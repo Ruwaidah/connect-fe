@@ -4,6 +4,7 @@ import HomePage from "../components/homePage/HomePage";
 import PrivateRoute from "./PrivateRoute";
 import ResetPassword from "../components/homePage/Auth/ResetPassword/ResetPassword";
 import DashBoard from "../components/dashBoard/DashBoard";
+import Messages from "../components/messages/Messages";
 
 const RoutesComponent = () => {
   return (
@@ -11,7 +12,7 @@ const RoutesComponent = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="reset-password" element={<ResetPassword />} />
       <Route element={<PrivateRoute />}>
-        <Route path="/dashboard" element={[<DashBoard />]} />
+        <Route path="/dashboard" element={[<DashBoard />, <Messages />]} />
       </Route>
     </Routes>
   );
