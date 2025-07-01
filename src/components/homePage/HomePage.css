@@ -161,6 +161,10 @@
   background-color: rgb(223, 223, 223);
 }
 
+/* .HomePage .forms-div form input {
+  background-color: ;
+} */
+
 .HomePage .forms-div form input[type="submit"] {
   background-color: rgb(48, 60, 175);
   background-color: #5d9be4;
@@ -171,6 +175,9 @@
 
 .HomePage .forms-div form .error-input {
   border: rgb(236, 55, 55) 1px solid;
+}
+.password-not-match {
+  margin: 0;
 }
 
 .HomePage .forms-div p {
@@ -212,8 +219,15 @@
     /* justify-content: center; */
     align-items: center;
     justify-content: flex-end;
-    margin-top: 100px;
     height: 200vh;
+  }
+
+  .HomePage .loginForm {
+    margin-top: 190px;
+  }
+
+  .HomePage .signupForm {
+    margin-top: 120px;
   }
 
   .HomePage .section .img-sections {

@@ -54,7 +54,7 @@ const HomePage = () => {
         />
         <h4 className="welcome-h4"> Connect </h4>
       </div>
-      <div className="section">
+      <div className={isLoginForm ? "section loginForm" : "section signupForm"}>
         <div className="section-auth">
           <div id="googleLogin">
             <GoogleLogin
