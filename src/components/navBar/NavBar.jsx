@@ -1,3 +1,4 @@
+import "./NavBar.css"
 import { NavLink } from "react-router-dom";
 import LogOut from "../logout/LogOut";
 
@@ -6,7 +7,7 @@ const NavBar = () => {
     <NavLink>Message</NavLink>
     <NavLink>Friends</NavLink>
     <NavLink>Profile</NavLink>
-    <LogOut />
+    {/* <LogOut /> */}
   </div>;
 };
 
