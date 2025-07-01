@@ -1,15 +1,34 @@
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { signUp } from "../../../../reducers/usersSlice";
 
 const SignUp = () => {
+  const dispatch = useDispatch();
   const { register, handleSubmit, reset, formState } = useForm();
   const { errors } = formState;
+  const [isMatchPassword, setIsMatchPassword] = useState(true);
 
   const onSubmit = (data) => {
-    console.log(data);
+    if (data.password == data.repassword) {
+      setIsMatchPassword(true);
+      dispatch(
+        signUp({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          username: data.username,
+          password: data.password,
+          email: data.email,
+        })
+      );
+    } else {
+      setIsMatchPassword(false);
+    }
   };
-  console.log(localStorage.getItem("token"));
+  if (localStorage.getItem("token")) return <Navigate to="/dashboard" />;
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form className="signup-component" onSubmit={handleSubmit(onSubmit)}>
       {errors && errors.password ? (
         <div className="error-p">
           <p className="password-rule-p"> Password Must Have:</p>
@@ -19,12 +38,14 @@ const SignUp = () => {
             <li>at least one one uppercase and lowercase letter.</li>
           </ul>
         </div>
-      ) : null}
+      ) : isMatchPassword ? null : (
+        <p className="error-p password-not-match">Password is not match</p>
+      )}
       <input
         placeholder="First Name"
         type="text"
-        className={errors.firstname ? "error-input" : null}
-        {...register("firstname", {
+        className={errors.firstName ? "error-input" : null}
+        {...register("firstName", {
           required: {
             value: true,
             message: "Require",
@@ -106,7 +127,7 @@ const SignUp = () => {
       <input
         placeholder="******"
         type="password"
-        className={errors.password ? "error-input" : null}
+        className={errors.password || !isMatchPassword ? "error-input" : null}
         {...register("password", {
           required: {
             value: true,
@@ -121,7 +142,7 @@ const SignUp = () => {
       <input
         placeholder="re-type Password"
         type="password"
-        className={errors.repassword ? "error-input" : null}
+        className={errors.repassword || !isMatchPassword ? "error-input" : null}
         {...register("repassword", {
           required: true,
         })}
