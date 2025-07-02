@@ -1,0 +1,15 @@
+.Footer {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(27, 27, 27);
+  height: 14vh;
+}
+
+.Footer p {
+  font-size: 1rem;
+  color: whitesmoke;
+}

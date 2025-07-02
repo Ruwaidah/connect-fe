@@ -44,6 +44,20 @@ export const signUp = createAsyncThunk("SIGN_UP", async (data, thunkAPI) => {
     .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
 });
 
+// *********************** RECOVERY PASSWORD *************************
+export const resetPassword = createAsyncThunk(
+  "RESET_PASSWORD",
+  async (data, thunkAPI) => {
+    return await axios
+      .post(
+        `${import.meta.env.VITE_APP_URL}/api/users/send_recovery_email`,
+        data
+      )
+      .then((response) => response.data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  }
+);
+
 const usersSlice = createSlice({
   name: "user",
   initialState,

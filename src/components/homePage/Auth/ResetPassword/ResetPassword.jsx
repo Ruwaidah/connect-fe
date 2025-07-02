@@ -1,17 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import "./ResetPassword.css";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 import { useForm } from "react-hook-form";
+import { resetPassword } from "../../../../reducers/usersSlice";
+import Footer from "../../../footer/Footer";
 
 const ResetPassword = () => {
   const { handleSubmit, register, watch, reset, formState } = useForm();
   const { errors } = formState;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useGSAP(() => {
+    gsap.to(".ResetPassword-component", {
+      opacity: 1,
+      duration: 1,
+      ease: "power1.inOut",
+    });
+  }, {});
 
   const onSubmit = (data) => {
-    console.log(data);
+    // dispatch(resetPassword(data));
+    navigate("/pto");
   };
 
-  console.log(errors);
   return (
     <div className="ResetPassword-component">
       <div className="header-div">
@@ -52,6 +67,7 @@ const ResetPassword = () => {
           <Link to="/">Cancel</Link>
         </form>
       </div>
+      <Footer />
     </div>
   );
 };
