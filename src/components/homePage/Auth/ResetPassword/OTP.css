@@ -1,0 +1,48 @@
+.OTP {
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  color: whitesmoke;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  margin: 160px auto;
+  background-color: rgb(41, 41, 41);
+  border-radius: 8px;
+}
+
+.OTP p {
+  text-align: start;
+  width: 84%;
+}
+.OTP .otp-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 86%;
+}
+
+.OTP .otp-form div {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 90px;
+  /* width: 90%; */
+  margin-bottom: 20px;
+}
+
+.OTP .otp-form input[type="text"] {
+  width: 22%;
+  height: 96%;
+  border: 1px solid black;
+  border-radius: 6px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.OTP .otp-form input[type="submit"] {
+  background-color: rgb(101, 129, 128);
+  width: 180px;
+  height: 40px;
+  border-radius: 6px;
+}

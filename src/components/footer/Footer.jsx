@@ -2,7 +2,7 @@ import "./Footer.css";
 
 const Footer = () => {
   return (
-    <div className="Footer">
+    <div id="Footer">
       <p>&copy; 2025 All Rights Reserved Ruwaidah Alfakhri</p>
     </div>
   );

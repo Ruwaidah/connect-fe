@@ -7,6 +7,9 @@ const initialState = {
   isAuthError: false,
   errorMessage: null,
   user: null,
+  isResetPassword: false,
+  isResetPasswordLoading: false,
+  isResetPasswordError: false,
 };
 
 // ************************** LOGIN AUTH WITH GOOGLE ******************************
@@ -37,14 +40,13 @@ export const loginUser = createAsyncThunk(
 
 // ************************** SIGNUP AUTH ******************************
 export const signUp = createAsyncThunk("SIGN_UP", async (data, thunkAPI) => {
-  console.log(data);
   return await axios
     .post(`${import.meta.env.VITE_APP_URL}/api/users/register`, data)
     .then((response) => response.data)
     .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
 });
 
-// *********************** RECOVERY PASSWORD *************************
+// *********************** RESET PASSWORD *************************
 export const resetPassword = createAsyncThunk(
   "RESET_PASSWORD",
   async (data, thunkAPI) => {
@@ -142,6 +144,24 @@ const usersSlice = createSlice({
       state.isAuthLoading = false;
       state.errorMessage = action.payload;
       state.user = null;
+    });
+
+    // *********************** RESET PASSWORD *************************
+    builder.addCase(resetPassword.pending, (state, action) => {
+      state.isResetPassword = false;
+      state.isResetPasswordLoading = true;
+      state.isResetPasswordError = false;
+    });
+    builder.addCase(resetPassword.fulfilled, (state, action) => {
+      localStorage.setItem("hashedOtp", action.payload.hashedOtp);
+      state.isResetPassword = true;
+      state.isResetPasswordLoading = false;
+      state.isResetPasswordError = false;
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
+      state.isResetPassword = false;
+      state.isResetPasswordLoading = false;
+      state.isResetPasswordError = true;
     });
   },
 });
