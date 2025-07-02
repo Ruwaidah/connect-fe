@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Login from "./Auth/Login/Login";
 import SignUp from "./Auth/SignUp/SignUp";
 import { Link } from "react-router-dom";
+import Footer from "../footer/Footer";
 
 const HomePage = () => {
   const { isAuthLoading, isAuthError, errorMessage, user } = useSelector(
@@ -24,7 +25,7 @@ const HomePage = () => {
     });
   }, {});
 
-  const loginwithGoogle = (data) => {
+  const loginWithGoogle = (data) => {
     console.log(data);
     // dispatch(loginWithGoogle(data));
   };
@@ -43,11 +44,6 @@ const HomePage = () => {
   return (
     <div className="HomePage">
       <div className="welcome-div">
-        {/* <img
-          className="logo-img"
-          src="https://img.icons8.com/?size=100&id=58562&format=png&color=000000"
-        /> */}
-        {/* <img src="../src/assets/logo-msg.png" /> */}
         <img
           className="logo-img"
           src="https://img.icons8.com/?size=100&id=58562&format=png&color=000000"
@@ -59,7 +55,7 @@ const HomePage = () => {
           <div id="googleLogin">
             <GoogleLogin
               cookiePolicy={"single_host_origin"}
-              onSuccess={loginwithGoogle}
+              onSuccess={loginWithGoogle}
               onError={errorLoginGoogle}
             />
           </div>{" "}
@@ -96,6 +92,7 @@ const HomePage = () => {
           <img src="../src/assets/msg-07.png" className="msg-07" />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
