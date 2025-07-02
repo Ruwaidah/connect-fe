@@ -2,11 +2,16 @@ import "./OTP.css";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import Footer from "../../../footer/Footer";
+import { useEffect } from "react";
 
 const OTP = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit, formState } = useForm();
   const { errors } = formState;
+
+  useEffect(() => {
+    
+  },[])
 
   const onSubmit = (data) => {
     console.log(data)
