@@ -6,14 +6,14 @@ import gsap from "gsap";
 import { useForm } from "react-hook-form";
 import { resetPassword } from "../../../../reducers/usersSlice";
 import Footer from "../../../footer/Footer";
-import Loading from "../../../loading/Loading"
+import Loading from "../../../loading/Loading";
 import { useState } from "react";
 import OTP from "./OTP";
+import Header from "../../../header/Header";
 
 const ResetPassword = () => {
-  const { isResetPassword, isResetPasswordLoading } = useSelector(
-    (state) => state.user
-  );
+  const [isResetPassword, setIsResetPassword] = useState(false);
+  const { isResetPasswordLoading } = useSelector((state) => state.user);
   const { handleSubmit, register, watch, reset, formState } = useForm();
   const { errors } = formState;
   const dispatch = useDispatch();
@@ -28,21 +28,22 @@ const ResetPassword = () => {
   }, {});
 
   const onSubmit = (data) => {
+    setIsResetPassword(true);
     dispatch(resetPassword(data));
     // navigate("/pto");
   };
-  console.log("rfgerger");
   if (isResetPassword) return <OTP />;
   else
     return (
       <div className="ResetPassword-component">
-        <div className="header-div">
+        {/* <div className="header-div">
           <img
             className="logo-img"
             src="https://img.icons8.com/?size=100&id=58562&format=png&color=000000"
           />
           <h4>Connect</h4>
-        </div>
+        </div> */}
+        <Header />
         <div className="ResetPassword-div">
           <div>
             <h3>Reset Your Password</h3>
@@ -51,7 +52,9 @@ const ResetPassword = () => {
               your password.
             </p>
           </div>
-          <div>{isResetPasswordLoading? <Loading />: null}</div>
+          <div className="loading-reset-password">
+            {isResetPasswordLoading ? <p>Loading ... </p> : null}
+          </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="resetpassword-form"

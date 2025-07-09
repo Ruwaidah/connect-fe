@@ -7,7 +7,7 @@ const initialState = {
   isAuthError: false,
   errorMessage: null,
   user: null,
-  isResetPassword: false,
+  // isResetPassword: false,
   isResetPasswordLoading: false,
   isResetPasswordError: false,
 };
@@ -148,18 +148,18 @@ const usersSlice = createSlice({
 
     // *********************** RESET PASSWORD *************************
     builder.addCase(resetPassword.pending, (state, action) => {
-      state.isResetPassword = false;
+      // state.isResetPassword = false;
       state.isResetPasswordLoading = true;
       state.isResetPasswordError = false;
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       localStorage.setItem("hashedOtp", action.payload.hashedOtp);
-      state.isResetPassword = true;
+      // state.isResetPassword = true;
       state.isResetPasswordLoading = false;
       state.isResetPasswordError = false;
     });
     builder.addCase(resetPassword.rejected, (state, action) => {
-      state.isResetPassword = false;
+      // state.isResetPassword = false;
       state.isResetPasswordLoading = false;
       state.isResetPasswordError = true;
     });

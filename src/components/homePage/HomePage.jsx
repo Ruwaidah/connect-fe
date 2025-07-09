@@ -9,6 +9,7 @@ import Login from "./Auth/Login/Login";
 import SignUp from "./Auth/SignUp/SignUp";
 import { Link } from "react-router-dom";
 import Footer from "../footer/Footer";
+import Header from "../header/Header";
 
 const HomePage = () => {
   const { isAuthLoading, isAuthError, errorMessage, user } = useSelector(
@@ -43,13 +44,7 @@ const HomePage = () => {
 
   return (
     <div className="HomePage">
-      <div className="welcome-div">
-        <img
-          className="logo-img"
-          src="https://img.icons8.com/?size=100&id=58562&format=png&color=000000"
-        />
-        <h4 className="welcome-h4"> Connect </h4>
-      </div>
+      <Header />
       <div className={isLoginForm ? "section loginForm" : "section signupForm"}>
         <div className="section-auth">
           <div id="googleLogin">

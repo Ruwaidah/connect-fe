@@ -5,10 +5,12 @@ import PrivateRoute from "./PrivateRoute";
 import ResetPassword from "../components/homePage/Auth/ResetPassword/ResetPassword";
 import DashBoard from "../components/dashBoard/DashBoard";
 import Messages from "../components/messages/Messages";
+import NavBar from "../components/navBar/NavBar";
 
 const RoutesComponent = () => {
   return (
     <Routes>
+      {/* <Route path="*" element={<NavBar />}/> */}
       <Route path="/" element={<HomePage />} />
       <Route path="reset-password" element={<ResetPassword />} />
       <Route element={<PrivateRoute />}>
