@@ -1,12 +1,13 @@
 #Footer {
   position: absolute;
-  bottom: 10px;
+  bottom: 0px;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgb(27, 27, 27);
   height: 10vh;
+  box-sizing: border-box;
 }
 
 #Footer p {

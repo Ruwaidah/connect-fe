@@ -1,12 +1,15 @@
-body {
+html {
   margin: 0;
   padding: 0;
   width: 100dvw;
-  height: 100dvh;
+ height: 100dvh;
   background-color: whitesmoke;
   font-family: "Cabin", sans-serif;
+  box-sizing: border-box;
 }
-
+body {
+  margin: 0;
+}
 a {
   text-decoration: none;
   outline: none;
@@ -19,4 +22,9 @@ input {
 .logo-img {
   width: 60px;
   height: 60px;
+}
+
+.error-input {
+  border: rgb(212, 61, 61) solid 1px !important;
+  background-color: rgb(240, 214, 214);
 }
