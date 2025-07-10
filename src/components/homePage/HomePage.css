@@ -24,7 +24,7 @@
 
 .HomePage .section .section-auth {
   width: 400px;
-  margin-top: 200px;
+  margin-top: 300px;
 }
 
 .HomePage .section .img-sections {
@@ -185,10 +185,6 @@
 }
 
 @media screen and (max-width: 800px) {
-  .HomePage div .welcome-h4 {
-    font-size: 1.6rem;
-  }
-
   .HomePage .section {
     flex-direction: column-reverse;
     align-items: center;
@@ -197,11 +193,11 @@
   }
 
   .HomePage .loginForm {
-    margin-top: 190px;
+    margin-top: 260px;
   }
 
   .HomePage .signupForm {
-    margin-top: 120px;
+    margin-top: 200px;
   }
 
   .HomePage .section .img-sections {
@@ -216,16 +212,16 @@
 }
 
 @media screen and (max-width: 450px) {
-  .HomePage .welcome-div {
+  /* .HomePage .welcome-div {
     width: 100%;
-  }
+  } */
 
   .HomePage .welcome-div h4 {
     font-size: 1rem;
   }
   .HomePage .section .section-auth {
     margin: 0;
-    height: 54vh;
+    /* height: 80vh; */
     width: 100%;
   }
 

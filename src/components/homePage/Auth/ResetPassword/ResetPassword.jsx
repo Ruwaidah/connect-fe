@@ -36,13 +36,6 @@ const ResetPassword = () => {
   else
     return (
       <div className="ResetPassword-component">
-        {/* <div className="header-div">
-          <img
-            className="logo-img"
-            src="https://img.icons8.com/?size=100&id=58562&format=png&color=000000"
-          />
-          <h4>Connect</h4>
-        </div> */}
         <Header />
         <div className="ResetPassword-div">
           <div>
