@@ -7,9 +7,12 @@ const initialState = {
   isAuthError: false,
   errorMessage: null,
   user: null,
-  // isResetPassword: false,
   isResetPasswordLoading: false,
   isResetPasswordError: false,
+  isOtpLoading: false,
+  isOtpError: false,
+  otpErrorMessage: null,
+  isChangePasswword: false
 };
 
 // ************************** LOGIN AUTH WITH GOOGLE ******************************
@@ -55,6 +58,21 @@ export const resetPassword = createAsyncThunk(
         `${import.meta.env.VITE_APP_URL}/api/users/send_recovery_email`,
         data
       )
+      .then((response) => response.data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  }
+);
+
+// ***************************** VERIFY OTP ********************************
+export const verifyOtp = createAsyncThunk(
+  "VERIFY_OTP",
+  async (data, thunkAPI) => {
+    const hashedOtp = localStorage.getItem("hashedOtp");
+    return await axios
+      .post(`${import.meta.env.VITE_APP_URL}/api/users/verify_otp`, {
+        data,
+        hashedOtp,
+      })
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
   }
@@ -162,6 +180,27 @@ const usersSlice = createSlice({
       // state.isResetPassword = false;
       state.isResetPasswordLoading = false;
       state.isResetPasswordError = true;
+    });
+
+    // ***************************** VERIFY OTP ********************************
+    builder.addCase(verifyOtp.pending, (state, action) => {
+      state.isOtpLoading = true;
+      state.otpErrorMessage = null;
+      state.isOtpError = false;
+      isChangePasswword = false;
+    });
+    builder.addCase(verifyOtp.fulfilled, (state, action) => {
+      localStorage.clear("hashedOtp");
+       state.isOtpLoading = false;
+      state.otpErrorMessage = null;
+      state.isOtpError = false;
+      state.isChangePasswword = true
+    });
+    builder.addCase(verifyOtp.rejected, (state, action) => {
+       state.isOtpLoading = false;
+      state.otpErrorMessage = action.payload;
+      state.isOtpError = true;
+      state.isChangePasswword = false
     });
   },
 });
