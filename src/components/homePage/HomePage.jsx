@@ -46,7 +46,11 @@ const HomePage = () => {
     <div className="HomePage">
       <Header />
       <div className={isLoginForm ? "section loginForm" : "section signupForm"}>
-        <div className="section-auth">
+        <div
+          className={
+            isLoginForm ? "section-auth login-auth" : "section-auth signup-auth"
+          }
+        >
           <div id="googleLogin">
             <GoogleLogin
               cookiePolicy={"single_host_origin"}
@@ -94,11 +98,3 @@ const HomePage = () => {
 
 export default HomePage;
 
-{
-  /* <a
-  href="https://www.flaticon.com/free-stickers/message"
-  title="message stickers"
->
-  Message stickers created by Stickers - Flaticon
-</a>; */
-}

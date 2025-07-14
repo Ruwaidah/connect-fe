@@ -1,0 +1,157 @@
+.InputEmailForm {
+  opacity: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.InputEmailForm .ResetPassword-div {
+  width: 700px;
+  height: 400px;
+  background-color: #161616;
+  color: whitesmoke;
+  border-radius: 4px;
+  box-shadow: 2px 2px 10px 1px rgb(28, 29, 29);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  z-index: 1;
+}
+
+.ResetPassword-component .ResetPassword-div .resetpassword-form {
+  display: flex;
+  flex-direction: column;
+  /* margin-top: 20px; */
+  margin-bottom: 24px;
+  width: 60%;
+}
+
+.ResetPassword-component
+  .ResetPassword-div
+  .resetpassword-form
+  input[type="email"] {
+  padding-left: 6px;
+}
+
+.ResetPassword-component .ResetPassword-div .resetpassword-form input,
+.ResetPassword-component .ResetPassword-div .resetpassword-form a {
+  height: 36px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ResetPassword-component .ResetPassword-div .resetpassword-form a,
+.ResetPassword-component
+  .ResetPassword-div
+  .resetpassword-form
+  input[type="submit"] {
+  background-color: rgb(109, 155, 155);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-size: 0.9rem;
+}
+
+.ResetPassword-component .ResetPassword-div .resetpassword-form #disabled {
+  background-color: rgb(158, 158, 158);
+  color: black;
+}
+
+.ResetPassword-component .ResetPassword-div .loading-reset-password {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 22px;
+}
+
+@media screen and (max-width: 800px) {
+  .ResetPassword-component .ResetPassword-div {
+    width: 68%;
+    height: 320px;
+    justify-content: center;
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .ResetPassword-component .ResetPassword-div div {
+    justify-content: center;
+    height: auto;
+    width: 90%;
+  }
+
+  .ResetPassword-component .ResetPassword-div .resetpassword-form {
+    width: 90%;
+    margin-top: 0;
+  }
+
+  .ResetPassword-component .ResetPassword-div .resetpassword-form input,
+  .ResetPassword-component .ResetPassword-div .resetpassword-form a {
+    height: 32px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .ResetPassword-component .ResetPassword-div {
+    /* padding: 10px;
+    height: 280px;
+    box-sizing: border-box; */
+    width: 96%;
+  }
+
+  .ResetPassword-component .ResetPassword-div div p {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .ResetPassword-component .ResetPassword-div div h3 {
+    margin-top: 0;
+    margin-bottom: 6px;
+  }
+
+  .ResetPassword-component .ResetPassword-div .resetpassword-form {
+    width: 98%;
+    /* height: 400px; */
+    margin-bottom: 0;
+  }
+
+  .ResetPassword-component
+    .ResetPassword-div
+    .resetpassword-form
+    input[types="submit"] {
+    height: 32px;
+  }
+
+  .ResetPassword-component .ResetPassword-div .resetpassword-form input,
+  .ResetPassword-component .ResetPassword-div .resetpassword-form a {
+    width: 100%;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .InputEmailForm .ResetPassword-div {
+    height: 260px;
+    font-size: 0.9rem;
+  }
+
+  .InputEmailForm .ResetPassword-div .para-1 p {
+    font-size: 0.8rem;
+  }
+
+  .ResetPassword-component .ResetPassword-div .resetpassword-form input,
+  .ResetPassword-component .ResetPassword-div .resetpassword-form a {
+    height: 28px;
+  }
+}

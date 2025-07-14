@@ -1,14 +1,21 @@
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import "./OTP.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Footer from "../../../footer/Footer";
 import { useEffect, useState } from "react";
 import Header from "../../../header/Header";
+import { checkOtp } from "../../../../reducers/usersSlice";
+import StickersImages from "../../../StickersImages/StickersImages";
 
 const OTP = () => {
   const dispatch = useDispatch();
+  const { otpErrorMessage, isOtpError, isOtpLoading, verifyEmail } =
+    useSelector((state) => state.user);
   const { register, handleSubmit, formState } = useForm();
   const { errors } = formState;
+
   let firstInput = {
     firstNum: true,
     secondtNum: true,
@@ -16,6 +23,13 @@ const OTP = () => {
     fourthNum: true,
   };
 
+  useGSAP(() => {
+    gsap.to(".OTP", {
+      opacity: 1,
+      duration: 1,
+      ease: "power1.inOut",
+    });
+  }, {});
   useEffect(() => {
     document.addEventListener("keypress", (e) => {
       if (Number(e.key) || (e.key == 0 && e.key != " ")) {
@@ -42,18 +56,25 @@ const OTP = () => {
     });
   }, []);
 
-  console.log(errors);
   const onSubmit = (data) => {
     console.log(data);
-    const otp = Object.values(data).join("")
-    console.log(otp)
+    const numberCode = Object.values(data).join("");
+    console.log(numberCode);
+    dispatch(checkOtp(numberCode));
   };
+  console.log(isOtpLoading);
 
+  console.log(isOtpError);
+  console.log(otpErrorMessage);
   return (
     <div className="OTP">
       <Header />
+      <StickersImages />
       <div className="OTP-section">
         <p>Enter the 4 Digits</p>
+        <p className="otp-error">
+          {isOtpLoading ? "Loading ..." : isOtpError ? otpErrorMessage : null}
+        </p>
         <form className="otp-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="otp_input_div">
             <input
