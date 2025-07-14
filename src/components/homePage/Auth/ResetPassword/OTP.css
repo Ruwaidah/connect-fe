@@ -7,6 +7,7 @@
   width: 100%;
   background-color: whitesmoke;
   height: 100vh;
+  opacity: 0;
 }
 
 .OTP .OTP-section {
@@ -18,11 +19,13 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+  z-index: 1;
 }
 
 .OTP p {
   text-align: start;
   width: 84%;
+  margin: 0;
 }
 .OTP .otp-form {
   display: flex;
@@ -42,8 +45,8 @@
 }
 
 .OTP .otp-form input[type="text"] {
-  width: 22%;
-  height: 96%;
+  width: 20%;
+  height: 80%;
   border: 1px solid black;
   border-radius: 6px;
   font-size: 1.6rem;
@@ -55,6 +58,11 @@
   width: 180px;
   height: 40px;
   border-radius: 6px;
+}
+
+.OTP .otp-error {
+  margin: 10px 0;
+  color: rgb(216, 94, 94);
 }
 
 @media screen and (max-width: 800px) {
@@ -71,14 +79,20 @@
 @media screen and (max-width: 500px) {
   .OTP .OTP-section {
     width: 94%;
-    height: 260px;
+    height: 240px;
   }
   .OTP .otp-form {
     width: 90%;
   }
+
+  .OTP .otp-form .otp_input_div {
+    margin: 0;
+  }
   .OTP .otp-form input[type="text"] {
-    width: 20%;
-    height: 80%;
+    width: 22%;
+    height: 60%;
     font-size: 1.6rem;
   }
 }
+
+

@@ -12,7 +12,12 @@ const initialState = {
   isOtpLoading: false,
   isOtpError: false,
   otpErrorMessage: null,
-  isChangePasswword: false
+  isChangePasswword: false,
+  requestChangePasswordLoading: false,
+  requestChangePasswordError: false,
+  requestChangePasswordErrorMessage: null,
+  requestChangePasswordPass: false,
+  verifyEmail: null,
 };
 
 // ************************** LOGIN AUTH WITH GOOGLE ******************************
@@ -53,6 +58,7 @@ export const signUp = createAsyncThunk("SIGN_UP", async (data, thunkAPI) => {
 export const resetPassword = createAsyncThunk(
   "RESET_PASSWORD",
   async (data, thunkAPI) => {
+    console.log(data);
     return await axios
       .post(
         `${import.meta.env.VITE_APP_URL}/api/users/send_recovery_email`,
@@ -64,17 +70,36 @@ export const resetPassword = createAsyncThunk(
 );
 
 // ***************************** VERIFY OTP ********************************
-export const verifyOtp = createAsyncThunk(
-  "VERIFY_OTP",
+export const checkOtp = createAsyncThunk(
+  "VERIFY_NUMBERS_OTP",
   async (data, thunkAPI) => {
+    console.log(data);
     const hashedOtp = localStorage.getItem("hashedOtp");
+    console.log(hashedOtp);
     return await axios
       .post(`${import.meta.env.VITE_APP_URL}/api/users/verify_otp`, {
         data,
         hashedOtp,
       })
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+        return thunkAPI.rejectWithValue(error.response.data.message);
+      });
+  }
+);
+
+// ***************************** REQUEST NEW PASSWORD ********************************
+export const requestNewPassword = createAsyncThunk(
+  "REQUEST_NEW_PASSWORD",
+  async (data, thunkAPI) => {
+    return await axios
+      .post(`${import.meta.env.VITE_APP_URL}/api/users/change_password`, data)
       .then((response) => response.data)
-      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+      .catch((error) => thunkAPI.rejectWithValue(error.response));
   }
 );
 
@@ -82,6 +107,12 @@ const usersSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    clearChangePassword: (state) => {
+      state.isOtpLoading = false;
+      state.isOtpError = false;
+      state.otpErrorMessage = null;
+      state.isChangePasswword = false;
+    },
     logout: (state) => {
       localStorage.clear();
       state.isAuthLoading = false;
@@ -169,10 +200,13 @@ const usersSlice = createSlice({
       // state.isResetPassword = false;
       state.isResetPasswordLoading = true;
       state.isResetPasswordError = false;
+      state.verifyEmail = null;
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
       localStorage.setItem("hashedOtp", action.payload.hashedOtp);
       // state.isResetPassword = true;
+      console.log(action.payload);
+      state.verifyEmail = action.payload.email;
       state.isResetPasswordLoading = false;
       state.isResetPasswordError = false;
     });
@@ -180,31 +214,54 @@ const usersSlice = createSlice({
       // state.isResetPassword = false;
       state.isResetPasswordLoading = false;
       state.isResetPasswordError = true;
+      state.verifyEmail = null;
     });
 
     // ***************************** VERIFY OTP ********************************
-    builder.addCase(verifyOtp.pending, (state, action) => {
+    builder.addCase(checkOtp.pending, (state, action) => {
       state.isOtpLoading = true;
       state.otpErrorMessage = null;
       state.isOtpError = false;
-      isChangePasswword = false;
+      state.isChangePasswword = false;
     });
-    builder.addCase(verifyOtp.fulfilled, (state, action) => {
+    builder.addCase(checkOtp.fulfilled, (state, action) => {
       localStorage.clear("hashedOtp");
-       state.isOtpLoading = false;
+      state.isOtpLoading = false;
       state.otpErrorMessage = null;
       state.isOtpError = false;
-      state.isChangePasswword = true
+      state.isChangePasswword = true;
     });
-    builder.addCase(verifyOtp.rejected, (state, action) => {
-       state.isOtpLoading = false;
+    builder.addCase(checkOtp.rejected, (state, action) => {
+      console.log("efwnlfnl", action);
+      state.isOtpLoading = false;
       state.otpErrorMessage = action.payload;
       state.isOtpError = true;
-      state.isChangePasswword = false
+      state.isChangePasswword = false;
     });
+
+    // ***************************** REQUEST NEW PASSWORD ********************************
+    builder.addCase(requestNewPassword.pending, (state, action) => {
+      state.requestChangePasswordLoading = true;
+      state.requestChangePasswordError = false;
+      state.requestChangePasswordErrorMessage = null;
+      state.requestChangePasswordPass = false;
+    }),
+      builder.addCase(requestNewPassword.fulfilled, (state, action) => {
+        localStorage.clear("hashedOtp");
+        state.requestChangePasswordLoading = false;
+        state.requestChangePasswordError = false;
+        state.requestChangePasswordErrorMessage = null;
+        state.requestChangePasswordPass = true;
+      }),
+      builder.addCase(requestNewPassword.rejected, (state, action) => {
+        state.requestChangePasswordLoading = false;
+        state.requestChangePasswordError = true;
+        state.requestChangePasswordErrorMessage = action.payload;
+        state.requestChangePasswordPass = false;
+      });
   },
 });
 
-export const { logout } = usersSlice.actions;
+export const { logout, clearChangePassword } = usersSlice.actions;
 
 export default usersSlice.reducer;
