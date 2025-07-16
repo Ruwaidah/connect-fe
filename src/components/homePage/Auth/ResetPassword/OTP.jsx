@@ -6,8 +6,13 @@ import { useForm } from "react-hook-form";
 import Footer from "../../../footer/Footer";
 import { useEffect, useState } from "react";
 import Header from "../../../header/Header";
-import { checkOtp } from "../../../../reducers/usersSlice";
+import {
+  checkOtp,
+  changeTheEmail,
+  clearChangePassword,
+} from "../../../../reducers/usersSlice";
 import StickersImages from "../../../StickersImages/StickersImages";
+import { Link } from "react-router-dom";
 
 const OTP = () => {
   const dispatch = useDispatch();
@@ -30,6 +35,7 @@ const OTP = () => {
       ease: "power1.inOut",
     });
   }, {});
+
   useEffect(() => {
     document.addEventListener("keypress", (e) => {
       if (Number(e.key) || (e.key == 0 && e.key != " ")) {
@@ -56,22 +62,28 @@ const OTP = () => {
     });
   }, []);
 
+  const notRightEmail = () => {
+    // dispatch(changeTheEmail());
+    dispatch(clearChangePassword());
+  };
+
   const onSubmit = (data) => {
-    console.log(data);
     const numberCode = Object.values(data).join("");
-    console.log(numberCode);
     dispatch(checkOtp(numberCode));
   };
-  console.log(isOtpLoading);
 
-  console.log(isOtpError);
-  console.log(otpErrorMessage);
   return (
     <div className="OTP">
       <Header />
       <StickersImages />
       <div className="OTP-section">
-        <p>Enter the 4 Digits</p>
+        <div className="section-1-para">
+          <p>Check your Email</p>
+          <div>
+            <p>{verifyEmail}</p> <Link onClick={notRightEmail}>Not You?</Link>
+          </div>{" "}
+          <p>We sent you an email with 4 Digit code.</p>
+        </div>
         <p className="otp-error">
           {isOtpLoading ? "Loading ..." : isOtpError ? otpErrorMessage : null}
         </p>
