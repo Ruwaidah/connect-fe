@@ -45,7 +45,7 @@ const NewPassword = () => {
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <p className="para-new-password"> Please enter your new password:</p>
+          <p className="para-new-password"> Please enter new password</p>
           <p className="error-new-password-para">
             {isMatchPassword ? null : "Password is not match"}
           </p>

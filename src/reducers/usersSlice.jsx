@@ -12,7 +12,8 @@ const initialState = {
   isOtpLoading: false,
   isOtpError: false,
   otpErrorMessage: null,
-  isChangePasswword: false,
+  isOTPPage: false,
+  isNewPassword: false,
   requestChangePasswordLoading: false,
   requestChangePasswordError: false,
   requestChangePasswordErrorMessage: null,
@@ -108,11 +109,24 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     clearChangePassword: (state) => {
+      state.isOTPPage = false;
       state.isOtpLoading = false;
       state.isOtpError = false;
       state.otpErrorMessage = null;
-      state.isChangePasswword = false;
+      state.isNewPassword = false;
+      state.isResetPasswordLoading = false;
+      state.isResetPasswordError = false;
+      state.requestChangePasswordLoading = false;
+      state.requestChangePasswordError = false;
+      state.requestChangePasswordErrorMessage = null;
+      state.requestChangePasswordPass = false;
+      state.verifyEmail = null;
     },
+    changeTheEmail: (state) => {
+      state.isOTPPage = false;
+      state.isNewPassword = false;
+    },
+
     logout: (state) => {
       localStorage.clear();
       state.isAuthLoading = false;
@@ -200,6 +214,7 @@ const usersSlice = createSlice({
       // state.isResetPassword = false;
       state.isResetPasswordLoading = true;
       state.isResetPasswordError = false;
+      state.isOTPPage = false;
       state.verifyEmail = null;
     });
     builder.addCase(resetPassword.fulfilled, (state, action) => {
@@ -207,11 +222,13 @@ const usersSlice = createSlice({
       // state.isResetPassword = true;
       console.log(action.payload);
       state.verifyEmail = action.payload.email;
+      state.isOTPPage = true;
       state.isResetPasswordLoading = false;
       state.isResetPasswordError = false;
     });
     builder.addCase(resetPassword.rejected, (state, action) => {
       // state.isResetPassword = false;
+      state.isOTPPage = false;
       state.isResetPasswordLoading = false;
       state.isResetPasswordError = true;
       state.verifyEmail = null;
@@ -222,21 +239,24 @@ const usersSlice = createSlice({
       state.isOtpLoading = true;
       state.otpErrorMessage = null;
       state.isOtpError = false;
-      state.isChangePasswword = false;
+      state.isNewPassword = false;
+      // state.isChangePasswword = false;
     });
     builder.addCase(checkOtp.fulfilled, (state, action) => {
       localStorage.clear("hashedOtp");
       state.isOtpLoading = false;
       state.otpErrorMessage = null;
       state.isOtpError = false;
-      state.isChangePasswword = true;
+      state.isNewPassword = true;
+      state.isOTPPage = false;
+      // state.isChangePasswword = true;
     });
     builder.addCase(checkOtp.rejected, (state, action) => {
-      console.log("efwnlfnl", action);
       state.isOtpLoading = false;
       state.otpErrorMessage = action.payload;
       state.isOtpError = true;
-      state.isChangePasswword = false;
+      state.isNewPassword = false;
+      // state.isChangePasswword = false;
     });
 
     // ***************************** REQUEST NEW PASSWORD ********************************
@@ -262,6 +282,7 @@ const usersSlice = createSlice({
   },
 });
 
-export const { logout, clearChangePassword } = usersSlice.actions;
+export const { logout, clearChangePassword, changeTheEmail } =
+  usersSlice.actions;
 
 export default usersSlice.reducer;

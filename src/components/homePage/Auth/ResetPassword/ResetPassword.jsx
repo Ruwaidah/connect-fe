@@ -14,7 +14,9 @@ import InputEmailForm from "./InputEmailForm";
 import NewPassword from "./NewPassword";
 
 const ResetPassword = () => {
-  const { isChangePasswword } = useSelector((state) => state.user);
+  const { isNewPassword, isOTPPage } = useSelector(
+    (state) => state.user
+  );
   const [isResetPassword, setIsResetPassword] = useState(false);
 
   useGSAP(() => {
@@ -25,13 +27,13 @@ const ResetPassword = () => {
     });
   }, {});
 
-  console.log(isChangePasswword);
   return (
     <div className="ResetPassword-component">
       <Header />
-      {isResetPassword && !isChangePasswword ? (
+      {/* {isResetPassword && !isChangePasswword ? ( */}
+      {isOTPPage ? (
         <OTP />
-      ) : isChangePasswword ? (
+      ) : isNewPassword ? (
         <NewPassword />
       ) : (
         <InputEmailForm setIsResetPassword={setIsResetPassword} />
