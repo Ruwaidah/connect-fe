@@ -43,8 +43,8 @@
   position: absolute;
 }
 
-.msg-01 {
-  top: 30%;
+.HomePage .section .img-sections .msg-01 {
+  top: 40%;
   right: 60%;
 }
 
@@ -76,6 +76,49 @@
 .msg-07 {
   top: 10%;
   right: 80%;
+}
+/* @media screen and (max-width: 1500px) {
+  .HomePage .section .img-sections .msg-01 {
+    top: 40%;
+    right: 60%;
+  }
+} */
+
+@media screen and (max-width: 900px) {
+  .HomePage .section .img-sections .msg-01 {
+    top: 30%;
+    right: 60%;
+  }
+
+  .HomePage .section .img-sections .msg-02 {
+    top: 30%;
+    right: 10%;
+  }
+
+  .HomePage .section .img-sections .msg-03 {
+    top: 60%;
+    right: 70%;
+  }
+
+  .HomePage .section .img-sections .msg-04 {
+    top: 12%;
+    right: 34%;
+  }
+
+  .HomePage .section .img-sections .msg-05 {
+    top: 80%;
+    right: 44%;
+  }
+
+  .HomePage .section .img-sections .msg-06 {
+    top: 48%;
+    right: 20%;
+  }
+
+  .HomePage .section .img-sections .msg-07 {
+    top: 10%;
+    right: 80%;
+  }
 }
 
 .HomePage .forgot-password-div {
@@ -180,6 +223,12 @@
   font-weight: bold !important;
 }
 
+@media screen and (max-width: 1500px) {
+  .HomePage {
+    align-items: center;
+  }
+}
+
 @media screen and (max-width: 1024px) {
   .HomePage .section .img-sections img {
     width: 14%;
@@ -220,6 +269,10 @@
     width: 100%;
   } */
 
+  .forgot-password-div .forgot-password-para {
+    font-size: 0.8rem;
+  }
+
   .HomePage .welcome-div h4 {
     font-size: 1rem;
   }
@@ -230,10 +283,20 @@
   }
 
   .HomePage .forms-div {
-    width: 100%;
+    width: 96%;
+    margin: 0 auto;
   }
 
   #googleLogin {
-    width: 100%;
+    width: 96%;
+    margin: 0 auto;
+  }
+
+  .forms-div .have-account-para {
+    font-size: 0.8rem;
+    margin: 10px 0 0 0;
+  }
+  .HomePage .forms-div .have-account-para button {
+    font-size: 0.8rem;
   }
 }

@@ -1,0 +1,22 @@
+/* .Friends-component {
+  display: flex;
+  flex-direction: column;
+} */
+
+.friends-forms-friendslist-div {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.friends-forms-div {
+  display: flex;
+  margin: 0 auto;
+  width: 99.9%;
+  height: 38px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+  padding-bottom: 2px;
+  /* background-color: rgb(12, 33, 51); */
+}

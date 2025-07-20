@@ -1,0 +1,19 @@
+.HomePage .loginForm .login-auth {
+  margin-top: 260px;
+}
+
+@media screen and (max-width: 1500px) {
+  .HomePage .loginForm {
+    width: 90%;
+  }
+
+  .HomePage .loginForm .login-auth {
+    margin-top: 160px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .HomePage .loginForm {
+    margin: 0;
+  }
+}

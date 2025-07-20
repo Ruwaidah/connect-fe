@@ -1,0 +1,27 @@
+.SearchFriendForm {
+  width: 92%;
+  display: flex;
+}
+
+.SearchFriendForm  {
+    display: flex;
+    height: 100%;
+    width: 90%;
+    box-sizing: border-box;
+}
+
+.SearchFriendForm form {
+    height: 100%;
+    width: 80%;
+}
+
+form input {
+  height: 100%;
+  width: 100%;
+  padding-left: 10px;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: rgb(233, 233, 233);
+}

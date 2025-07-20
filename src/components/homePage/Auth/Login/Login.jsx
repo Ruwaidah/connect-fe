@@ -1,3 +1,4 @@
+import "./Login.css";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -21,7 +22,6 @@ const Login = () => {
   return (
     <form className="Login-Component" onSubmit={handleSubmit(onSubmit)}>
       {/* <p className="error-para">{errors && errors.text ? "Require !" : null}</p> */}
-
       <p className="error-request-p">
         {" "}
         {errors.text || errors.password
