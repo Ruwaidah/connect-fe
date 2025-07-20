@@ -1,0 +1,78 @@
+.FriendCard-no-match {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.FriendCard {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: rgb(252, 252, 252);
+  padding: 10px 20px 20px 30px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 1px 4px 10px 1px rgb(192, 192, 192);
+}
+
+.FriendCard .btns-request button {
+  width: 160px;
+  border: none;
+  background-color: rgba(56, 86, 94, 0.466);
+  height: 30px;
+  border-radius: 4px;
+  margin: 0;
+  cursor: pointer;
+  box-shadow: 1px 4px 10px 1px rgb(192, 192, 192);
+  font-size: 0.8rem;
+}
+
+.FriendCard .user-info-img-div #username-para {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.FriendCard .user-info-img-div {
+  display: flex;
+  align-items: center;
+  height: 200px;
+  font-size: 1.1rem;
+}
+
+.FriendCard .user-info-img-div .img-username-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.FriendCard .user-info-img-div .img-username-div img {
+  width: 140px;
+  height: 140px;
+  border-radius: 100%;
+  margin-bottom: 6px;
+}
+
+.FriendCard .user-info-img-div .user-info-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.FriendCard .user-info-img-div .user-info-div #para-bio {
+  font-size: 0.8rem;
+  margin: 14px 0 0 0;
+}
+
+.FriendCard .user-info-img-div .user-info-div div p {
+  display: inline;
+  font-size: 1.2rem;
+}
+
+.FriendCard .user-info-img-div .user-info-div p:last-child {
+  margin-left: 6px;
+}

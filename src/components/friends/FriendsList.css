@@ -1,0 +1,72 @@
+.FriendsList {
+  width: 100%;
+  height: 70vh;
+}
+
+.FriendsList .user-in-list {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgb(139, 139, 139);
+  box-sizing: border-box;
+}
+
+.img-info-div {
+  display: flex;
+  height: 80px;
+}
+
+.FriendsList .user-in-list img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50px;
+}
+
+.FriendsList .user-in-list .username-bio-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.FriendsList .user-in-list .username-bio-div .username-para {
+  display: flex;
+  font-size: 1.2rem;
+}
+
+.FriendsList .user-in-list .username-bio-div .username-para p:last-child {
+  margin-left: 8px;
+}
+
+.FriendsList .user-in-list .username-bio-div p {
+  margin: 0;
+  margin-left: 14px;
+}
+
+.FriendsList .user-in-list .username-bio-div .bio-para {
+  font-size: 0.8rem;
+}
+
+.FriendsList .user-in-list .friend-btns {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.FriendsList .user-in-list .friend-btns a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-sizing: border-box;
+  outline: none;
+  margin-bottom: 8px;
+  background-color: rgb(42, 57, 58);
+  color: whitesmoke;
+  padding: 6px;
+  width: 120px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}

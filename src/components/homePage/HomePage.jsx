@@ -1,9 +1,12 @@
 import "./HomePage.css";
 import { useGSAP } from "@gsap/react";
 import { GoogleLogin } from "@react-oauth/google";
-import { loginWithGoogle } from "../../reducers/usersSlice";
+import {
+  loginWithGoogle,
+  clearChangePassword,
+} from "../../reducers/usersSlice";
 import gsap from "gsap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./Auth/Login/Login";
 import SignUp from "./Auth/SignUp/SignUp";
@@ -18,6 +21,10 @@ const HomePage = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(clearChangePassword());
+  }, []);
+
   useGSAP(() => {
     gsap.to(".welcome-h4", {
       opacity: 1,
@@ -26,9 +33,9 @@ const HomePage = () => {
     });
   }, {});
 
-  const loginWithGoogle = (data) => {
+  const googleLogin = (data) => {
     console.log(data);
-    // dispatch(loginWithGoogle(data));
+    dispatch(loginWithGoogle(data));
   };
 
   const errorLoginGoogle = (data) => {
@@ -54,7 +61,7 @@ const HomePage = () => {
           <div id="googleLogin">
             <GoogleLogin
               cookiePolicy={"single_host_origin"}
-              onSuccess={loginWithGoogle}
+              onSuccess={googleLogin}
               onError={errorLoginGoogle}
             />
           </div>{" "}
@@ -66,7 +73,7 @@ const HomePage = () => {
                   Forgot Password
                 </Link>
               </div>{" "}
-              <p>
+              <p className="have-account-para">
                 Don't Have account?{" "}
                 <button onClick={createAccount}>SignUp</button>{" "}
               </p>
@@ -74,7 +81,7 @@ const HomePage = () => {
           ) : (
             <div className="signup-div forms-div">
               <SignUp />
-              <p>
+              <p className="have-account-para">
                 Already have account?{" "}
                 <button onClick={clickLoginButton}>Login</button>
               </p>
@@ -97,4 +104,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

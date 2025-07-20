@@ -1,0 +1,17 @@
+
+
+@media screen and (max-width: 1500px) {
+  .HomePage .signupForm {
+    width: 96%;
+  }
+
+  .HomePage .signupForm .signup-auth {
+    margin-top: 100px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .HomePage .signupForm {
+    margin-top: 0;
+  }
+}

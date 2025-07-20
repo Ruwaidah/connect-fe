@@ -2,10 +2,11 @@ html {
   margin: 0;
   padding: 0;
   width: 100dvw;
- height: 100dvh;
+  height: 100dvh;
   background-color: whitesmoke;
   font-family: "Cabin", sans-serif;
   box-sizing: border-box;
+  /* position: relative; */
 }
 body {
   margin: 0;
@@ -20,8 +21,6 @@ input {
   border: none;
 }
 
-
-
 .logo-img {
   width: 60px;
   height: 60px;
@@ -29,5 +28,58 @@ input {
 
 .error-input {
   border: rgb(212, 61, 61) solid 1px !important;
-  background-color: rgb(235, 223, 223);
+  background-color: rgb(248, 237, 237) !important;
+}
+
+.error-para {
+  height: 20px;
+  color: rgb(206, 49, 49);
+  width: 20%;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.Loading-div {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.Loading-div p {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: rgb(41, 80, 41);
+  font-size: 1.2rem;
+}
+
+.component-div {
+  background-color: whitesmoke;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+    overflow: hidden;
+
+}
+
+.component-div .mid-section {
+  display: flex;
+  height: 80vh;
+}
+
+.component-div .mid-section .section-2-div {
+  height: 80vh;
+  width: 100%;
+}
+
+.NoList {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

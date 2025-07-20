@@ -97,6 +97,10 @@
 }
 
 @media screen and (max-width: 800px) {
+    .OTP .OTP-section {
+    width: 94%;
+    height: 300px;
+  }
   .OTP .otp-form {
     width: 70%;
   }
@@ -108,16 +112,17 @@
 }
 
 @media screen and (max-width: 500px) {
-  .OTP .OTP-section {
+  /* .OTP .OTP-section {
     width: 94%;
     height: 300px;
-  }
+  } */
 
   .OTP .OTP-section .section-1-para {
     font-size: 0.9rem;
   }
   .OTP .otp-form {
-    width: 90%;
+    width: 96%;
+    /* height: 40%; */
   }
 
   .OTP .otp-error {
@@ -125,17 +130,17 @@
   }
 
   .OTP .otp-form .otp_input_div {
-    margin: 0;
+    margin: 0 0 10px 0;
+    height: 60px;
   }
   .OTP .otp-form input[type="text"] {
-    width: 22%;
-    height: 60%;
+    width: 20%;
+    height: 100%;
     font-size: 1.2rem;
   }
 
-    .OTP .otp-form input[type="submit"] {
-      height: 30px;
-      width: 60%;
-
-    }
+  .OTP .otp-form input[type="submit"] {
+    height: 30px;
+    width: 60%;
+  }
 }
