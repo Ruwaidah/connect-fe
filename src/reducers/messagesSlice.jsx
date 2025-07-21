@@ -37,7 +37,18 @@ export const getMessagesBetweenTwoUsers = createAsyncThunk(
           "id"
         )}`
       )
-      .then(response => response.data)
+      .then((response) => response.data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  }
+);
+
+// ************************** SEND PRIVATE MESSAGE ******************************
+export const sendMessage = createAsyncThunk(
+  "SEND_PRIVATE_MESSAGE",
+  async (data, thunkAPI) => {
+    return await axiosWithAuth()
+      .post(`${import.meta.env.VITE_APP_URL}/api/auth/message`, data.data)
+      .then((response) => ({ data: response.data, sender: data.sender }))
       .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
   }
 );
@@ -79,9 +90,30 @@ const messagesSlice = createSlice({
       state.isMessagesLoading = false;
       state.isMessagesError = false;
       state.errorMessages = null;
-      state.privateMsg = action.payload
+      state.privateMsg = action.payload;
     });
     builder.addCase(getMessagesBetweenTwoUsers.rejected, (state, action) => {
+      state.isMessagesLoading = false;
+      state.isMessagesError = true;
+      state.errorMessages = action.payload;
+    });
+
+    // ************************** SEND PRIVATE MESSAGE ******************************
+    builder.addCase(sendMessage.pending, (state, action) => {
+      // state.isMessagesLoading = true;
+      // state.isMessagesError = false;
+      // state.errorMessages = null;
+    });
+    builder.addCase(sendMessage.fulfilled, (state, action) => {
+      // socket.emit("SEND_MESSAGE", action.payload);
+      console.log(action.payload)
+      state.isMessagesLoading = false;
+      state.isMessagesError = false;
+      state.errorMessages = null;
+      // state.privateMsg = action.payload.data;
+      state.privateMsg.messages = [...state.privateMsg["messages"],action.payload.data]
+    });
+    builder.addCase(sendMessage.rejected, (state, action) => {
       state.isMessagesLoading = false;
       state.isMessagesError = true;
       state.errorMessages = action.payload;

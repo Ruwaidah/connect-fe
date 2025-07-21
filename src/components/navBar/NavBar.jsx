@@ -32,7 +32,7 @@ const NavBar = () => {
     <>
       <img
         onClick={menuClick}
-        src="../src/assets/menu-icon.png"
+        src="../src/assets/menu-icon-1.png"
         id="menu-icon-img"
       />
 
@@ -46,33 +46,41 @@ const NavBar = () => {
         </div>
         <div className="menu-div">
           <div className="navbar-section-1">
+                   <NavLink
+              to="/profile"
+              onClick={() => dispatch(clearFriendSearch())}
+            >
+                 <img src="../src/assets/profile.png" />
+              Profile
+            </NavLink>
             <NavLink
               to="/addnewfriend"
               onClick={() => dispatch(clearFriendSearch())}
             >
+                  <img src="../src/assets/add-user.png" />
               Add Friend
+            </NavLink>
+                        <NavLink
+              to="/friends"
+              onClick={() => dispatch(clearFriendSearch())}
+            >
+              <img src="../src/assets/friends.png" />
+              Friends
             </NavLink>
             <NavLink
               to="/dashboard"
               onClick={() => dispatch(clearFriendSearch())}
             >
+                 <img src="../src/assets/msgs.png" />
               Messages
             </NavLink>
-            <NavLink
-              to="/friends"
-              onClick={() => dispatch(clearFriendSearch())}
-            >
-              Friends
-            </NavLink>
-            <NavLink
-              to="/profile"
-              onClick={() => dispatch(clearFriendSearch())}
-            >
-              Profile
-            </NavLink>
+
+     
           </div>
           <div className="navbar-section-2">
-            <NavLink to="/setting">Setting </NavLink>
+            <NavLink to="/setting">
+                 <img src="../src/assets/setting.png" />
+            Setting </NavLink>
           </div>{" "}
         </div>{" "}
       </div>

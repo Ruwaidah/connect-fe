@@ -19,10 +19,15 @@ const AddNewFriendForm = () => {
     findFriend,
   } = useSelector((state) => state.user);
 
-  const onSubmit = (data) => {
-    dispatch(findNewFriend(data));
+  const submitBtn = (e) => {
+    e.preventDefault();
+    document.getElementById("submit-search-user").click();
   };
 
+  const onSubmit = (data) => {
+    console.log(data)
+    dispatch(findNewFriend(data));
+  };
 
   return (
     <div className="component-div addNewFriend-component">
@@ -36,14 +41,15 @@ const AddNewFriendForm = () => {
               className="search-input"
               type="text"
               placeholder="search"
-              {...register("text", {
+              {...register("username", {
                 required: {
                   value: true,
                   message: "Require",
                 },
               })}
             />
-            <input type="submit" value="Search" />
+            <input type="submit" value="Search" id="submit-search-user" />
+            <img src="../src/assets/searching.png" onClick={submitBtn} />
           </form>
           <div className="find-friend-div">
             {findFriend ? (

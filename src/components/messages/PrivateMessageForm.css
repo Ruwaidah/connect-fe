@@ -1,0 +1,82 @@
+.PrivateMsgForm {
+  width: 99.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.PrivateMsgForm form {
+  display: flex;
+  width: 99.3%;
+  overflow-wrap: break-word;
+  position: relative;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.PrivateMsgForm form .textarea-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(227, 240, 255);
+  border-radius: 6px;
+  align-items: center;
+  margin: 0;
+  position: relative;
+}
+
+.PrivateMsgForm form .textarea-div textarea {
+  font-size: 1.2rem;
+  outline: none;
+  padding: 0;
+  padding-left: 4px;
+  padding-top: 2px;
+  width: 100%;
+  display: block;
+  background-color: transparent;
+  color: black;
+  border: none;
+  margin: 0;
+  background-color: rgb(227, 240, 255);
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 1px solid lightgray;
+  margin-bottom: 2px;
+}
+
+#texting-submit {
+  display: none;
+}
+
+.PrivateMsgForm form .textarea-div img {
+  width: 30px;
+  height: 30px;
+  padding: 0 6px 0 0;
+  position: absolute;
+  right: 1px;
+  top: 4px;
+}
+
+@media screen and (max-width: 1200px) {
+  .PrivateMsgForm form .textarea-div textarea {
+    margin-bottom: 2px;
+  }
+
+  .PrivateMsgForm form .textarea-div img {
+    top: 3px;
+    right: 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  /* .PrivateMsgForm form .textarea-div textarea {
+    height: 32px !important;
+  } */
+
+  .PrivateMsgForm form .textarea-div img {
+    top: 2px;
+    right: 0;
+    padding-right: 4px;
+  }
+}

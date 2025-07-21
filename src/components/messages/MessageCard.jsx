@@ -1,3 +1,4 @@
+import "./MessageCard.css";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,26 +12,25 @@ import PrivateMessageCard from "./PrivateMessageCard";
 const MessageCard = () => {
   const param = useParams();
   const dispatch = useDispatch();
-  const { isMessagesLoading, errorMessages, isMessagesError, privateMsg } =
-    useSelector((state) => state.messages);
+  const { user } = useSelector((state) => state.user);
+  const { isMessagesLoading, privateMsg } = useSelector(
+    (state) => state.messages
+  );
 
-  console.log(param);
   useEffect(() => {
     dispatch(getMessagesBetweenTwoUsers(param.friendid));
   }, []);
 
   return (
-    <div className="component-div MessageCard">
+    <div className="component-div MessageCard" id="MessageCard-component">
       <Header />
       <div className="mid-section">
         <NavBar />
-        <div>
-          {isMessagesLoading || !privateMsg ? (
-            <Loading />
-          ) : (
-            <PrivateMessageCard />
-          )}
-        </div>
+        {isMessagesLoading || !privateMsg || !user ? (
+          <Loading />
+        ) : (
+          <PrivateMessageCard />
+        )}
       </div>
       <Footer />
     </div>

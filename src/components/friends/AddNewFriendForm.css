@@ -14,37 +14,33 @@
 }
 
 .addNewFriend-component .mid-section .add-new-friend-form-div {
-width: 40%;
-margin-left: 10px;
+  width: 100%;
+  margin-left: 2px;
 }
 
 .addNewFriend-component .AddNewFriendForm {
   display: flex;
-  width: 100%;
-  justify-content: space-between;
+  width: 50%;
+  justify-content: flex-start;
   /* margin: 10px 40px; */
   align-items: center;
+  background-color: rgb(227, 239, 250);
+  border-radius: 6px;
 }
 
 .addNewFriend-component .AddNewFriendForm input {
   height: 40px;
+  width: 100%;
+  background-color: rgb(227, 239, 250);
 }
 
-.addNewFriend-component .AddNewFriendForm .search-input {
-  background-color: rgb(218, 218, 218);
-  width: 82%;
-}
-
-.addNewFriend-component .AddNewFriendForm input:last-child {
-  width: 17%;
-  background-color: rgb(31, 31, 31);
-  color: whitesmoke;
-  font-size: 0.9rem;
+.addNewFriend-component .AddNewFriendForm img {
+  width: 36px;
 }
 
 .addNewFriend-component .find-friend-div {
   height: 94%;
-  width: 100%;
+  width: 50%;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -52,7 +48,29 @@ margin-left: 10px;
   /* justify-content: flex-start; */
 }
 
+.AddNewFriendForm #submit-search-user {
+  display: none;
+}
+
 .addNewFriend-component .find-friend-div .no-match {
   width: 100%;
   text-align: center;
+}
+
+@media screen and (max-width: 1500px) {
+  .addNewFriend-component .mid-section .add-new-friend-form-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .addNewFriend-component .AddNewFriendForm {
+    width: 100%;
+  }
+
+  .addNewFriend-component .find-friend-div {
+    width: 100%;
+    margin-top: 2px;
+  }
 }

@@ -1,6 +1,6 @@
 import "./FriendCard.css";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addNewFriend,
@@ -101,8 +101,9 @@ const FriendCard = () => {
       </div>
       {
         findFriend.friend ? (
-          <div className="btns-request">
-            <button>Send Message</button>
+          <div className="btns-request sendmsg">
+            <img src="../src/assets/text.png" />
+            <Link to={`/messages/${findFriend.id}`}>Send Message</Link>
           </div>
         ) : findFriend.friendReq ? (
           findFriend.friendReq.userRecieveRequest === findFriend.id ? (
@@ -117,7 +118,8 @@ const FriendCard = () => {
             </div>
           )
         ) : (
-          <div className="btns-request">
+          <div className="btns-request" onClick={sendFriendReq}>
+            <img src="../src/assets/adding-user.png" />
             <button onClick={sendFriendReq}>Send Friend Request</button>
           </div>
         )

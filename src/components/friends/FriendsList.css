@@ -1,21 +1,26 @@
 .FriendsList {
-  width: 100%;
+  width: 99.6%;
   height: 70vh;
+  margin: 1px 4px;
+  box-sizing: border-box;
 }
 
 .FriendsList .user-in-list {
-  width: 100%;
+  width: 50%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
+  padding: 6px 20px;
   border-bottom: 1px solid rgb(139, 139, 139);
   box-sizing: border-box;
+  background-color: #fff2ee;
+  border: 1px solid lightgray;
+  border-radius: 18px;
 }
 
 .img-info-div {
   display: flex;
-  height: 80px;
+  /* height: 80px; */
 }
 
 .FriendsList .user-in-list img {
@@ -46,13 +51,12 @@
 }
 
 .FriendsList .user-in-list .username-bio-div .bio-para {
-  font-size: 0.8rem;
+  font-size: 0.79rem;
 }
 
 .FriendsList .user-in-list .friend-btns {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .FriendsList .user-in-list .friend-btns a {
@@ -62,11 +66,75 @@
   border: none;
   box-sizing: border-box;
   outline: none;
-  margin-bottom: 8px;
-  background-color: rgb(42, 57, 58);
-  color: whitesmoke;
+  color: black;
   padding: 6px;
-  width: 120px;
-  border-radius: 4px;
-  font-size: 0.9rem;
+  margin-left: 10px;
+}
+
+.FriendsList .user-in-list .friend-btns a img {
+  width: 40px;
+  height: 40px;
+}
+
+@media screen and (max-width: 1600px) {
+  .FriendsList .user-in-list {
+    width: 100%;
+  }
+
+  .FriendsList .user-in-list {
+    width: 100%;
+  }
+
+  .FriendsList .user-in-list {
+    padding: 6px 10px;
+  }
+
+  .FriendsList .user-in-list img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .FriendsList .user-in-list .friend-btns a img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .FriendsList {
+    width: 99%;
+  }
+
+  .FriendsList .user-in-list .friend-btns a img {
+    width: 26px;
+    height: 26px;
+  }
+
+  .FriendsList .user-in-list .friend-btns a {
+    margin-left: 4px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .FriendsList .user-in-list {
+    padding: 4px;
+  }
+
+  .FriendsList .user-in-list img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .FriendsList .user-in-list .friend-btns a img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .FriendsList .user-in-list .username-bio-div .username-para {
+    font-size: 1rem;
+  }
+
+  .FriendsList .user-in-list .username-bio-div .bio-para {
+    font-size: 0.7rem;
+  }
 }

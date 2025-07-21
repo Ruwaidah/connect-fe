@@ -63,13 +63,12 @@ input {
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-    overflow: hidden;
-
+  overflow: hidden;
 }
 
 .component-div .mid-section {
   display: flex;
-  height: 80vh;
+  height: 83vh;
 }
 
 .component-div .mid-section .section-2-div {
@@ -82,4 +81,20 @@ input {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+
+  #MessageCard-component .mid-section {
+height: 84vh;
+  }
+@media screen and (max-width: 1200px) {
+  .component-div .mid-section {
+    height: 85vh;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #MessageCard-component .mid-section {
+    height: 86.5vh;
+  }
 }

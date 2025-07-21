@@ -42,16 +42,17 @@
 .ProfileCard .profile-form .username-status-div input {
   height: 44px;
   width: 100%;
-  background-color: rgb(223, 222, 222);
+  background-color: #fff2ee;
   font-size: 0.9rem;
   padding-left: 10px;
   box-sizing: border-box;
   border-radius: 6px;
   margin-bottom: 16px;
+  border: 1px solid lightgray;
 }
 
 .ProfileCard .profile-form .input-div p {
-  color: rgb(56, 85, 83);
+  color: rgb(37, 56, 55);
 }
 
 .ProfileCard .profile-form .username-status-div .input-div,
@@ -80,7 +81,7 @@
 .ProfileCard .profile-form .submit-edit-btn button {
   border: none;
   outline: none;
-  background-color: rgb(160, 187, 169);
+  background-color: rgb(181, 209, 190);
   border-radius: 4px;
   width: 49%;
   height: 40px;

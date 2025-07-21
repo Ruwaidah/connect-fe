@@ -14,6 +14,8 @@ const FriendsList = () => {
     friendsList,
   } = useSelector((state) => state.user);
 
+  console.log(friendsList);
+
   if (isGetFriendsLoading)
     return (
       <div className="Loading-div">
@@ -37,8 +39,12 @@ const FriendsList = () => {
             </div>
           </div>
           <div className="friend-btns">
-            <Link to={`/friend/profile/${u.id}`}>View Profile</Link>
-            <Link>Send Message</Link>
+            <Link to={`/friend/profile/${u.friendId}`}>
+              <img src="../src/assets/friend-info.png" />
+            </Link>
+            <Link to={`/messages/${u.friendId}`}>
+              <img src="../src/assets/text.png" />
+            </Link>
           </div>
         </div>
       ))}

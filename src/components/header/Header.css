@@ -7,7 +7,8 @@
   align-items: center;
   box-sizing: border-box;
   padding: 10px;
-  color: black;
+  color: rgb(59, 100, 136);
+  z-index: 1;
 }
 
 .Header h4 {
@@ -31,15 +32,14 @@
   }
 }
 
-
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 500px) {
   .Header h4 {
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-left: 6px;
   }
 
   .Header img {
-    width: 40px;
-    height: 40px;
+    width: 28px;
+    height: 28px;
   }
 }

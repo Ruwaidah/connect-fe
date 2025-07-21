@@ -1,21 +1,25 @@
 .SearchFriendForm {
-  width: 92%;
   display: flex;
+  width: 49.7%;
+  height: 40px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+  padding-bottom: 2px;
+  box-sizing: border-box;
+  border: 1px solid lightgrey;
+  border-radius: 10px;
+  margin: 1px 4px;
 }
-
-.SearchFriendForm  {
-    display: flex;
-    height: 100%;
-    width: 90%;
-    box-sizing: border-box;
-}
-
 .SearchFriendForm form {
-    height: 100%;
-    width: 80%;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: rgb(235, 245, 255);
 }
 
-form input {
+.SearchFriendForm form input {
   height: 100%;
   width: 100%;
   padding-left: 10px;
@@ -23,5 +27,48 @@ form input {
   outline: none;
   box-sizing: border-box;
   border-radius: 4px;
-  background-color: rgb(233, 233, 233);
+  background-color: rgb(235, 245, 255);
+}
+
+.SearchFriendForm form img {
+  width: 34px;
+  height: 34px;
+  margin-right: 6px;
+  cursor: pointer;
+}
+
+#search-friend-input {
+  display: none;
+}
+
+@media screen and (max-width: 1600px) {
+  .SearchFriendForm {
+    width: 99.6%;
+  }
+
+  .SearchFriendForm form img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .SearchFriendForm {
+    width: 98.8%;
+  }
+
+  .SearchFriendForm form img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .SearchFriendForm {
+    height: 32px;
+  }
+  .SearchFriendForm form img {
+    width: 26px;
+    height: 26px;
+  }
 }

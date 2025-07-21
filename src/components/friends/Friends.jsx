@@ -31,9 +31,9 @@ const Friends = () => {
       <div className="mid-section">
         <NavBar />
         <div className="friends-forms-friendslist-div">
-          <div className="friends-forms-div">
+          {/* <div className="friends-forms-div"> */}
             <SearchFriendForm />
-          </div>
+          {/* </div> */}
           <FriendsList />
         </div>{" "}
       </div>

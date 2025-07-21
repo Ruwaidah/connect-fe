@@ -2,9 +2,10 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: rgb(231, 231, 231);
+  background-color: #fff2ee;
   border-radius: 6px;
   margin-bottom: 2px;
+  border: 1px solid lightgray;
 }
 
 .Messages .message h4 {
