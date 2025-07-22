@@ -63,7 +63,7 @@ const Messages = () => {
           opacity: 1,
         });
       }
-    }, 100);
+    }, 200);
   }, [isStartNewChat, isGetFriendsLoading]);
 
   const searchNewChat = () => {
