@@ -80,7 +80,6 @@ const Messages = () => {
     dispatch(getFriends());
   };
 
-  console.log(isStartNewChat);
 
   const objKeys = Object.keys(messages);
 

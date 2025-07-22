@@ -18,9 +18,6 @@ const Friends = () => {
     friendsList,
   } = useSelector((state) => state.user);
 
-  console.log(isGetFriendsLoading);
-  console.log(friendsList);
-
   useEffect(() => {
     dispatch(getFriends());
   }, []);

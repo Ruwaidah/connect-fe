@@ -18,14 +18,11 @@ import MessageCard from "../components/messages/MessageCard";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
-  console.log("srffwe", localStorage.getItem("id"));
 
   useEffect(() => {
     if (localStorage.getItem("id")) {
-      console.log("srffwe", localStorage.getItem("id"));
       dispatch(getUser());
     }
-    //  else console.log("no");
   }, []);
   return (
     <Routes>

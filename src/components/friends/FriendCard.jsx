@@ -20,8 +20,6 @@ const FriendCard = () => {
     findFriendError,
     findFriendErrorMessage,
   } = useSelector((state) => state.user);
-  console.log(findFriend);
-  console.log(param);
 
   useEffect(() => {
     if (param.friendid) dispatch(getFriendById(param.friendid));
@@ -76,7 +74,6 @@ const FriendCard = () => {
       })
     );
   };
-  console.log(findFriendLoading, findFriendErrorMessage);
   if (findFriendLoading || !findFriend) return <Loading />;
   else if (findFriend.message)
     return (

@@ -86,7 +86,6 @@ const messagesSlice = createSlice({
       state.isMessagesError = false;
     });
     builder.addCase(getMessagesBetweenTwoUsers.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.isMessagesLoading = false;
       state.isMessagesError = false;
       state.errorMessages = null;
@@ -106,7 +105,6 @@ const messagesSlice = createSlice({
     });
     builder.addCase(sendMessage.fulfilled, (state, action) => {
       // socket.emit("SEND_MESSAGE", action.payload);
-      console.log(action.payload)
       state.isMessagesLoading = false;
       state.isMessagesError = false;
       state.errorMessages = null;

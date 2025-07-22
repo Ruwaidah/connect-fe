@@ -138,7 +138,6 @@ export const requestNewPassword = createAsyncThunk(
 
 // *************************** GET USER *******************************
 export const getUser = createAsyncThunk("GET_USER", async (data, thunkAPI) => {
-  console.log(localStorage.getItem("id"));
   return await axiosWithAuth()
     .get(
       `${import.meta.env.VITE_APP_URL}/api/users/getUser/${localStorage.getItem(
@@ -636,7 +635,6 @@ const usersSlice = createSlice({
       state.addingNewFriendErrorMessage = null;
     });
     builder.addCase(addNewFriend.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.addingNewFriendLoading = false;
       state.addingNewFriendError = false;
       state.addingNewFriendErrorMessage = null;
@@ -725,7 +723,6 @@ const usersSlice = createSlice({
       state.findFriend = null;
     });
     builder.addCase(getFriendById.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.findFriendLoading = false;
       state.findFriendError = false;
       state.findFriendErrorMessage = null;

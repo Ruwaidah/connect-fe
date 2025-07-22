@@ -25,7 +25,6 @@ const AddNewFriendForm = () => {
   };
 
   const onSubmit = (data) => {
-    console.log(data)
     dispatch(findNewFriend(data));
   };
 

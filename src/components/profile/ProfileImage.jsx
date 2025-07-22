@@ -51,7 +51,6 @@ const ProfileImage = () => {
   };
 
   const cancelImageChange = () => {
-    console.log("wfwfwfw");
     setIsImageChange(false);
     setImageUpload(user.image);
     reset();

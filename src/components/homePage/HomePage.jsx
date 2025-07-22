@@ -33,21 +33,13 @@ const HomePage = () => {
     });
   }, {});
 
-     gsap.to(".HomePage .section .img-sections .msg-01", {
-      opacity: 1,
-      duration: 6,
-      ease: "power1.inOut",
-    });
-
   const googleLogin = (data) => {
-    console.log(data);
     dispatch(loginWithGoogle(data));
   };
 
   const errorLoginGoogle = (data) => {
     console.log(data);
   };
-  console.log(isAuthError);
 
   // ************************ CLICK SIGNUP BUTTON ********************
   const createAccount = () => setIsLoginForm(false);
