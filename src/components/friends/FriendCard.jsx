@@ -102,7 +102,7 @@ const FriendCard = () => {
       {
         findFriend.friend ? (
           <div className="btns-request sendmsg">
-            <img src="../src/assets/text.png" />
+            <img src="./assets/text.png" />
             <Link to={`/messages/${findFriend.id}`}>Send Message</Link>
           </div>
         ) : findFriend.friendReq ? (
@@ -119,7 +119,7 @@ const FriendCard = () => {
           )
         ) : (
           <div className="btns-request" onClick={sendFriendReq}>
-            <img src="../src/assets/adding-user.png" />
+            <img src="./assets/adding-user.png" />
             <button onClick={sendFriendReq}>Send Friend Request</button>
           </div>
         )

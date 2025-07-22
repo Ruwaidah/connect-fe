@@ -25,7 +25,7 @@ const SearchFriendForm = () => {
             },
           })}
         />
-        <img src="../src/assets/search-user.png" onClick={submitBtn} />
+        <img src="./assets/search-user.png" onClick={submitBtn} />
         <input type="submit" id="search-friend-input" />
       </form>
     </div>

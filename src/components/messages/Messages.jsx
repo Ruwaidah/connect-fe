@@ -79,7 +79,7 @@ const Messages = () => {
     <div className="Messages section-2-div">
       <div className="messages-header">
         <h2>Messages</h2>
-        <img src="../src/assets/new-msg.png" onClick={searchNewChat} />
+        <img src="./assets/new-msg.png" onClick={searchNewChat} />
       </div>
       {isMessagesLoading || isGetFriendsLoading ? (
         <Loading />
