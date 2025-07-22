@@ -7,17 +7,16 @@
 }
 
 .FriendCard {
-  width: 100%;
+  width: 90%;
   height: 100%;
-  margin-top: 10px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: rgb(252, 252, 252);
+  background-color: transparent;
   padding: 10px 20px 20px 30px;
   box-sizing: border-box;
   border-radius: 4px;
-  box-shadow: 1px 4px 10px 1px rgb(192, 192, 192);
 }
 
 .FriendCard .btns-request {
@@ -41,7 +40,7 @@
   color: rgb(18, 59, 70);
 }
 
-.FriendCard  .sendmsg a {
+.FriendCard .sendmsg a {
   color: rgb(17, 45, 61);
 }
 
@@ -88,4 +87,39 @@
 
 .FriendCard .user-info-img-div .user-info-div p:last-child {
   margin-left: 6px;
+}
+
+@media screen and (max-width: 800px) {
+  .FriendCard {
+    padding: 10px;
+  }
+  .FriendCard .user-info-img-div {
+    height: 180px;
+  }
+  .FriendCard {
+    width: 100%;
+  }
+
+  .FriendCard .user-info-img-div .img-username-div img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .FriendCard .user-info-img-div .user-info-div #para-bio {
+    margin-top: 6px;
+  }
+
+  .FriendCard .sendmsg a {
+    font-size: 0.9rem;
+  }
+  .FriendCard .sendmsg img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .user-info-img-div {
+    margin-left: 30px;
+  }
 }

@@ -46,21 +46,21 @@ const NavBar = () => {
         </div>
         <div className="menu-div">
           <div className="navbar-section-1">
-                   <NavLink
+            <NavLink
               to="/profile"
               onClick={() => dispatch(clearFriendSearch())}
             >
-                 <img src="../src/assets/profile.png" />
+              <img src="../src/assets/profile.png" />
               Profile
             </NavLink>
             <NavLink
               to="/addnewfriend"
               onClick={() => dispatch(clearFriendSearch())}
             >
-                  <img src="../src/assets/add-user.png" />
+              <img src="../src/assets/add-user.png" />
               Add Friend
             </NavLink>
-                        <NavLink
+            <NavLink
               to="/friends"
               onClick={() => dispatch(clearFriendSearch())}
             >
@@ -71,16 +71,15 @@ const NavBar = () => {
               to="/dashboard"
               onClick={() => dispatch(clearFriendSearch())}
             >
-                 <img src="../src/assets/msgs.png" />
+              <img src="../src/assets/msgs.png" />
               Messages
             </NavLink>
-
-     
           </div>
           <div className="navbar-section-2">
             <NavLink to="/setting">
-                 <img src="../src/assets/setting.png" />
-            Setting </NavLink>
+              <img src="../src/assets/setting.png" />
+              Setting{" "}
+            </NavLink>
           </div>{" "}
         </div>{" "}
       </div>

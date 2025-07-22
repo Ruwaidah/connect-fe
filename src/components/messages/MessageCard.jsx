@@ -32,7 +32,7 @@ const MessageCard = () => {
           <PrivateMessageCard />
         )}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
