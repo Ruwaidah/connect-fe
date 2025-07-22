@@ -1,5 +1,14 @@
+.navBar-component {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  background-color: transparent;
+  height: 100vh;
+  z-index: 3;
+}
+
 .NavBar {
-  width: 22%;
+  width: 24%;
   height: 83vh;
   border-right: 1px solid black;
   display: flex;
@@ -99,7 +108,7 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 800px) {
   #menu-icon-img {
     display: block;
     position: absolute;
@@ -171,7 +180,7 @@
     width: 24px;
     height: 24px;
   }
-    .NavBar .navbar-section-2 {
-      margin: 0;
-    }
+  .NavBar .navbar-section-2 {
+    margin: 0;
+  }
 }

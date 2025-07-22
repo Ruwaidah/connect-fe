@@ -14,15 +14,15 @@ const NavBar = () => {
       setIsMenuOpen(true);
       gsap.registerPlugin();
       gsap.to(".NavBar", {
-        right: 0,
-        duration: 2,
+        right: window.screen.width < 600 ? "-50%" : "-75%",
+        duration: 1,
         yoyo: true,
       });
     } else {
       setIsMenuOpen(false);
       gsap.to(".NavBar", {
         right: "-100%",
-        duration: 2,
+        duration: 1,
         yoyo: true,
       });
     }
@@ -30,12 +30,12 @@ const NavBar = () => {
 
   return (
     <>
+      {" "}
       <img
         onClick={menuClick}
         src="../src/assets/menu-icon-1.png"
         id="menu-icon-img"
       />
-
       <div className="NavBar">
         <div className="menu-icon-div">
           <img
