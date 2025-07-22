@@ -7,6 +7,7 @@ const initialState = {
   isError: false,
   isLoading: false,
   isErrorMessage: null,
+  isStartNewChat: false,
 
   isAuthLoading: false,
   isAuthError: false,
@@ -317,6 +318,9 @@ const usersSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    startNewChatList: (state, action) => {
+      state.isStartNewChat = action.payload;
+    },
     clearChangePassword: (state) => {
       state.isOTPPage = false;
       state.isOtpLoading = false;
@@ -336,6 +340,7 @@ const usersSlice = createSlice({
       state.findFriendLoading = false;
       state.findFriendError = false;
       state.findFriendErrorMessage = null;
+      state.isStartNewChat = false;
     },
     changeTheEmail: (state) => {
       state.isOTPPage = false;
@@ -347,7 +352,7 @@ const usersSlice = createSlice({
       state.isError = false;
       state.isLoading = false;
       state.isErrorMessage = null;
-
+      state.isStartNewChat = false;
       state.isAuthLoading = false;
       state.isAuthError = false;
       state.errorMessage = null;
@@ -740,6 +745,7 @@ export const {
   clearChangePassword,
   changeTheEmail,
   clearFriendSearch,
+  startNewChatList,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

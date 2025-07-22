@@ -18,9 +18,14 @@
   margin-left: 2px;
 }
 
+.addNewFriend-component .mid-section .add-new-friend-form-div .no-match {
+  width: 100%;
+}
+
 .addNewFriend-component .AddNewFriendForm {
   display: flex;
-  width: 50%;
+  width: 99.5%;
+  margin: 0 auto;
   justify-content: flex-start;
   /* margin: 10px 40px; */
   align-items: center;
@@ -32,15 +37,18 @@
   height: 40px;
   width: 100%;
   background-color: rgb(227, 239, 250);
+  font-size: 1.1rem;
+  padding-left: 10px;
 }
 
 .addNewFriend-component .AddNewFriendForm img {
-  width: 36px;
+  width: 32px;
+  padding-right: 10px;
 }
 
 .addNewFriend-component .find-friend-div {
   height: 94%;
-  width: 50%;
+  width: 100%;
   display: flex;
   align-items: center;
   box-sizing: border-box;
@@ -72,5 +80,12 @@
   .addNewFriend-component .find-friend-div {
     width: 100%;
     margin-top: 2px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .addNewFriend-component .AddNewFriendForm input {
+    height: 34px;
+    font-size: 1rem;
   }
 }

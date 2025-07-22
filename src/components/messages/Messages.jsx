@@ -1,44 +1,111 @@
 import "./Messages.css";
-import { useEffect } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { startNewChatList, getFriends } from "../../reducers/usersSlice";
 import { getMessages } from "../../reducers/messagesSlice";
 import Loading from "../loading/Loading";
 import NoMessages from "./NoMessages";
 import { Link } from "react-router-dom";
+import SearchFriendForm from "../friends/SearchFriendForm";
+import FriendsList from "../friends/FriendsList";
 
 const Messages = () => {
   const dispatch = useDispatch();
   const { messages, isMessagesLoading, isMessagesError, errorMessages } =
     useSelector((state) => state.messages);
 
+  const {
+    isStartNewChat,
+    isGetFriendsLoading,
+    isGetFriendsError,
+    isGetFriendsErrorMessage,
+    friendsList,
+  } = useSelector((state) => state.user);
+
   useEffect(() => {
     dispatch(getMessages());
   }, []);
 
-  const objKeys = Object.keys(messages);
-  console.log(messages);
-  console.log(objKeys);
+  useEffect(() => {
+    setTimeout(() => {
+      if (isStartNewChat) {
+        for (let i = 0; i <= friendsList.length - 1; i++) {
+          document.getElementById(`.StartNewChat .FriendsList .friend-${i}`);
+          try {
+            gsap.from(`.StartNewChat .FriendsList #friend-${i}`, {
+              duration: 1,
+              ease: "circ.out",
+              x: "100%",
+            });
 
-  if (isMessagesLoading)
-    return (
-      <div className="Loading-div">
-        <p>Loading ... </p>
-      </div>
-    );
-  else if (objKeys.length === 0) return <NoMessages />;
+            gsap.to(`.StartNewChat .FriendsList #friend-${i}`, {
+              duration: 1,
+              ease: "circ.out",
+              x: "0",
+              opacity: 1,
+            });
+          } catch {
+            return;
+          }
+        }
+      } else {
+        gsap.from(".message", {
+          duration: 1,
+          ease: "circ.out",
+          x: "100%",
+        });
+        gsap.to(".message", {
+          duration: 1,
+          ease: "circ.out",
+          x: "0",
+          opacity: 1,
+        });
+      }
+    }, 100);
+  }, [isStartNewChat, isGetFriendsLoading]);
+
+  const searchNewChat = () => {
+    dispatch(startNewChatList(!isStartNewChat));
+    dispatch(getFriends());
+  };
+
+  console.log(isStartNewChat);
+
+  const objKeys = Object.keys(messages);
 
   return (
     <div className="Messages section-2-div">
-      {objKeys.map((msg, indx) => (
-        <Link key={indx} className="message" to={`/messages/${messages[msg].friend.id}`}>
-          <h4>
-            {messages[msg].friend.firstName} {messages[msg].friend.lastName}
-          </h4>
-          <p>
-            {messages[msg].messages[messages[msg].messages.length - 1].text}
-          </p>
-        </Link>
-      ))}
+      <div className="messages-header">
+        <h2>Messages</h2>
+        <img src="../src/assets/new-msg.png" onClick={searchNewChat} />
+      </div>
+      {isMessagesLoading || isGetFriendsLoading ? (
+        <Loading />
+      ) : objKeys.length === 0 ? (
+        <NoMessages />
+      ) : isStartNewChat ? (
+        <div className="StartNewChat">
+          <SearchFriendForm />
+          <FriendsList />
+        </div>
+      ) : (
+        objKeys.map((msg, indx) => (
+          <Link
+            key={indx}
+            className="message"
+            to={`/messages/${messages[msg].friend.id}`}
+          >
+            <h4>
+              {messages[msg].friend.firstName} {messages[msg].friend.lastName}
+            </h4>
+            <p>
+              {messages[msg].messages[messages[msg].messages.length - 1].text}
+            </p>
+          </Link>
+        ))
+      )}
     </div>
   );
 };

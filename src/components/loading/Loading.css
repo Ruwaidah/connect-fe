@@ -1,15 +1,21 @@
-.Loading p{
-margin: 0;
+.Loading p {
+  margin: 0;
 }
 
 .MessageCard .Loading {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .MessageCard .Loading p {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
+.Messages .Loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

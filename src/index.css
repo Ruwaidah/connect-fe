@@ -1,11 +1,13 @@
 html {
   margin: 0;
   padding: 0;
-  width: 100dvw;
+  width: 60%;
+  margin: 0 auto;
   height: 100dvh;
   background-color: whitesmoke;
   font-family: "Cabin", sans-serif;
   box-sizing: border-box;
+  box-shadow: 1px 10px 20px 1px lightgray;
   /* position: relative; */
 }
 body {
@@ -83,10 +85,16 @@ input {
   align-items: center;
 }
 
+#MessageCard-component .mid-section {
+  height: 84vh;
+}
 
-  #MessageCard-component .mid-section {
-height: 84vh;
+@media screen and (max-width: 1500px) {
+  html {
+    width: 100%;
   }
+}
+
 @media screen and (max-width: 1200px) {
   .component-div .mid-section {
     height: 85vh;

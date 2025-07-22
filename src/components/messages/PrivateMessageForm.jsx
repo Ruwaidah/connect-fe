@@ -1,14 +1,32 @@
 import "./PrivateMessageForm.css";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { sendMessage } from "../../reducers/messagesSlice";
 
 const PrivateMessageForm = (props) => {
   const dispatch = useDispatch();
   const { user, privateMsg } = useSelector((state) => state.messages);
   const { register, handleSubmit, reset, watch } = useForm();
+  const [reSize, setResize] = useState(
+    window.screen.width >= 1200
+      ? "l"
+      : window.screen.width <= 1200 && window.screen.width >= 500
+      ? "m"
+      : window.screen.width <=  500
+      ? "s"
+      : "s"
+  );
 
+  useEffect(() => {
+    const text = document.getElementById("text-area");
+    if (text) {
+      if (reSize === "l") text.style.height = "34px";
+      else if (reSize === "m") text.style.height = "32px";
+      // else if (reSize === "m") text.style.height = "30px";
+      else text.style.height = "29px";
+    }
+  }, [reSize]);
   const submitBtn = (e) => {
     e.preventDefault();
     document.getElementById("texting-submit").click();
@@ -28,13 +46,27 @@ const PrivateMessageForm = (props) => {
 
     reset();
   };
+  console.log(reSize)
+  addEventListener("resize", (e) => {
+    if (window.screen.width >= 1200) setResize("l");
+    else if (window.screen.width <= 1200 && window.screen.width >= 500)
+      setResize("m");
+    else if (window.screen.width <= 500) setResize("s");
+    // else setResize("s");
+  });
   useEffect(() => {
     const text = document.getElementById("text-area");
-    if (text.scrollHeight > 36 && text.value) {
-      if (text.style.height !== text.scrollHeight + "px")
-        props.setSendMsg(!props.sendMsg);
-      text.style.height = text.scrollHeight + "px";
-    } else text.style.height = "32px";
+    if (text.value) {
+      if (
+        (reSize === "l" && text.scrollHeight > 34) ||
+        (reSize === "m" && text.scrollHeight > 30) ||
+        (reSize === "s" && text.scrollHeight > 29)
+      ) {
+        if (text.style.height !== text.scrollHeight + "px")
+          props.setSendMsg(!props.sendMsg);
+        text.style.height = text.scrollHeight + "px";
+      }
+    }
   }, [watch("msg")]);
 
   return (

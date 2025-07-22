@@ -11,6 +11,7 @@ const FriendsList = () => {
     isGetFriendsLoading,
     isGetFriendsError,
     isGetFriendsErrorMessage,
+    isStartNewChat,
     friendsList,
   } = useSelector((state) => state.user);
 
@@ -27,7 +28,7 @@ const FriendsList = () => {
   return (
     <div className="FriendsList">
       {friendsList.map((u, i) => (
-        <div key={u.id} className="user-in-list">
+        <div key={u.id} className="user-in-list" id={`friend-${i}`}>
           <div className="img-info-div">
             <img src={u.image} width="50px" />
             <div className="username-bio-div">
@@ -38,14 +39,16 @@ const FriendsList = () => {
               <p className="bio-para">{u.bio ? u.bio : "No Status"}</p>
             </div>
           </div>
-          <div className="friend-btns">
-            <Link to={`/friend/profile/${u.friendId}`}>
-              <img src="../src/assets/friend-info.png" />
-            </Link>
-            <Link to={`/messages/${u.friendId}`}>
-              <img src="../src/assets/text.png" />
-            </Link>
-          </div>
+          {isStartNewChat ? null : (
+            <div className="friend-btns">
+              <Link to={`/friend/profile/${u.friendId}`}>
+                <img src="../src/assets/friend-info.png" />
+              </Link>
+              <Link to={`/messages/${u.friendId}`}>
+                <img src="../src/assets/text.png" />
+              </Link>
+            </div>
+          )}
         </div>
       ))}
     </div>
