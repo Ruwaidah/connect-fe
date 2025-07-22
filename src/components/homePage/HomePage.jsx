@@ -33,6 +33,12 @@ const HomePage = () => {
     });
   }, {});
 
+     gsap.to(".HomePage .section .img-sections .msg-01", {
+      opacity: 1,
+      duration: 6,
+      ease: "power1.inOut",
+    });
+
   const googleLogin = (data) => {
     console.log(data);
     dispatch(loginWithGoogle(data));
@@ -89,7 +95,7 @@ const HomePage = () => {
           )}
         </div>
         <div className="img-sections">
-          <img src="./assets/msg-01.png" className="msg-01" />
+          <img src="./assets/msg-01.png"  className="msg-01" />
           <img src="./assets/msg-02.png" className="msg-02" />
           <img src="./assets/msg-03.png" className="msg-03" />
           <img src="./assets/msg-04.png" className="msg-04" />

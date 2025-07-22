@@ -24,6 +24,14 @@ const Messages = () => {
     friendsList,
   } = useSelector((state) => state.user);
 
+  setTimeout(() => {
+    gsap.to(".message", {
+      opacity: 1,
+      duration: 1,
+      ease: "power1.inOut",
+    });
+  }, 100);
+
   useEffect(() => {
     dispatch(getMessages());
   }, []);
@@ -50,19 +58,20 @@ const Messages = () => {
             return;
           }
         }
-      } else {
-        gsap.from(".message", {
-          duration: 1,
-          ease: "circ.out",
-          x: "100%",
-        });
-        gsap.to(".message", {
-          duration: 1,
-          ease: "circ.out",
-          x: "0",
-          opacity: 1,
-        });
       }
+      // else {
+      //   gsap.from(".message", {
+      //     duration: 1,
+      //     ease: "circ.out",
+      //     x: "100%",
+      //   });
+      //   gsap.to(".message", {
+      //     duration: 1,
+      //     ease: "circ.out",
+      //     x: "0",
+      //     opacity: 1,
+      //   });
+      // }
     }, 200);
   }, [isStartNewChat, isGetFriendsLoading]);
 

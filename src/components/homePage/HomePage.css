@@ -1,8 +1,9 @@
 .HomePage {
+  /* background-image: url("./assets/messaging.avif"); */
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-start;
   background-color: whitesmoke;
   background-repeat: no-repeat;
@@ -19,7 +20,8 @@
   display: flex;
   width: 100%;
   height: 80vh;
-  justify-content: center;
+  justify-content: flex-start;
+  margin-left: 40px;
 }
 
 .HomePage .section .section-auth {
@@ -46,6 +48,7 @@
 .HomePage .section .img-sections .msg-01 {
   top: 40%;
   right: 60%;
+  opacity: 0;
 }
 
 .msg-02 {
