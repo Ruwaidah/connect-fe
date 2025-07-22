@@ -49,7 +49,7 @@ const AddNewFriendForm = () => {
               })}
             />
             <input type="submit" value="Search" id="submit-search-user" />
-            <img src="../src/assets/searching.png" onClick={submitBtn} />
+            <img src="./assets/searching.png" onClick={submitBtn} />
           </form>
           <div className="find-friend-div">
             {findFriend ? (

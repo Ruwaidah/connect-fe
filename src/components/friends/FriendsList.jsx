@@ -42,10 +42,10 @@ const FriendsList = () => {
           {isStartNewChat ? null : (
             <div className="friend-btns">
               <Link to={`/friend/profile/${u.friendId}`}>
-                <img src="../src/assets/friend-info.png" />
+                <img src="./assets/friend-info.png" />
               </Link>
               <Link to={`/messages/${u.friendId}`}>
-                <img src="../src/assets/text.png" />
+                <img src="./assets/text.png" />
               </Link>
             </div>
           )}

@@ -89,7 +89,7 @@ const PrivateMessageForm = (props) => {
             })}
           />
           <img
-            src="../src/assets/send-text.png"
+            src="./assets/send-text.png"
             type="submit"
             onClick={submitBtn}
           />
