@@ -34,14 +34,12 @@ const HomePage = () => {
   }, {});
 
   const googleLogin = (data) => {
-    console.log(data);
     dispatch(loginWithGoogle(data));
   };
 
   const errorLoginGoogle = (data) => {
     console.log(data);
   };
-  console.log(isAuthError);
 
   // ************************ CLICK SIGNUP BUTTON ********************
   const createAccount = () => setIsLoginForm(false);

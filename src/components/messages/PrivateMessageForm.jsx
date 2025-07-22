@@ -46,7 +46,6 @@ const PrivateMessageForm = (props) => {
 
     reset();
   };
-  console.log(reSize)
   addEventListener("resize", (e) => {
     if (window.screen.width >= 1200) setResize("l");
     else if (window.screen.width <= 1200 && window.screen.width >= 500)

@@ -15,7 +15,6 @@ const FriendsList = () => {
     friendsList,
   } = useSelector((state) => state.user);
 
-  console.log(friendsList);
 
   if (isGetFriendsLoading)
     return (
