@@ -13,6 +13,9 @@ html {
 body {
   margin: 0;
 }
+p {
+  margin: 0;
+}
 a {
   text-decoration: none;
   outline: none;
@@ -78,6 +81,41 @@ input {
   width: 100%;
 }
 
+.component-div .mid-section .section-2-div .page-header,
+.component-div .mid-section .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: antiquewhite;
+  padding: 10px 10px;
+  font-size: 1rem;
+  width: 99.5%;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.component-div .mid-section .page-header div {
+  display: flex;
+}
+
+.component-div .mid-section .page-header div img {
+  margin-right: 4px;
+}
+
+.component-div .mid-section .section-2-div .page-header h2,
+.component-div .mid-section .page-header h2 {
+  margin: 0;
+  color: rgb(56, 34, 5);
+  font-size: 1.2rem;
+}
+
+.component-div .mid-section .section-2-div .page-header img,
+.component-div .mid-section .page-header img {
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+
 .NoList {
   box-sizing: border-box;
   display: flex;
@@ -89,6 +127,14 @@ input {
   height: 84vh;
 }
 
+.blur-div,
+.blur-div-out .NavBar,
+.blur-div-out .img-blur,
+.blur-div-out .Header,
+.blur-div-out #Footer {
+  filter: blur(2px) !important;
+}
+
 @media screen and (max-width: 1500px) {
   html {
     width: 100%;
@@ -98,6 +144,22 @@ input {
 @media screen and (max-width: 1200px) {
   .component-div .mid-section {
     height: 85vh;
+  }
+
+  .component-div .mid-section .section-2-div .page-header,
+  .component-div .mid-section .page-header {
+    padding: 8px 16px;
+  }
+
+  .component-div .mid-section .section-2-div .page-header h2,
+  .component-div .mid-section .page-header h2 {
+    font-size: 1rem;
+  }
+  .component-div .mid-section .section-2-div .page-header img,
+  .component-div .mid-section .page-header a,
+  .component-div .mid-section .page-header img {
+    width: 24px;
+    height: 24px;
   }
 }
 

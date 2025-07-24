@@ -15,7 +15,6 @@ const FriendsList = () => {
     friendsList,
   } = useSelector((state) => state.user);
 
-
   if (isGetFriendsLoading)
     return (
       <div className="Loading-div">
@@ -38,16 +37,17 @@ const FriendsList = () => {
               <p className="bio-para">{u.bio ? u.bio : "No Status"}</p>
             </div>
           </div>
-          {isStartNewChat ? null : (
-            <div className="friend-btns">
+
+          <div className="friend-btns">
+            {isStartNewChat ? null : (
               <Link to={`/friend/profile/${u.friendId}`}>
                 <img src="./assets/friend-info.png" />
               </Link>
-              <Link to={`/messages/${u.friendId}`}>
-                <img src="./assets/text.png" />
-              </Link>
-            </div>
-          )}
+            )}
+            <Link to={`/messages/${u.friendId}`}>
+              <img src="./assets/text.png" />
+            </Link>
+          </div>
         </div>
       ))}
     </div>

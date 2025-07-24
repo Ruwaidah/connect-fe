@@ -25,6 +25,7 @@ const AddNewFriendForm = () => {
   };
 
   const onSubmit = (data) => {
+    console.log("dsgsg")
     dispatch(findNewFriend(data));
   };
 
@@ -34,6 +35,10 @@ const AddNewFriendForm = () => {
       <div className="mid-section">
         <NavBar />
         <div className="section-2-div add-new-friend-form-div">
+          <div className="friends-header page-header">
+            <h2>Search</h2>
+            <img src="./assets/add-user.png" />
+          </div>
           <form className="AddNewFriendForm" onSubmit={handleSubmit(onSubmit)}>
             <p> {findFriendLoading ? "Searching ..." : null}</p>
             <input

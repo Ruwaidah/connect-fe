@@ -1,5 +1,5 @@
 import "./FriendCard.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -8,17 +8,21 @@ import {
   rejectFriendRequest,
   approveFriendRequest,
   getFriendById,
+  deletingFriendUser,
+  deleteFriend,
 } from "../../reducers/usersSlice";
 import Loading from "../loading/Loading";
 
 const FriendCard = () => {
   const dispatch = useDispatch();
+  const [userSentReq, setUserSentReq] = useState(false);
   const param = useParams();
   const {
     findFriend,
     findFriendLoading,
     findFriendError,
     findFriendErrorMessage,
+    isDeleteUser,
   } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -27,7 +31,7 @@ const FriendCard = () => {
 
   // ************************************* SEND FRIEND REQUEST *************************************
   const sendFriendReq = () => {
-    dispatch(
+    return dispatch(
       addNewFriend({
         userSendRequest: localStorage.getItem("id"),
         userRecieveRequest: findFriend.id,
@@ -74,6 +78,13 @@ const FriendCard = () => {
       })
     );
   };
+
+  // ************************** DELETE FRIEND  ******************************
+  const deletingUser = () => {
+    dispatch(deleteFriend(findFriend.id));
+    dispatch(deletingFriendUser(false));
+  };
+
   if (findFriendLoading || !findFriend) return <Loading />;
   else if (findFriend.message)
     return (
@@ -83,7 +94,31 @@ const FriendCard = () => {
     );
   return (
     <div className="FriendCard">
-      <div className="user-info-img-div">
+      {isDeleteUser ? (
+        <div className="delete-big-div">
+          <div className="delete-div-out">
+            <div className="delete-div-in">
+              <p>Delete Friend?</p>
+              <div className="delete-btns-div">
+                <div onClick={deletingUser}>
+                  <img src="./assets/yes.png" />
+                  <button>Yes</button>
+                </div>
+                <div onClick={() => dispatch(deletingFriendUser(false))}>
+                  {" "}
+                  <img src="./assets/no.png" />
+                  <button>No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      <div
+        className={
+          isDeleteUser ? "blur-div user-info-img-div" : "user-info-img-div"
+        }
+      >
         <div className="img-username-div">
           <img src={findFriend.image} />
           <p id="username-para">@{findFriend.username}</p>
@@ -98,14 +133,35 @@ const FriendCard = () => {
       </div>
       {
         findFriend.friend ? (
-          <div className="btns-request sendmsg">
-            <img src="./assets/text.png" />
-            <Link to={`/messages/${findFriend.id}`}>Send Message</Link>
+          <div
+            className={
+              isDeleteUser
+                ? "btns-request sendmsg blur-div"
+                : "btns-request sendmsg"
+            }
+          >
+            <div>
+              <img src="./assets/text.png" />
+              <Link to={`/messages/${findFriend.id}`}>Send Message</Link>
+            </div>{" "}
+            <div
+              className="delete-friend-div"
+              onClick={() => dispatch(deletingFriendUser(true))}
+            >
+              <img src="./assets/delete-friend.png" />
+              <p>Delete Friend</p>
+            </div>
           </div>
         ) : findFriend.friendReq ? (
           findFriend.friendReq.userRecieveRequest === findFriend.id ? (
             <div className="btns-request">
-              <button onClick={cancelRequest}>Cancel Friend Request</button>
+              <div className="request-sent">
+                <p>Sent Friend request !</p>
+                <div>
+                  <img src="./assets/no.png" />
+                  <button onClick={cancelRequest}>Cancel</button>
+                </div>{" "}
+              </div>{" "}
             </div>
           ) : (
             <div className="btns-request">
@@ -115,9 +171,11 @@ const FriendCard = () => {
             </div>
           )
         ) : (
-          <div className="btns-request" onClick={sendFriendReq}>
-            <img src="./assets/adding-user.png" />
-            <button onClick={sendFriendReq}>Send Friend Request</button>
+          <div className="btns-request" onClick={() => sendFriendReq()}>
+            <div>
+              <img src="./assets/adding-user.png" />
+              <button>Send Friend Request</button>
+            </div>
           </div>
         )
         // )

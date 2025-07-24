@@ -1,0 +1,9 @@
+#MessageCard-component .mid-section {
+  height: 88vh;
+}
+
+#MessageCard-component .mid-section .NavBar {
+  height: 88vh;
+  justify-content: flex-start;
+  padding-top: 0;
+}

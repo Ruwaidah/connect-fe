@@ -25,12 +25,15 @@ const Messages = () => {
   } = useSelector((state) => state.user);
 
   setTimeout(() => {
-    gsap.to(".message", {
-      opacity: 1,
-      duration: 1,
-      ease: "power1.inOut",
-    });
-  }, 100);
+    const e = document.getElementsByClassName("message");
+    if (e.length > 0) {
+      gsap.to(".message", {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power1.inOut",
+      });
+    }
+  }, 50);
 
   useEffect(() => {
     dispatch(getMessages());
@@ -39,6 +42,19 @@ const Messages = () => {
   useEffect(() => {
     setTimeout(() => {
       if (isStartNewChat) {
+        gsap.from(".StartNewChat .SearchFriendForm", {
+          duration: 1,
+          ease: "circ.out",
+          x: "100%",
+        });
+
+        gsap.to(".StartNewChat .SearchFriendForm", {
+          duration: 1,
+          ease: "circ.out",
+          x: "0",
+          opacity: 1,
+        });
+
         for (let i = 0; i <= friendsList.length - 1; i++) {
           document.getElementById(`.StartNewChat .FriendsList .friend-${i}`);
           try {
@@ -46,6 +62,7 @@ const Messages = () => {
               duration: 1,
               ease: "circ.out",
               x: "100%",
+              delay: 0.4,
             });
 
             gsap.to(`.StartNewChat .FriendsList #friend-${i}`, {
@@ -53,25 +70,13 @@ const Messages = () => {
               ease: "circ.out",
               x: "0",
               opacity: 1,
+              delay: 0.4,
             });
           } catch {
             return;
           }
         }
       }
-      // else {
-      //   gsap.from(".message", {
-      //     duration: 1,
-      //     ease: "circ.out",
-      //     x: "100%",
-      //   });
-      //   gsap.to(".message", {
-      //     duration: 1,
-      //     ease: "circ.out",
-      //     x: "0",
-      //     opacity: 1,
-      //   });
-      // }
     }, 200);
   }, [isStartNewChat, isGetFriendsLoading]);
 
@@ -80,13 +85,16 @@ const Messages = () => {
     dispatch(getFriends());
   };
 
-
   const objKeys = Object.keys(messages);
 
   return (
     <div className="Messages section-2-div">
-      <div className="messages-header">
-        <h2>Messages</h2>
+      <div className="messages-header page-header">
+        <div>
+          <img src="./assets/msgs.png" />
+          <h2>Messages</h2>
+        </div>
+
         <img src="./assets/new-msg.png" onClick={searchNewChat} />
       </div>
       {isMessagesLoading || isGetFriendsLoading ? (

@@ -8,6 +8,7 @@ const initialState = {
   isLoading: false,
   isErrorMessage: null,
   isStartNewChat: false,
+  isDeleteUser: false,
 
   isAuthLoading: false,
   isAuthError: false,
@@ -198,11 +199,7 @@ export const addNewFriend = createAsyncThunk(
     return await axiosWithAuth()
       .post(`${import.meta.env.VITE_APP_URL}/api/users/sendrequest`, data)
       .then((response) => response.data)
-      .catch((error) =>
-        thunkAPI.rejectWithValue((error) =>
-          thunkAPI.rejectWithValue(error.response.data.message)
-        )
-      );
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
   }
 );
 
@@ -313,10 +310,30 @@ export const getFriendById = createAsyncThunk(
   }
 );
 
+// ************************************* DELETE FRIEND  *************************************
+export const deleteFriend = createAsyncThunk(
+  "DELETE_FRIEND",
+  async (id, thunkAPI) => {
+    return await axiosWithAuth()
+      .delete(
+        `${
+          import.meta.env.VITE_APP_URL
+        }/api/users/deletefriend?userid=${localStorage.getItem(
+          "id"
+        )}&&searchFriend=${id}`
+      )
+      .then((response) => response.data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  }
+);
+
 const usersSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    deletingFriendUser: (state, action) => {
+      state.isDeleteUser = action.payload;
+    },
     startNewChatList: (state, action) => {
       state.isStartNewChat = action.payload;
     },
@@ -596,6 +613,7 @@ const usersSlice = createSlice({
       state.friendsList = [];
     });
     builder.addCase(getFriends.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.isGetFriendsLoading = false;
       state.isGetFriendsError = false;
       state.isGetFriendsErrorMessage = null;
@@ -641,6 +659,7 @@ const usersSlice = createSlice({
       state.findFriend.friendReq = action.payload.response;
     });
     builder.addCase(addNewFriend.rejected, (state, action) => {
+      console.log(action.payload);
       state.addingNewFriendLoading = false;
       state.addingNewFriendError = true;
       state.addingNewFriendErrorMessage = action.payload;
@@ -703,11 +722,13 @@ const usersSlice = createSlice({
     });
     builder.addCase(rejectFriendRequest.fulfilled, (state, action) => {
       // socket.emit("REJECT_FIEND_REQUEST", action.payload.friend);
+      console.log(action.payload)
       state.isLoading = false;
       state.isError = false;
       state.isErrorMessage = null;
-      state.user.friendReq = action.payload.data;
-      state.findFriend.friendReq = null;
+      // state.user.friendReq = action.payload.data;
+     state.user.friendReq = action.payload.data;
+      if (state.findFriend) state.findFriend.friendReq = null;
     });
     builder.addCase(rejectFriendRequest.rejected, (state, action) => {
       state.isLoading = false;
@@ -734,6 +755,24 @@ const usersSlice = createSlice({
       state.findFriendErrorMessage = action.payload;
       state.findFriend = null;
     });
+
+    // ************************** DELETE FRIEND  ******************************
+    builder.addCase(deleteFriend.pending, (state, action) => {
+      state.addingNewFriendLoading = true;
+      state.addingNewFriendError = false;
+      state.addingNewFriendErrorMessage = null;
+    });
+    builder.addCase(deleteFriend.fulfilled, (state, action) => {
+      if (state.findFriend) state.findFriend.friend = false;
+      state.addingNewFriendLoading = false;
+      state.addingNewFriendError = false;
+      state.addingNewFriendErrorMessage = null;
+    });
+    builder.addCase(deleteFriend.rejected, (state, action) => {
+      state.addingNewFriendLoading = false;
+      state.addingNewFriendError = true;
+      state.addingNewFriendErrorMessage = action.payload;
+    });
   },
 });
 
@@ -743,6 +782,7 @@ export const {
   changeTheEmail,
   clearFriendSearch,
   startNewChatList,
+  deletingFriendUser,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;
