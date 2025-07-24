@@ -9,18 +9,19 @@
 }
 
 .PrivateMessageCard .friend-info {
-  width: 49%;
-  background-color: whitesmoke;
+  width: 100%;
+  background-color: rgb(250, 235, 214);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid gray;
-  position: fixed;
-  top: 20px;
-  padding-bottom: 10px;
-  overflow: hidden;
+  border-bottom: 1px solid lightgray;
+  /* height: 140px; */
+  /* position: fixed;
+  top: 20px; */
+  padding: 10px;
+  /* overflow: hidden; */
 }
 
 .PrivateMessageCard .friend-info img {
@@ -37,11 +38,11 @@
 .PrivateMessageCard .messages-section {
   display: flex;
   flex-direction: column;
-  /* height: 100%; */
+  height: 90%;
   width: 99%;
   box-sizing: border-box;
   overflow-y: scroll;
-  height: auto;
+  /* height: auto; */
 }
 
 .PrivateMessageCard .messages-section .date-para {
@@ -106,7 +107,7 @@
 
 @media screen and (max-width: 1600px) {
   .PrivateMessageCard .friend-info {
-    width: 82%;
+    /* width: 82%; */
   }
 
   .PrivateMessageCard .friend-info img {

@@ -35,6 +35,7 @@ const NavBar = () => {
         onClick={menuClick}
         src="./assets/menu-icon-1.png"
         id="menu-icon-img"
+      className="img-blur"
       />
       <div className="NavBar">
         <div className="menu-icon-div">
@@ -58,7 +59,7 @@ const NavBar = () => {
               onClick={() => dispatch(clearFriendSearch())}
             >
               <img src="./assets/add-user.png" />
-              Add Friend
+             Search
             </NavLink>
             <NavLink
               to="/friends"

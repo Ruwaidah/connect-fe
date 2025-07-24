@@ -13,7 +13,7 @@ const PrivateMessageForm = (props) => {
       ? "l"
       : window.screen.width <= 1200 && window.screen.width >= 500
       ? "m"
-      : window.screen.width <=  500
+      : window.screen.width <= 500
       ? "s"
       : "s"
   );
@@ -26,7 +26,7 @@ const PrivateMessageForm = (props) => {
       // else if (reSize === "m") text.style.height = "30px";
       else text.style.height = "29px";
     }
-  }, [reSize]);
+  }, [reSize,privateMsg ]);
   const submitBtn = (e) => {
     e.preventDefault();
     document.getElementById("texting-submit").click();
@@ -87,11 +87,7 @@ const PrivateMessageForm = (props) => {
               },
             })}
           />
-          <img
-            src="./assets/send-text.png"
-            type="submit"
-            onClick={submitBtn}
-          />
+          <img src="./assets/send-text.png" type="submit" onClick={submitBtn} />
           <input type="submit" value="send" id="texting-submit" />
         </div>
       </form>

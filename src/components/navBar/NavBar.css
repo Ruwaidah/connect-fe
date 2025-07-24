@@ -10,7 +10,7 @@
 .NavBar {
   width: 24%;
   height: 83vh;
-  border-right: 1px solid black;
+  border-right: 1px solid lightgray;
   display: flex;
   justify-content: space-between;
   padding: 0 0 0 20px;

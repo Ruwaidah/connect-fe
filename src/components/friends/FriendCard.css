@@ -1,3 +1,66 @@
+.delete-big-div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  /* filter: blur(1px); */
+}
+
+.delete-big-div .delete-div-out {
+  width: 500px;
+  height: 180px;
+  background-color: #1b1b1b;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.delete-big-div .delete-div-out .delete-div-in {
+  width: 68%;
+  color: whitesmoke;
+}
+.delete-big-div .delete-div-out .delete-div-in p {
+  font-size: 1.2rem;
+  margin: 0 0 10px 0;
+}
+
+.delete-big-div .delete-div-out .delete-btns-div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.delete-big-div .delete-div-out .delete-div-in .delete-btns-div div {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  background-color: rgb(231, 223, 197);
+  padding: 3px 6px;
+  height: 30px;
+  width: 43%;
+  cursor: pointer;
+}
+
+.delete-big-div .delete-div-out div img {
+  width: 28px;
+  height: 28px;
+}
+
+.delete-big-div .delete-div-out div button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
 .FriendCard-no-match {
   width: 100%;
   height: 100%;
@@ -7,14 +70,14 @@
 }
 
 .FriendCard {
-  width: 90%;
+  width: 99.5%;
   height: 100%;
-  margin: 0 auto;
+  margin: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   background-color: transparent;
-  padding: 10px 20px 20px 30px;
+  padding: 10px 20px 20px 10px;
   box-sizing: border-box;
   border-radius: 4px;
 }
@@ -22,12 +85,75 @@
 .FriendCard .btns-request {
   display: flex;
   align-items: center;
-  width: 180px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 6px;
+  background: linear-gradient(
+    to left,
+    #416b9c 0%,
+    #477092 20%,
+    #6e89a1 51%,
+    #b1cbdf 100%
+  );
+  border-radius: 4px;
+}
+
+.FriendCard .btns-request div {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.FriendCard .btns-request div img {
+  width: 24px;
+  height: 24px;
+}
+.FriendCard .btns-request p {
+  color: rgb(18, 59, 70);
+}
+.FriendCard .btns-request .request-sent div {
+  margin-left: 6px;
+}
+.FriendCard .btns-request .request-sent div button {
+  padding: 0;
+}
+.FriendCard .btns-request .request-sent div img {
+  width: 20px;
+  height: 20px;
+}
+
+/* .FriendCard .btns-request .request-sent {
+  background-color: rgb(204, 204, 204);
+  width: 100%;
+  padding: 6px 6px;
+  border-radius: 4px;
+} */
+
+/* .FriendCard .btns-request .request-sent div {
+  margin-left: 10px;
+} */
+/* .FriendCard .btns-request .request-sent div img,
+.FriendCard .btns-request .request-sent div button {
+  color: rgb(56, 15, 15);
+  margin: 0;
+  padding: 0;
+} */
+
+/* .FriendCard .btns-request .request-sent div img {
+  width: 20px;
+  height: 20px;
+}
+.FriendCard .btns-request .request-sent div button {
+  color: rgb(114, 37, 37);
+  font-size: 0.9rem;
+} */
+
+.FriendCard .btns-request .delete-friend-div {
+  /* margin-left: 50px; */
 }
 .FriendCard .btns-request img {
-  width: 30px;
-  height: 30px;
-  margin-right: 6px;
+  width: 26px;
+  height: 26px;
 }
 
 .FriendCard .btns-request button {
@@ -89,6 +215,12 @@
   margin-left: 6px;
 }
 
+@media screen and (max-width: 1500px) {
+  .FriendCard {
+    width: 100%;
+  }
+}
+
 @media screen and (max-width: 800px) {
   .FriendCard {
     padding: 10px;
@@ -96,9 +228,9 @@
   .FriendCard .user-info-img-div {
     height: 180px;
   }
-  .FriendCard {
+  /* .FriendCard {
     width: 100%;
-  }
+  } */
 
   .FriendCard .user-info-img-div .img-username-div img {
     width: 100px;

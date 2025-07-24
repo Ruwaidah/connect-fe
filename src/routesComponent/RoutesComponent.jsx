@@ -15,6 +15,7 @@ import NoPageFound from "../components/noPageFound/NoPageFound";
 import FriendCard from "../components/friends/FriendCard";
 import FriendProfile from "../components/friends/FriendProfile";
 import MessageCard from "../components/messages/MessageCard";
+import FriendsRequests from "../components/friends/FriendsRequests/FriendsRequests";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const RoutesComponent = () => {
         <Route path="/friend/profile/:friendid" element={<FriendProfile />} />
         <Route path="/messages/:friendid" element={<MessageCard />} />
         <Route path="/addnewfriend" element={<AddNewFriendForm />} />
+        <Route path="//friend-request" element={<FriendsRequests />} />
         <Route path="/setting" element={<Setting />} />
       </Route>
       <Route path="*" element={<NoPageFound />} />

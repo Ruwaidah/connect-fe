@@ -42,7 +42,8 @@
 }
 
 .addNewFriend-component .AddNewFriendForm img {
-  width: 32px;
+  width: 30px;
+  height: 30px;
   padding-right: 10px;
 }
 
@@ -76,6 +77,9 @@
   .addNewFriend-component .AddNewFriendForm {
     width: 100%;
   }
+  .addNewFriend-component .AddNewFriendForm img {
+    width: 29px;
+  }
 
   .addNewFriend-component .find-friend-div {
     width: 100%;
@@ -84,6 +88,10 @@
 }
 
 @media screen and (max-width: 800px) {
+    .addNewFriend-component .AddNewFriendForm img {
+    width: 26px;
+  }
+
   .addNewFriend-component .AddNewFriendForm input {
     height: 34px;
     font-size: 1rem;
