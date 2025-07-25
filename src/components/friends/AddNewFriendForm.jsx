@@ -25,7 +25,6 @@ const AddNewFriendForm = () => {
   };
 
   const onSubmit = (data) => {
-    console.log("dsgsg")
     dispatch(findNewFriend(data));
   };
 

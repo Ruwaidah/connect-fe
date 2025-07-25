@@ -82,7 +82,6 @@ const Messages = () => {
 
   // ************************** OPEN UNREAD MESSAGE ******************************
   const openPrivateMsg = (data) => {
-    console.log("open");
     dispatch(
       messageRead({
         numberOfMsgUnread: data.numberOfMsgUnread,
@@ -100,7 +99,6 @@ const Messages = () => {
   };
 
   const objKeys = Object.keys(messages);
-  console.log(messages);
   return (
     <div className="Messages section-2-div">
       <div className="messages-header page-header">

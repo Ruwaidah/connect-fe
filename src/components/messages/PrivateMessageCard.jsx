@@ -17,7 +17,6 @@ const PrivateMessageCard = () => {
   useEffect(() => {
     scrollToBottom();
   }, [privateMsg, sendMsg]);
-  console.log(privateMsg);
   return (
     <div className="PrivateMessageCard">
       <div className="friend-info">

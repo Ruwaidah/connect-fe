@@ -10,8 +10,7 @@ const NewNotification = () => {
   // ************************************* MESSAGE RECEIVE *************************************
   useEffect(() => {
     socket.on("MESSAGE_RECEIVE", (data) => {
-      console.log(data)
-      console.log(window.location.hash == `#/messages/${data.friend.id}`);
+
       //   if (window.location.hash == `#/messages/${data.friend.id}`) {
       //     dispatch(
       //       messageRead({

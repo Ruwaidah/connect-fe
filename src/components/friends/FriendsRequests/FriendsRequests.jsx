@@ -55,7 +55,6 @@ const FriendsRequests = () => {
 
   // ************************** REJECT FRIEND REQUEST ******************************
   const rejectRequest = (friend, i) => {
-    console.log(`#request-user-card-${i}`);
     setTimeout(() => {
       dispatch(
         rejectFriendRequest({
@@ -84,8 +83,6 @@ const FriendsRequests = () => {
     // });
   };
 
-  console.log(findFriend);
-  console.log(user);
 
   return (
     <div className="component-div">
