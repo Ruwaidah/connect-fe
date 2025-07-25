@@ -88,8 +88,17 @@
 }
 
 @media screen and (max-width: 800px) {
-    .addNewFriend-component .AddNewFriendForm img {
-    width: 26px;
+  /* .addNewFriend-component
+    .mid-section
+    .add-new-friend-form-div
+    .friends-header
+    .friends-header
+    img {
+    width: 10px;
+  } */
+  .addNewFriend-component .AddNewFriendForm img {
+    width: 22px;
+    height: 22px;
   }
 
   .addNewFriend-component .AddNewFriendForm input {

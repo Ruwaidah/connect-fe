@@ -450,6 +450,7 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(loginUser.fulfilled, (state, action) => {
+            socket.emit("testing", action.payload);
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("id", action.payload.id);
       state.isAuthError = false;

@@ -26,7 +26,7 @@ const PrivateMessageForm = (props) => {
       // else if (reSize === "m") text.style.height = "30px";
       else text.style.height = "29px";
     }
-  }, [reSize,privateMsg ]);
+  }, [reSize, privateMsg]);
   const submitBtn = (e) => {
     e.preventDefault();
     document.getElementById("texting-submit").click();

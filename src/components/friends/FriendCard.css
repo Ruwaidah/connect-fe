@@ -96,6 +96,7 @@
     #b1cbdf 100%
   );
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .FriendCard .btns-request div {
@@ -109,7 +110,8 @@
   height: 24px;
 }
 .FriendCard .btns-request p {
-  color: rgb(18, 59, 70);
+  /* color: rgb(18, 59, 70); */
+  color: black;
 }
 .FriendCard .btns-request .request-sent div {
   margin-left: 6px;
@@ -167,7 +169,8 @@
 }
 
 .FriendCard .sendmsg a {
-  color: rgb(17, 45, 61);
+  /* color: rgb(17, 45, 61); */
+  color: black;
 }
 
 .FriendCard .user-info-img-div #username-para {
@@ -241,12 +244,15 @@
     margin-top: 6px;
   }
 
-  .FriendCard .sendmsg a {
-    font-size: 0.9rem;
+  .FriendCard .sendmsg a,
+  .FriendCard .delete-friend-div p {
+    font-size: 0.8rem;
   }
-  .FriendCard .sendmsg img {
-    width: 24px;
-    height: 24px;
+
+  .FriendCard .sendmsg div img {
+    width: 20px;
+    height: 20px;
+    margin-right: 2px;
   }
 }
 
