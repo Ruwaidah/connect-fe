@@ -38,7 +38,7 @@ const HomePage = () => {
   };
 
   const errorLoginGoogle = (data) => {
-    console.log(data);
+    return
   };
 
   // ************************ CLICK SIGNUP BUTTON ********************

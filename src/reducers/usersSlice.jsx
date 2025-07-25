@@ -614,7 +614,6 @@ const usersSlice = createSlice({
       state.friendsList = [];
     });
     builder.addCase(getFriends.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.isGetFriendsLoading = false;
       state.isGetFriendsError = false;
       state.isGetFriendsErrorMessage = null;
@@ -660,7 +659,6 @@ const usersSlice = createSlice({
       state.findFriend.friendReq = action.payload.response;
     });
     builder.addCase(addNewFriend.rejected, (state, action) => {
-      console.log(action.payload);
       state.addingNewFriendLoading = false;
       state.addingNewFriendError = true;
       state.addingNewFriendErrorMessage = action.payload;
@@ -723,7 +721,6 @@ const usersSlice = createSlice({
     });
     builder.addCase(rejectFriendRequest.fulfilled, (state, action) => {
       // socket.emit("REJECT_FIEND_REQUEST", action.payload.friend);
-      console.log(action.payload)
       state.isLoading = false;
       state.isError = false;
       state.isErrorMessage = null;

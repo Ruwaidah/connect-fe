@@ -59,7 +59,6 @@ export const sendMessage = createAsyncThunk(
 export const messageRead = createAsyncThunk(
   "OPEN_UNREAD_MESSAGES",
   async (data, thunkAPI) => {
-    console.log(data)
     return await axiosWithAuth()
       .put(
         `${import.meta.env.VITE_APP_URL}/api/auth/message/openmessages`,
@@ -75,7 +74,6 @@ const messagesSlice = createSlice({
   initialState,
   reducers: {
     receivedMsg: (state, action) => {
-      console.log(action.payload);
       state.livePrivateTexting[action.payload.connectId] = action.payload;
       state.messages[action.payload.friend.id] = action.payload;
       state.privateMsg = action.payload;

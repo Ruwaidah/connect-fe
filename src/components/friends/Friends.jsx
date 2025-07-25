@@ -25,7 +25,6 @@ const Friends = () => {
   useEffect(() => {
     dispatch(getFriends());
   }, []);
-  console.log(user);
   return (
     <div className="component-div">
       <Header />
