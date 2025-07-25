@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosWithAuth from "../utils/axiosWithAuth";
+import { socket } from "../socket";
 
 const initialState = {
   messages: [],
+  livePrivateTexting: {},
   privateMsg: null,
   isMessagesLoading: false,
   isMessagesError: false,
@@ -53,10 +55,37 @@ export const sendMessage = createAsyncThunk(
   }
 );
 
+// ************************** OPEN UNREAD MESSAGE ******************************
+export const messageRead = createAsyncThunk(
+  "OPEN_UNREAD_MESSAGES",
+  async (data, thunkAPI) => {
+    console.log(data)
+    return await axiosWithAuth()
+      .put(
+        `${import.meta.env.VITE_APP_URL}/api/auth/message/openmessages`,
+        data.data
+      )
+      .then((response) => data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  }
+);
+
 const messagesSlice = createSlice({
   name: "messages",
   initialState,
-  reducers: {},
+  reducers: {
+    receivedMsg: (state, action) => {
+      console.log(action.payload);
+      state.livePrivateTexting[action.payload.connectId] = action.payload;
+      state.messages[action.payload.friend.id] = action.payload;
+      state.privateMsg = action.payload;
+      // if (data.payload.messages.length !== state.msgLength) {
+      //   state.messagesList[data.payload.friend.id] = data.payload;
+      //   state.totalUnreadMsgs = state.totalUnreadMsgs + 1;
+      //   state.msgLength = data.payload.messages.length;
+      // }
+    },
+  },
   extraReducers: (builder) => {
     // ************************** GET ALL MESSAGES ******************************
     builder.addCase(getMessages.pending, (state, action) => {
@@ -104,19 +133,37 @@ const messagesSlice = createSlice({
       // state.errorMessages = null;
     });
     builder.addCase(sendMessage.fulfilled, (state, action) => {
-      // socket.emit("SEND_MESSAGE", action.payload);
+      socket.emit("SEND_MESSAGE", action.payload);
       state.isMessagesLoading = false;
       state.isMessagesError = false;
       state.errorMessages = null;
       // state.privateMsg = action.payload.data;
-      state.privateMsg.messages = [...state.privateMsg["messages"],action.payload.data]
+      state.privateMsg.messages = [
+        ...state.privateMsg["messages"],
+        action.payload.data,
+      ];
     });
     builder.addCase(sendMessage.rejected, (state, action) => {
       state.isMessagesLoading = false;
       state.isMessagesError = true;
       state.errorMessages = action.payload;
     });
+
+    // ************************** OPEN UNREAD MESSAGE ******************************
+    builder.addCase(messageRead.fulfilled, (state, action) => {
+      if (
+        state.messages[action.payload.data.friendId] &&
+        state.messages[action.payload.data.friendId].messages
+      ) {
+        state.totalUnreadMsgs =
+          state.totalUnreadMsgs -
+          state.messages[action.payload.data.friendId].numberOfMsgUnread;
+        state.messages[action.payload.data.friendId].numberOfMsgUnread = 0;
+      }
+    });
   },
 });
+
+export const { receivedMsg } = messagesSlice.actions;
 
 export default messagesSlice.reducer;

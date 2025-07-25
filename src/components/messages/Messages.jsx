@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { startNewChatList, getFriends } from "../../reducers/usersSlice";
-import { getMessages } from "../../reducers/messagesSlice";
+import { getMessages, messageRead } from "../../reducers/messagesSlice";
 import Loading from "../loading/Loading";
 import NoMessages from "./NoMessages";
 import { Link } from "react-router-dom";
@@ -80,13 +80,27 @@ const Messages = () => {
     }, 200);
   }, [isStartNewChat, isGetFriendsLoading]);
 
+  // ************************** OPEN UNREAD MESSAGE ******************************
+  const openPrivateMsg = (data) => {
+    console.log("open");
+    dispatch(
+      messageRead({
+        numberOfMsgUnread: data.numberOfMsgUnread,
+        data: {
+          userId: localStorage.getItem("id"),
+          friendId: data.friend.id,
+        },
+      })
+    );
+  };
+
   const searchNewChat = () => {
     dispatch(startNewChatList(!isStartNewChat));
     dispatch(getFriends());
   };
 
   const objKeys = Object.keys(messages);
-
+  console.log(messages);
   return (
     <div className="Messages section-2-div">
       <div className="messages-header page-header">
@@ -111,14 +125,18 @@ const Messages = () => {
           <Link
             key={indx}
             className="message"
+            onClick={() => openPrivateMsg(messages[msg])}
             to={`/messages/${messages[msg].friend.id}`}
           >
-            <h4>
-              {messages[msg].friend.firstName} {messages[msg].friend.lastName}
-            </h4>
-            <p>
-              {messages[msg].messages[messages[msg].messages.length - 1].text}
-            </p>
+            <div>
+              <h4>
+                {messages[msg].friend.firstName} {messages[msg].friend.lastName}
+              </h4>
+              <p>
+                {messages[msg].messages[messages[msg].messages.length - 1].text}
+              </p>
+            </div>
+            <p>{messages[msg].numberOfMsgUnread> 0 ? messages[msg].numberOfMsgUnread: null}</p>
           </Link>
         ))
       )}
