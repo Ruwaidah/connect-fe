@@ -1,7 +1,7 @@
 .Messages .message {
   display: flex;
-  flex-direction: column;
-  padding: 16px 10px;
+  /* flex-direction: column; */
+  padding: 16px 22px;
   background-color: #fff2ee;
   border-radius: 6px;
   border: 1px solid lightgray;
@@ -9,8 +9,8 @@
   margin: 2px auto;
   box-sizing: border-box;
   opacity: 0;
+  justify-content: space-between;
 }
-
 
 .Messages .message h4 {
   font-size: 1.2rem;
@@ -43,9 +43,10 @@
     width: 100%;
   }
   .Messages .message {
-    padding: 10px 8px;
+    padding: 10px 10px;
     width: 99.5%;
     margin: 2px 0;
+    margin-left: 2px;
   }
 
   .Messages .messages-header h2 {
