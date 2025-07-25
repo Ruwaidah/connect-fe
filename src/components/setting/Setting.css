@@ -1,0 +1,50 @@
+.setting-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.setting-section button {
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: black;
+  border: none;
+  background-color: transparent;
+  /* font-weight: bold; */
+}
+
+.setting-section button:hover {
+  color: rgb(104, 62, 98);
+}
+
+.setting-list {
+  height: 92%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.acount-setting-list .back-arrow-img {
+  margin-bottom: 30px;
+}
+
+.acount-setting-list .back-arrow-img img {
+  width: 26px;
+  cursor: pointer;
+}
+
+.setting-section .acount-setting-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.component-div .mid-section .setting-section .acount-setting-list button {
+  padding: 0;
+  text-align: start;
+  margin-bottom: 20px;
+}

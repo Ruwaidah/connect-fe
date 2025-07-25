@@ -1,0 +1,16 @@
+.setting-section .LogOut {
+  display: flex;
+  align-items: center;
+}
+
+.setting-section .LogOut img {
+  width: 24px;
+  height: 24px;
+}
+
+.setting-section .LogOut a {
+  color: #791033;
+  font-size: 1.1rem;
+  margin-left: 4px;
+  font-weight: bold;
+}

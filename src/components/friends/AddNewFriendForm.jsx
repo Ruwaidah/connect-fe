@@ -61,6 +61,7 @@ const AddNewFriendForm = () => {
                 <Navigate to="/profile" />
               ) : (
                 <FriendCard />
+                // <Navigate to={`/friend/profile/${findFriend.id}`} />
               )
             ) : (
               <p className="no-match">No match</p>
