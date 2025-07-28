@@ -86,7 +86,7 @@ const NewPassword = () => {
               <li>at least 8 characters .</li>
               <li>at least one number.</li>
               <li>at least one one uppercase and lowercase letter.</li>
-            </ul>
+            </ul> 
           </div>
           {/* ) : null} */}
           <input type="submit" value="Submit" />
