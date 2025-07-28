@@ -7,11 +7,11 @@ import Header from "../header/Header";
 import NavBar from "../navBar/NavBar";
 import Footer from "../footer/Footer";
 import { useEffect, useState } from "react";
-import ChangePasswordPrivacy from "./change-password-privacy.jsx";
+import ChangePassword from "./change-password-privacy.jsx";
 import { clearChangePassword } from "../../reducers/usersSlice.jsx";
 
 const Setting = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   let count = 0;
   let targets;
   useEffect(() => {
@@ -39,7 +39,7 @@ const Setting = () => {
 
   // Previous button
   function slideOnePrev() {
-    dispatch(clearChangePassword())
+    dispatch(clearChangePassword());
     gsap.fromTo(
       targets[count],
       { xPercent: 0, zIndex: 10 },
@@ -99,7 +99,7 @@ const Setting = () => {
             </div>
             <div className="list list03">
               {" "}
-              <ChangePasswordPrivacy slideOnePrev={slideOnePrev} />
+              <ChangePassword slideOnePrev={slideOnePrev} />
             </div>
             {/* <div className="box box04">SLIDE-04</div> */}
           </div>
