@@ -93,6 +93,17 @@ export const signUp = createAsyncThunk("SIGN_UP", async (data, thunkAPI) => {
     .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
 });
 
+// *********************** CHANGE PASSWORD *************************
+export const changePassword = createAsyncThunk(
+  "CHANGE_PASSWORD",
+  async (data, thunkAPI) => {
+    return await axiosWithAuth()
+      .post(`${import.meta.env.VITE_APP_URL}/api/users/change-password/${localStorage.getItem("id")}`, data)
+      .then((response) => response.data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  }
+);
+
 // *********************** RESET PASSWORD *************************
 export const resetPassword = createAsyncThunk(
   "RESET_PASSWORD",
@@ -131,7 +142,7 @@ export const requestNewPassword = createAsyncThunk(
   "REQUEST_NEW_PASSWORD",
   async (data, thunkAPI) => {
     return await axios
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/change_password`, data)
+      .post(`${import.meta.env.VITE_APP_URL}/api/users/forget_password`, data)
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response));
   }
@@ -450,7 +461,7 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(loginUser.fulfilled, (state, action) => {
-            socket.emit("testing", action.payload);
+      socket.emit("testing", action.payload);
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("id", action.payload.id);
       state.isAuthError = false;
@@ -551,6 +562,28 @@ const usersSlice = createSlice({
       state.requestChangePasswordErrorMessage = action.payload;
       state.requestChangePasswordPass = false;
     });
+
+    // *********************** CHANGE PASSWORD *************************
+    builder.addCase(changePassword.pending, (state, action) => {
+      state.requestChangePasswordLoading = true;
+      state.requestChangePasswordError = false;
+      state.requestChangePasswordErrorMessage = null;
+      state.requestChangePasswordPass = false;
+    });
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      state.requestChangePasswordLoading = false;
+      state.requestChangePasswordError = false;
+      state.requestChangePasswordErrorMessage = null;
+      state.requestChangePasswordPass = true;
+    });
+    builder.addCase(changePassword.rejected, (state, action) => {
+      state.requestChangePasswordLoading = false;
+      state.requestChangePasswordError = true;
+      state.requestChangePasswordErrorMessage = action.payload;
+      state.requestChangePasswordPass = false;
+    });
+
+
     // *************************** GET USER *******************************
     builder.addCase(getUser.pending, (state, action) => {
       state.isGettingUserLoading = true;
@@ -725,7 +758,7 @@ const usersSlice = createSlice({
       state.isError = false;
       state.isErrorMessage = null;
       // state.user.friendReq = action.payload.data;
-     state.user.friendReq = action.payload.data;
+      state.user.friendReq = action.payload.data;
       if (state.findFriend) state.findFriend.friendReq = null;
     });
     builder.addCase(rejectFriendRequest.rejected, (state, action) => {

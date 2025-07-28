@@ -175,6 +175,9 @@ input {
   }
 }
 @media screen and (max-width: 500px) {
+  .component-div {
+    height: 90vh;
+  }
   #MessageCard-component .mid-section {
     height: 86.5vh;
   }
