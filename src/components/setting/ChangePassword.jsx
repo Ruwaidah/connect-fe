@@ -2,7 +2,7 @@ import "./ChangePasswordPrivacy.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword } from "../../reducers/usersSlice";
+import { UserRequestChangePassword } from "../../reducers/usersSlice";
 
 const ChangePassword = (props) => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const ChangePassword = (props) => {
   const onSubmit = (data) => {
     console.log(data.newPsw, data.retypePsw);
     if (data.newPsw === data.retypePsw) {
-      dispatch(changePassword(data));
+      dispatch(UserRequestChangePassword(data));
       setisMatchPassword(true);
     } else {
       setisMatchPassword(false);
