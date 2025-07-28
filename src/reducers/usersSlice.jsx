@@ -564,19 +564,19 @@ const usersSlice = createSlice({
     });
 
     // *********************** CHANGE PASSWORD *************************
-    builder.addCase(changePassword.pending, (state, action) => {
+    builder.addCase(UserRequestChangePassword.pending, (state, action) => {
       state.requestChangePasswordLoading = true;
       state.requestChangePasswordError = false;
       state.requestChangePasswordErrorMessage = null;
       state.requestChangePasswordPass = false;
     });
-    builder.addCase(changePassword.fulfilled, (state, action) => {
+    builder.addCase(UserRequestChangePassword.fulfilled, (state, action) => {
       state.requestChangePasswordLoading = false;
       state.requestChangePasswordError = false;
       state.requestChangePasswordErrorMessage = null;
       state.requestChangePasswordPass = true;
     });
-    builder.addCase(changePassword.rejected, (state, action) => {
+    builder.addCase(UserRequestChangePassword.rejected, (state, action) => {
       state.requestChangePasswordLoading = false;
       state.requestChangePasswordError = true;
       state.requestChangePasswordErrorMessage = action.payload;
