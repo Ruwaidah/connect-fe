@@ -164,9 +164,9 @@ input {
 }
 
 @media screen and (max-width: 800px) {
-    .component-div .mid-section .section-2-div .page-header {
-      padding: 8px 10px;
-    }
+  .component-div .mid-section .section-2-div .page-header {
+    padding: 8px 10px;
+  }
   .component-div .mid-section .section-2-div .page-header img,
   .component-div .mid-section .page-header a,
   .component-div .mid-section .page-header img {
@@ -176,7 +176,7 @@ input {
 }
 @media screen and (max-width: 500px) {
   .component-div {
-    height: 90vh;
+    height: 80vh;
   }
   #MessageCard-component .mid-section {
     height: 86.5vh;
