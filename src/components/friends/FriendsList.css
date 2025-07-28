@@ -101,25 +101,10 @@
   }
 
   .FriendsList .user-in-list .friend-btns a img {
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
   }
 }
-
-/* @media screen and (max-width: 1200px) {
-  .FriendsList {
-    width: 99%;
-  }
-
-  .FriendsList .user-in-list .friend-btns a img {
-    width: 26px;
-    height: 26px;
-  }
-
-  .FriendsList .user-in-list .friend-btns a {
-    margin-left: 4px;
-  }
-} */
 
 @media screen and (max-width: 800px) {
   .FriendsList .user-in-list {
@@ -138,8 +123,8 @@
   }
 
   .FriendsList .user-in-list .friend-btns a img {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   .FriendsList .user-in-list .username-bio-div .username-para {
