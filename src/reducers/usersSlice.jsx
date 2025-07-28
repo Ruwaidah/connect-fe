@@ -94,7 +94,7 @@ export const signUp = createAsyncThunk("SIGN_UP", async (data, thunkAPI) => {
 });
 
 // *********************** CHANGE PASSWORD *************************
-export const changePassword = createAsyncThunk(
+export const UserRequestChangePassword = createAsyncThunk(
   "CHANGE_PASSWORD",
   async (data, thunkAPI) => {
     return await axiosWithAuth()

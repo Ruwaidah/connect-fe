@@ -7,7 +7,7 @@ import Header from "../header/Header";
 import NavBar from "../navBar/NavBar";
 import Footer from "../footer/Footer";
 import { useEffect, useState } from "react";
-// import ChangePassword from "./ChangePassword.jsx";
+import ChangePassword from "./ChangePassword.jsx";
 import { clearChangePassword } from "../../reducers/usersSlice.jsx";
 
 const Setting = () => {
@@ -99,19 +99,9 @@ const Setting = () => {
             </div>
             <div className="list list03">
               {" "}
-              {/* <ChangePassword slideOnePrev={slideOnePrev} /> */}
+              <ChangePassword slideOnePrev={slideOnePrev} />
             </div>
-            {/* <div className="box box04">SLIDE-04</div> */}
           </div>
-
-          {/* <div className="controls">
-            <button id="prevButton" onClick={slideOnePrev}>
-              Prev
-            </button>
-            <button id="nextButton" onClick={slideOneNext}>
-              Next
-            </button>
-          </div> */}
         </div>
       </div>
       <Footer />
