@@ -112,7 +112,7 @@ The application supports instant message delivery, user authentication, and scal
 - disconnect – User disconnects
 
 
-## 🗄 Database Schema (Simplified)
+## 🗄 Database Schema
 
 #### users
 
