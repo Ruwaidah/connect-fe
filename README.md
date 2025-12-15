@@ -75,15 +75,15 @@ The application supports instant message delivery, user authentication, and scal
 ☁️ Cloud deployment on AWS
 
 #🧱 System Architecture
-React (Frontend)
-   |
-   | REST API / WebSocket
-   |
-Node.js + Express (Backend)
-   |
-PostgreSQL (Database)
-   |
-AWS (EC2, RDS, S3)
+-     React (Frontend)
+        |
+        | REST API / WebSocket
+        |
+          Node.js + Express (Backend)
+        |
+          PostgreSQL (Database)
+        |
+          AWS (EC2, RDS, S3)
 
 ##🔗 API Overview
 #Authentication
