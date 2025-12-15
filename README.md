@@ -23,7 +23,7 @@ Designed and built a real-time messaging platform to enable fast, reliable commu
 The application supports instant message delivery, user authentication, and scalable cloud deployment.
 
 
-### 🛠 Tech Stack
+## 🛠 Tech Stack
 
 #### Frontend
 
@@ -56,7 +56,7 @@ The application supports instant message delivery, user authentication, and scal
      - AWS S3 (Frontend Hosting)
 
 
-### ✨ Features
+## ✨ Features
 
      🔐 User authentication with JWT
      
@@ -118,7 +118,7 @@ The application supports instant message delivery, user authentication, and scal
 - disconnect – User disconnects
 
 
-### 🗄 Database Schema (Simplified)
+## 🗄 Database Schema (Simplified)
 
 #### users
 
