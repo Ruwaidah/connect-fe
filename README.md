@@ -43,11 +43,11 @@ The application supports instant message delivery, user authentication, and scal
 
 - Socket.IO (Real-Time Communication)
 
-# Database
+### Database
 
 - PostgreSQL
 
-  # Cloud & Deployment
+### Cloud & Deployment
 
 - AWS EC2 (Backend)
 
@@ -56,7 +56,7 @@ The application supports instant message delivery, user authentication, and scal
 - AWS S3 (Frontend Hosting)
 
 
-##✨ Features
+### ✨ Features
 
 🔐 User authentication with JWT
 
