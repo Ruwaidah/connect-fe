@@ -27,54 +27,54 @@ The application supports instant message delivery, user authentication, and scal
 
 #### Frontend
 
-- React.js
-
-- Redux Toolkit
-
-- React Hook Form
-
-- Tailwind CSS
+     - React.js
+     
+     - Redux Toolkit
+     
+     - React Hook Form
+     
+     - Tailwind CSS
 
 #### Backend
 
-- Node.js
-
-- Express.js
-
-- Socket.IO (Real-Time Communication)
+     - Node.js
+     
+     - Express.js
+     
+     - Socket.IO (Real-Time Communication)
 
 #### Database
 
-- PostgreSQL
+     - PostgreSQL
 
 #### Cloud & Deployment
 
-- AWS EC2 (Backend)
-
-- AWS RDS (PostgreSQL)
-
-- AWS S3 (Frontend Hosting)
+     - AWS EC2 (Backend)
+     
+     - AWS RDS (PostgreSQL)
+     
+     - AWS S3 (Frontend Hosting)
 
 
 ### ✨ Features
 
-🔐 User authentication with JWT
-
-💬 Real-time messaging using Socket.IO
-
-👥 One-to-one and group conversations
-
-🟢 Online/offline user status
-
-✍️ Typing indicators
-
-📁 Persistent message storage
-
-🧾 Form validation with React Hook Form
-
-📱 Responsive UI with Tailwind CSS
-
-☁️ Cloud deployment on AWS
+     🔐 User authentication with JWT
+     
+     💬 Real-time messaging using Socket.IO
+     
+     👥 One-to-one and group conversations
+     
+     🟢 Online/offline user status
+     
+     ✍️ Typing indicators
+     
+     📁 Persistent message storage
+     
+     🧾 Form validation with React Hook Form
+     
+     📱 Responsive UI with Tailwind CSS
+     
+     ☁️ Cloud deployment on AWS
 
 ## 🧱 System Architecture
 
