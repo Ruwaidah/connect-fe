@@ -125,8 +125,10 @@ The application supports instant message delivery, user authentication, and scal
 ### 👤 Author
 
 Ruwaidah Alfakhri
+
 Full Stack Developer
-🔗 LinkedIn: [LinkedIn](https://www.linkedin.com/in/ruwaidah-a-930b9a8b/)
+
+🔗 [LinkedIn](https://www.linkedin.com/in/ruwaidah-a-930b9a8b/)
 
 
 ## For Testing
