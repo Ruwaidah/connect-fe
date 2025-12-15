@@ -12,10 +12,11 @@ You can find the deployed project at [https://messaging-app-7bf0.onrender.com]
 🚀 Live Demo
 
 🔗 Frontend: [Add S3 / [CloudFront URL](https://message-app-ukya.onrender.com)]
+
 🔗 Backend API: [Add EC2 / [API URL](https://hashtagserver.onrender.com)]
 
 
-📌 Project Purpose
+## 📌 Project Purpose
 
 Designed and built a real-time messaging platform to enable fast, reliable communication between team members in operational environments. The application improves coordination, reduces delays caused by manual communication, and provides a secure, centralized system for real-time collaboration.
 
@@ -23,7 +24,8 @@ The application supports instant message delivery, user authentication, and scal
 
 
 🛠 Tech Stack
-#Frontend
+
+## Frontend
 
 - React.js
 
