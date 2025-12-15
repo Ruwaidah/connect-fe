@@ -11,7 +11,7 @@ You can find the deployed project at [https://messaging-app-7bf0.onrender.com]
 
 🚀 Live Demo
 
-🔗 Frontend: [Add S3 / [CloudFront URL](https://message-app-ukya.onrender.com)]
+🔗 Frontend: [Add S3 / [API URL](https://message-app-ukya.onrender.com)]
 
 🔗 Backend API: [Add EC2 / [API URL](https://hashtagserver.onrender.com)]
 
@@ -93,17 +93,13 @@ The application supports instant message delivery, user authentication, and scal
 
 #### Authentication
 
-- POST /api/auth/register – Register new user
+- POST /api/users/register – Register new user
 
-- POST /api/auth/login – Login user
+- POST /api/users/login – Login user
 
 #### Messaging
 
-- GET /api/conversations – Get user conversations
-
-- GET /api/messages/:conversationId – Fetch messages
-
-- POST /api/messages – Send message (REST fallback)
+- GET /api/listmessages – Get user conversations
 
 #### Socket.IO Events
 
@@ -113,7 +109,7 @@ The application supports instant message delivery, user authentication, and scal
 
 - receiveMessage – Receive real-time message
 
-- typing – Typing indicator
+- typing – Typing indicator  * InPro 
 
 - disconnect – User disconnects
 
