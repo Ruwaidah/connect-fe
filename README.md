@@ -23,9 +23,9 @@ Designed and built a real-time messaging platform to enable fast, reliable commu
 The application supports instant message delivery, user authentication, and scalable cloud deployment.
 
 
-🛠 Tech Stack
+## 🛠 Tech Stack
 
-## Frontend
+### Frontend
 
 - React.js
 
@@ -35,7 +35,7 @@ The application supports instant message delivery, user authentication, and scal
 
 - Tailwind CSS
 
-#Backend
+### Backend
 
 - Node.js
 
