@@ -23,9 +23,9 @@ Designed and built a real-time messaging platform to enable fast, reliable commu
 The application supports instant message delivery, user authentication, and scalable cloud deployment.
 
 
-## 🛠 Tech Stack
+### 🛠 Tech Stack
 
-### Frontend
+#### Frontend
 
 - React.js
 
@@ -35,7 +35,7 @@ The application supports instant message delivery, user authentication, and scal
 
 - Tailwind CSS
 
-### Backend
+#### Backend
 
 - Node.js
 
@@ -43,11 +43,11 @@ The application supports instant message delivery, user authentication, and scal
 
 - Socket.IO (Real-Time Communication)
 
-### Database
+#### Database
 
 - PostgreSQL
 
-### Cloud & Deployment
+#### Cloud & Deployment
 
 - AWS EC2 (Backend)
 
@@ -76,8 +76,9 @@ The application supports instant message delivery, user authentication, and scal
 
 ☁️ Cloud deployment on AWS
 
-#🧱 System Architecture
--     React (Frontend)
+## 🧱 System Architecture
+
+     React (Frontend)
         |
         | REST API / WebSocket
         |
@@ -87,14 +88,16 @@ The application supports instant message delivery, user authentication, and scal
         |
           AWS (EC2, RDS, S3)
 
-##🔗 API Overview
-#Authentication
+
+### 🔗 API Overview
+
+#### Authentication
 
 - POST /api/auth/register – Register new user
 
 - POST /api/auth/login – Login user
 
-#Messaging
+#### Messaging
 
 - GET /api/conversations – Get user conversations
 
@@ -102,7 +105,7 @@ The application supports instant message delivery, user authentication, and scal
 
 - POST /api/messages – Send message (REST fallback)
 
-#Socket.IO Events
+#### Socket.IO Events
 
 - connection – User connects
 
@@ -115,21 +118,22 @@ The application supports instant message delivery, user authentication, and scal
 - disconnect – User disconnects
 
 
-🗄 Database Schema (Simplified)
+### 🗄 Database Schema (Simplified)
 
-#users
+#### users
 
 - id, name, email, password, role
 
-#conversations
+#### conversations
 
 - id, isGroup, createdAt
 
-#messages
+#### messages
 
 - id, senderId, conversationId, content, timestamp
+- 
 
-👤 Author
+### 👤 Author
 
 Ruwaidah Alfakhri
 Full Stack Developer
