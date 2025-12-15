@@ -80,11 +80,11 @@ The application supports instant message delivery, user authentication, and scal
         |
         | REST API / WebSocket
         |
-          Node.js + Express (Backend)
+     Node.js + Express (Backend)
         |
-          PostgreSQL (Database)
+     PostgreSQL (Database)
         |
-          AWS (EC2, RDS, S3)
+     AWS (EC2, RDS)
 
 
 ### 🔗 API Overview
