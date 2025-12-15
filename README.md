@@ -11,9 +11,9 @@ You can find the deployed project at [Connect](https://messaging-app-7bf0.onrend
 
 🚀 Live Demo
 
-🔗 Frontend: [[FrontEnd URL](https://message-app-ukya.onrender.com)]
+🔗 Frontend: [FrontEnd URL](https://message-app-ukya.onrender.com)
 
-🔗 Backend API: [[Backend URL](https://hashtagserver.onrender.com)]
+🔗 Backend API: [BackEnd URL](https://hashtagserver.onrender.com)
 
 
 ## 📌 Project Purpose
@@ -126,7 +126,7 @@ The application supports instant message delivery, user authentication, and scal
 
 Ruwaidah Alfakhri
 Full Stack Developer
-🔗 LinkedIn: [[LinkedIn](https://www.linkedin.com/in/ruwaidah-a-930b9a8b/)]
+🔗 LinkedIn: [LinkedIn](https://www.linkedin.com/in/ruwaidah-a-930b9a8b/)
 
 
 ## For Testing
@@ -146,4 +146,3 @@ Full Stack Developer
 - Username: Username3
 - Password: 12345678
 
-#### [Back end]https://github.com/Ruwaidah/hashtagserver
