@@ -11,7 +11,7 @@ You can find the deployed project at [https://messaging-app-7bf0.onrender.com]
 
 🚀 Live Demo
 
-🔗 Frontend: [Add S3 / CloudFront URL]
+🔗 Frontend: [Add S3 / [CloudFront URL](https://message-app-ukya.onrender.com)]
 🔗 Backend API: [Add EC2 / [API URL](https://hashtagserver.onrender.com)]
 
 
