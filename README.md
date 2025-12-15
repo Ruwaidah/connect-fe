@@ -9,7 +9,7 @@ You can find the deployed project at [Connect](https://messaging-app-7bf0.onrend
 
      The application is still under development and not yet fully complete.
 
-🚀 Live Demo
+## 🚀 Live Demo
 
 🔗 Frontend: [FrontEnd URL](https://message-app-ukya.onrender.com)
 
