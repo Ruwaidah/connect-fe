@@ -49,11 +49,11 @@ The application supports instant message delivery, user authentication, and scal
 
 #### Cloud & Deployment
 
-     - AWS EC2 (Backend)
+     - Render (Backend)
      
      - AWS RDS (PostgreSQL)
      
-     - AWS S3 (Frontend Hosting)
+     - Render (Frontend Hosting)
 
 
 ## ✨ Features
@@ -62,20 +62,18 @@ The application supports instant message delivery, user authentication, and scal
      
      💬 Real-time messaging using Socket.IO
      
-     👥 One-to-one and group conversations
+     👥 One-to-one and user conversations
      
-     🟢 Online/offline user status
+     🟢 Online/offline user status * InProgress
      
-     ✍️ Typing indicators
+     ✍️ Typing indicators * InProgress
      
      📁 Persistent message storage
      
      🧾 Form validation with React Hook Form
      
-     📱 Responsive UI with Tailwind CSS
+     📱 Responsive UI with CSS
      
-     ☁️ Cloud deployment on AWS
-
 ## 🧱 System Architecture
 
      React (Frontend)
@@ -118,22 +116,17 @@ The application supports instant message delivery, user authentication, and scal
 
 #### users
 
-- id, name, email, password, role
-
-#### conversations
-
-- id, isGroup, createdAt
+- id, name, email, password
 
 #### messages
 
 - id, senderId, conversationId, content, timestamp
-- 
 
 ### 👤 Author
 
 Ruwaidah Alfakhri
 Full Stack Developer
-🔗 LinkedIn: [Your LinkedIn]
+🔗 LinkedIn: [[Your LinkedIn](https://www.linkedin.com/in/ruwaidah-a-930b9a8b/)]
 
 
 ## For Testing
