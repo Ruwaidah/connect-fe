@@ -1,7 +1,9 @@
+@import "tailwindcss";
+
 html {
   margin: 0;
   padding: 0;
-  width: 60%;
+  width: 100%;
   margin: 0 auto;
   height: 100dvh;
   background-color: whitesmoke;
@@ -10,12 +12,15 @@ html {
   box-shadow: 1px 10px 20px 1px lightgray;
   /* position: relative; */
 }
+
 body {
   margin: 0;
 }
+
 p {
   margin: 0;
 }
+
 a {
   text-decoration: none;
   outline: none;
@@ -31,6 +36,7 @@ input {
   height: 60px;
 }
 
+/* 
 .error-input {
   border: rgb(212, 61, 61) solid 1px !important;
   background-color: rgb(248, 237, 237) !important;
@@ -181,4 +187,4 @@ input {
   #MessageCard-component .mid-section {
     height: 86.5vh;
   }
-}
+} */

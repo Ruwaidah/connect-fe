@@ -1,6 +1,8 @@
-import "./HomePage.css";
+// import "./HomePage.css";
 import { useGSAP } from "@gsap/react";
 import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
+import LoginWithGoogle from "./Auth/Login/LoginInWithGoogle";
 import {
   loginWithGoogle,
   clearChangePassword,
@@ -25,6 +27,7 @@ const HomePage = () => {
     dispatch(clearChangePassword());
   }, []);
 
+
   useGSAP(() => {
     gsap.to(".welcome-h4", {
       opacity: 1,
@@ -41,6 +44,8 @@ const HomePage = () => {
     return
   };
 
+
+
   // ************************ CLICK SIGNUP BUTTON ********************
   const createAccount = () => setIsLoginForm(false);
 
@@ -48,32 +53,39 @@ const HomePage = () => {
   const clickLoginButton = () => setIsLoginForm(true);
 
   return (
-    <div className="HomePage">
+    // <div className="HomePage">
+    <div className="w-full flex flex-col h-[100vh] justify-between items-center">
       <Header />
-      <div className={isLoginForm ? "section loginForm" : "section signupForm"}>
-        <div
+      {/* <div className={isLoginForm ? "section loginForm" : "section signupForm"}> */}
+      <div className={`w-[600px] flex justify-center shadow-xl ${isLoginForm ? 'h-[40vh]' : 'h-[50vh]'}`}>
+        {/* <div
           className={
             isLoginForm ? "section-auth login-auth" : "section-auth signup-auth"
           }
-        >
+        > */}
+        <div
+          className="flex flex-col w-full rounded-sm bg-gray-200 p-10 justify-between">
           <div id="googleLogin">
-            <GoogleLogin
-              cookiePolicy={"single_host_origin"}
+            {/* <GoogleLogin
+              // cookiePolicy={"single_host_origin"}
               onSuccess={googleLogin}
               onError={errorLoginGoogle}
-            />
+            /> */}
+            <LoginWithGoogle />
           </div>{" "}
           {isLoginForm ? (
-            <div className="login-div forms-div">
+            // <div className="login-div forms-div">
+            <div className="flex flex-col">
               <Login />
-              <div className="forgot-password-div">
+              {/* <div className="forgot-password-div"> */}
+              <div className="flex my-1">
                 <Link className="forgot-password-para" to="/reset-password">
                   Forgot Password
                 </Link>
               </div>{" "}
               <p className="have-account-para">
                 Don't Have account?{" "}
-                <button onClick={createAccount}>SignUp</button>{" "}
+                <button className="cursor-pointer px-1 text-cyan-900" onClick={createAccount}>SignUp</button>{" "}
               </p>
             </div>
           ) : (
@@ -86,7 +98,7 @@ const HomePage = () => {
             </div>
           )}
         </div>
-        <div className="img-sections">
+        {/* <div className="img-sections">
           <img src="./assets/msg-01.png"  className="msg-01" />
           <img src="./assets/msg-02.png" className="msg-02" />
           <img src="./assets/msg-03.png" className="msg-03" />
@@ -94,7 +106,7 @@ const HomePage = () => {
           <img src="./assets/msg-05.png" className="msg-05" />
           <img src="./assets/msg-06.png" className="msg-06" />
           <img src="./assets/msg-07.png" className="msg-07" />
-        </div>
+        </div> */}
       </div>
       <Footer />
     </div>

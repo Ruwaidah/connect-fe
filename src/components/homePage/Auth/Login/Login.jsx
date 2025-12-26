@@ -1,4 +1,4 @@
-import "./Login.css";
+// import "./Login.css";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -20,23 +20,24 @@ const Login = () => {
 
   if (localStorage.getItem("token")) return <Navigate to="/dashboard" />;
   return (
-    <form className="Login-Component" onSubmit={handleSubmit(onSubmit)}>
+    // <form className="Login-Component" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col h-40" onSubmit={handleSubmit(onSubmit)}>
       {/* <p className="error-para">{errors && errors.text ? "Require !" : null}</p> */}
       <p className="error-request-p">
         {" "}
         {errors.text || errors.password
           ? "Invalid Input"
           : isAuthError
-          ? errorMessage
-          : isAuthLoading
-          ? "Loading ..."
-          : null}
+            ? errorMessage
+            : isAuthLoading
+              ? "Loading ..."
+              : null}
       </p>
-
       <input
         placeholder="Email/Username"
         type="text"
-        className={errors.text ? "error-input" : null}
+        // className={errors.text ? "error-input" : null}
+        className="bg-white h-10 pl-2 my-1 rounded-sm"
         {...register("text", {
           required: {
             value: true,
@@ -51,7 +52,8 @@ const Login = () => {
       <input
         placeholder="******"
         type="password"
-        className={errors.password ? "error-input" : null}
+        // className={errors.password ? "error-input" : null}
+        className="bg-white h-10 pl-2 rounded-sm"
         {...register("password", {
           required: true,
         })}
@@ -59,10 +61,15 @@ const Login = () => {
       <input
         type="submit"
         value="Login"
+        // className={
+        //   watch("text") === "" || watch("password") === "" || isAuthLoading
+        //     ? "disabled-btn"
+        //     : null
+        // }
         className={
           watch("text") === "" || watch("password") === "" || isAuthLoading
-            ? "disabled-btn"
-            : null
+            ? "bg-gray-300 text-black font-bold h-10 my-1 rounded-sm"
+            : "bg-cyan-950 text-white h-10 my-1 rounded-sm"
         }
         disabled={
           watch("text") === "" || isAuthLoading || watch("password") === ""

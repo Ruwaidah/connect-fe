@@ -1,9 +1,9 @@
-import "./Footer.css";
+// import "./Footer.css";
 
 const Footer = () => {
   return (
-    <div id="Footer">
-      <p>&copy; 2025 All Rights Reserved Ruwaidah Alfakhri</p>
+    <div className="w-full h-20 flex justify-center items-center bg-black text-xs">
+      <p className="text-white">&copy; 2025 All Rights Reserved Ruwaidah Alfakhri</p>
     </div>
   );
 };

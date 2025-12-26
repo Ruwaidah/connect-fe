@@ -1,9 +1,10 @@
 import "./SignUp.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { signUp } from "../../../../reducers/usersSlice";
+import { socket } from "../../../../socket";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,10 @@ const SignUp = () => {
   };
   if (localStorage.getItem("token")) return <Navigate to="/dashboard" />;
   return (
-    <form className="signup-component" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      // className="signup-component" 
+      className="flex flex-col"
+      onSubmit={handleSubmit(onSubmit)}>
       {errors && errors.password ? (
         <div className="error-p">
           <p className="password-rule-p"> Password Must Have:</p>
@@ -45,7 +49,8 @@ const SignUp = () => {
       <input
         placeholder="First Name"
         type="text"
-        className={errors.firstName ? "error-input" : null}
+        // className={errors.firstName ? "error-input" : null}
+        className={`bg-white h-10 pl-2 my-1 rounded-sm ${errors.firstName ? "error-input" : null}`}
         {...register("firstName", {
           required: {
             value: true,
@@ -62,11 +67,11 @@ const SignUp = () => {
           },
         })}
       />
-
       <input
         placeholder="Last Name"
         type="text"
-        className={errors.lastName ? "error-input" : null}
+        // className={errors.lastName ? "error-input" : null}
+        className={`bg-white h-10 pl-2 rounded-sm ${errors.lastName ? "error-input" : null}`}
         {...register("lastName", {
           required: {
             value: true,
@@ -87,7 +92,8 @@ const SignUp = () => {
       <input
         placeholder="Username"
         type="text"
-        className={errors.username ? "error-input" : null}
+        // className={errors.username ? "error-input" : null}
+        className={`bg-white h-10 pl-2 mt-1 rounded-sm ${errors.username ? "error-input" : null}`}
         {...register("username", {
           required: {
             value: true,
@@ -111,7 +117,8 @@ const SignUp = () => {
       <input
         placeholder="Email"
         type="email"
-        className={errors.email ? "error-input" : null}
+        // className={errors.email ? "error-input" : null}
+        className={`bg-white h-10 pl-2 mt-1 rounded-sm ${errors.email ? "error-input" : null}`}
         {...register("email", {
           required: {
             value: true,
@@ -124,11 +131,11 @@ const SignUp = () => {
           },
         })}
       />
-
       <input
-        placeholder="******"
+        placeholder="Password"
         type="password"
-        className={errors.password || !isMatchPassword ? "error-input" : null}
+        // className={errors.password || !isMatchPassword ? "error-input" : null}
+        className={`bg-white h-10 pl-2 mt-1 rounded-sm ${errors.password ? "error-input" : null}`}
         {...register("password", {
           required: {
             value: true,
@@ -141,9 +148,10 @@ const SignUp = () => {
         })}
       />
       <input
-        placeholder="re-type Password"
+        placeholder="Confirm Password"
         type="password"
-        className={errors.repassword || !isMatchPassword ? "error-input" : null}
+        // className={errors.repassword || !isMatchPassword ? "error-input" : null}
+        className={`bg-white h-10 pl-2 mt-1 rounded-sm ${errors.repassword || !isMatchPassword ? "error-input" : null}`}
         {...register("repassword", {
           required: true,
         })}
