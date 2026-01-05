@@ -1,4 +1,4 @@
-import "./ProfileCard.css"
+// import "./ProfileCard.css"
 import { useSelector, useDispatch } from "react-redux";
 import ProfileForm from "./ProfileForm";
 import ProfileImage from "./ProfileImage";

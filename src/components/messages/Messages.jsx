@@ -1,4 +1,4 @@
-import "./Messages.css";
+// import "./Messages.css";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useEffect, useState } from "react";
@@ -100,19 +100,22 @@ const Messages = () => {
 
   const objKeys = Object.keys(messages);
   return (
-    <div className="Messages section-2-div">
-      <div className="messages-header page-header">
-        <div>
-          <img src="./assets/msgs.png" />
-          <h2>Messages</h2>
+    <div className="flex flex-col w-full h-[80vh]">
+      <div className="flex items-center justify-between p-2 py-4 bg-gray-200">
+        <div className="flex items-center">
+          <img src="./assets/msgs.png"
+            className="w-6 w-6 mr-2" />
+          <h2 className="font-bold">Messages</h2>
         </div>
-
-        <img src="./assets/new-msg.png" onClick={searchNewChat} />
+        <img src="./assets/new-msg.png"
+          className="w-6" onClick={searchNewChat} />
       </div>
       {isMessagesLoading || isGetFriendsLoading ? (
         <Loading />
       ) : objKeys.length === 0 ? (
-        <NoMessages />
+        <div className="flex w-full justify-center items-center h-full">
+          <NoMessages />
+        </div>
       ) : isStartNewChat ? (
         <div className="StartNewChat">
           <SearchFriendForm />
@@ -134,7 +137,7 @@ const Messages = () => {
                 {messages[msg].messages[messages[msg].messages.length - 1].text}
               </p>
             </div>
-            <p>{messages[msg].numberOfMsgUnread> 0 ? messages[msg].numberOfMsgUnread: null}</p>
+            <p>{messages[msg].numberOfMsgUnread > 0 ? messages[msg].numberOfMsgUnread : null}</p>
           </Link>
         ))
       )}

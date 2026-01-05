@@ -1,7 +1,7 @@
 import Footer from "../footer/Footer";
 import Header from "../header/Header";
 import NavBar from "../navBar/NavBar";
-import "./Profile.css";
+// import "./Profile.css";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileCard from "./ProfileCard";
 import { clearFriendSearch } from "../../reducers/usersSlice";

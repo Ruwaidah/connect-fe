@@ -1,4 +1,4 @@
-import "./InputEmailForm.css";
+// import "./InputEmailForm.css";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { clearChangePassword } from "../../../../reducers/usersSlice";
@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { resetPassword } from "../../../../reducers/usersSlice";
-import StickersImages from "../../../StickersImages/StickersImages";
 
 const InputEmailForm = (props) => {
   const dispatch = useDispatch();
@@ -30,51 +29,64 @@ const InputEmailForm = (props) => {
     props.setIsResetPassword(true);
     dispatch(resetPassword(data));
   };
+
+  console.log(watch("email") === "", isResetPasswordLoading)
   return (
-    <div className="InputEmailForm">
-      <StickersImages />
-      <div className="ResetPassword-div">
-        <div className="para-1">
-          <h3>Reset Your Password</h3>
-          <p>
-            Enter your Email below, and we'll email you instructions to reset
-            your password.
-          </p>
-        </div>
-        <div className="loading-reset-password">
-          {isResetPasswordLoading ? <p>Loading ... </p> : null}
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="resetpassword-form">
-          <input
-            type="email"
-            placeholder="Email"
-            className={errors && errors.email ? "error-input" : null}
-            {...register("email", {
-              required: true,
-              pattern: {
-                value:
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: "invalid email",
-              },
-            })}
-          />
+    <div className="InputEmailForm w-160 h-64 flex
+                    flex-col opacity-0 bg-gray-200
+                     text-zinc-900 rounded-sm shadow-xl border border-gray-300
+                      p-10 px-20">
+      <div className="para-1">
+        <h3 className="font-bold mb-1 text-blue-700">
+          Reset Your Password
+        </h3>
+        <p>
+          Enter your Email below, and we'll email you instructions to reset
+          your password.
+        </p>
+      </div>
+      <div className="loading-reset-password">
+        {isResetPasswordLoading ? <p className="text-green-600">Loading ... </p> : null}
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mt-2">
+        <input
+          type="email"
+          placeholder="Email"
+          className={`${errors && errors.email ? "error-input" : null} 
+                      h-10 bg-white text-black pl-2 w-full rounded-sm`}
+          {...register("email", {
+            required: true,
+            pattern: {
+              value:
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              message: "invalid email",
+            },
+          })}
+        />
+        <div className="flex justify-around mt-4">
           <input
             type="submit"
+            className={`w-40 h-8 flex justify-center
+                       items-center bg-blue-300 rounded-sm 
+                       ${watch("email") === "" || isResetPasswordLoading ? 'bg-gray-300' :
+                errors.email ? 'border b-red-300' : 'bg-blue-300'
+              }`}
             id={
               watch("email") === "" || isResetPasswordLoading
                 ? "disabled"
                 : null
             }
             disabled={
-              watch("email") === "" || isResetPasswordLoading ? "disabled" : ""
-            }
+              watch("email") === "" || isResetPasswordLoading ? "disabled" : ""}
             value="Submit"
           />
-          <Link to="/" onClick={cancelChangePassword}>
+          <Link to="/" onClick={cancelChangePassword}
+            className="bg-blue-300 w-40 h-8 flex justify-center
+                           items-center text-zinc-900 rounded-sm">
             Cancel
           </Link>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };

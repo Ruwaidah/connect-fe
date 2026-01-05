@@ -1,15 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import "./ResetPassword.css";
+import { useSelector } from "react-redux";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useForm } from "react-hook-form";
 import { resetPassword } from "../../../../reducers/usersSlice";
-import Footer from "../../../footer/Footer";
 import Loading from "../../../loading/Loading";
 import { useState } from "react";
 import OTP from "./OTP";
-import Header from "../../../header/Header";
 import InputEmailForm from "./InputEmailForm";
 import NewPassword from "./NewPassword";
 
@@ -28,9 +24,7 @@ const ResetPassword = () => {
   }, {});
 
   return (
-    <div className="ResetPassword-component">
-      <Header />
-      {/* {isResetPassword && !isChangePasswword ? ( */}
+    <div className="flex justisy-center items-center w-full">
       {isOTPPage ? (
         <OTP />
       ) : isNewPassword ? (
@@ -38,7 +32,6 @@ const ResetPassword = () => {
       ) : (
         <InputEmailForm setIsResetPassword={setIsResetPassword} />
       )}
-      <Footer />
     </div>
   );
 };

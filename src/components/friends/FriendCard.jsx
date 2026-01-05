@@ -1,4 +1,4 @@
-import "./FriendCard.css";
+// import "./FriendCard.css";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -92,6 +92,8 @@ const FriendCard = () => {
         <p>{findFriend.message}</p>
       </div>
     );
+
+    console.log(findFriend)
   return (
     <div className="FriendCard">
       {isDeleteUser ? (

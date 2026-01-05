@@ -1,4 +1,4 @@
-import "./SearchFriendForm.css";
+// import "./SearchFriendForm.css";
 import { useForm } from "react-hook-form";
 
 const SearchFriendForm = () => {

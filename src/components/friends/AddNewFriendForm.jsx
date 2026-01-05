@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "./AddNewFriendForm.css";
 import { useForm } from "react-hook-form";
-import Header from "../header/Header";
-import Footer from "../footer/Footer";
-import NavBar from "../navBar/NavBar";
 import { findNewFriend } from "../../reducers/usersSlice";
 import FriendCard from "./FriendCard";
 import { Navigate } from "react-router-dom";
@@ -28,47 +24,50 @@ const AddNewFriendForm = () => {
     dispatch(findNewFriend(data));
   };
 
+  console.log(findFriend)
   return (
-    <div className="component-div addNewFriend-component">
-      <Header />
-      <div className="mid-section">
-        <NavBar />
-        <div className="section-2-div add-new-friend-form-div">
-          <div className="friends-header page-header">
-            <h2>Search</h2>
-            <img src="./assets/add-user.png" />
-          </div>
-          <form className="AddNewFriendForm" onSubmit={handleSubmit(onSubmit)}>
-            <p> {findFriendLoading ? "Searching ..." : null}</p>
-            <input
-              className="search-input"
-              type="text"
-              placeholder="search"
-              {...register("username", {
-                required: {
-                  value: true,
-                  message: "Require",
-                },
-              })}
-            />
-            <input type="submit" value="Search" id="submit-search-user" />
-            <img src="./assets/searching.png" onClick={submitBtn} />
-          </form>
-          <div className="find-friend-div">
-            {findFriend ? (
-              findFriend.id == localStorage.getItem("id") ? (
-                <Navigate to="/profile" />
-              ) : (
-                <FriendCard />
-                // <Navigate to={`/friend/profile/${findFriend.id}`} />
-              )
-            ) : (
-              <p className="no-match">No match</p>
-            )}
-          </div>
-        </div>
+    <div className="flex flex-col h-full">
+      <div className="flex items-center bg-gray-200 p-2 py-4">
+        <img src="./assets/add-user.png"
+          className="w-6 h-6 mr-2" />
+        <h2 className="font-bold">Search</h2>
       </div>
-      <Footer />
+      <form className="flex items-center h-10
+                        justify-between bg-blue-100 mt-1 mx-1 rounded-sm"
+        onSubmit={handleSubmit(onSubmit)}>
+
+        <input
+          className="pl-2"
+          type="text"
+          placeholder="search for friend"
+          {...register("username", {
+            required: {
+              value: true,
+              message: "Require",
+            },
+          })}
+        />
+        <input type="submit" value="Search" id="submit-search-user"
+          className="hidden" />
+        <img src="./assets/searching.png" onClick={submitBtn}
+          className="w-6 h-6 cursor-pointer" />
+      </form>
+      <div className="find-friend-div h-full">
+        {findFriendLoading ?
+          <p
+
+          > Searching ...</p> :
+          findFriend ? (
+            findFriend.id == localStorage.getItem("id") ? (
+              <Navigate to="/profile" />
+            ) : (
+              <FriendCard />
+            )
+          ) : (
+            <div className="flex items-center justify-center">
+              <p className="no-match">No Match</p>
+            </div>)}
+      </div>
     </div>
   );
 };

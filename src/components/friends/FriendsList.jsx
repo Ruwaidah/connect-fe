@@ -1,4 +1,4 @@
-import "./FriendsList.css";
+// import "./FriendsList.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFriends } from "../../reducers/usersSlice";

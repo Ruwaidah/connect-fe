@@ -86,7 +86,7 @@ const RoutesComponent = () => {
         />
         <Route
           path="/setting"
-          element={[<NewNotification key={uniqid()} />, <Setting key={uniqid()}/>]}
+          element={[<NewNotification key={uniqid()} />, <Setting key={uniqid()} />]}
         />
       </Route>
       <Route path="*" element={<NoPageFound />} />

@@ -1,4 +1,4 @@
-import "./PrivateMessageCard.css";
+// import "./PrivateMessageCard.css";
 import { useSelector } from "react-redux";
 import PrivateMessageForm from "./PrivateMessageForm";
 import { useRef, useEffect, useState } from "react";

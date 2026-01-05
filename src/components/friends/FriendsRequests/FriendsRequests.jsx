@@ -1,4 +1,4 @@
-import "./FriendsRequests.css";
+// import "./FriendsRequests.css";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap/gsap-core";
 import { useDispatch, useSelector } from "react-redux";

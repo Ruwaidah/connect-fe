@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "./NoPageFound.css";
+// import "./NoPageFound.css";
 
 const NoPageFound = () => {
   return (

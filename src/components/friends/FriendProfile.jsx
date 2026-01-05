@@ -1,4 +1,4 @@
-import "./FriendProfile.css";
+// import "./FriendProfile.css";
 import { useSelector } from "react-redux";
 import Footer from "../footer/Footer";
 import Header from "../header/Header";
