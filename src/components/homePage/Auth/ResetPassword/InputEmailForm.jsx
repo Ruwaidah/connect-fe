@@ -30,7 +30,6 @@ const InputEmailForm = (props) => {
     dispatch(resetPassword(data));
   };
 
-  console.log(watch("email") === "", isResetPasswordLoading)
   return (
     <div className="InputEmailForm w-160 h-64 flex
                     flex-col opacity-0 bg-gray-200

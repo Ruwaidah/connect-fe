@@ -1,0 +1,27 @@
+.login {
+    display: flex;
+    background-color: rgba(50, 97, 213, 0);
+    padding: 0;
+    width: 60px;
+    height: 30px;
+    transition: background-color 1s ease, width 1s ease-in-out, height 1s ease-in-out;
+    border-radius: 6px;
+    text-align: center;
+    /* padding-left: 60px;
+    padding-right: 60px; */
+}
+
+.login:hover {
+    /* background-color: #3261d5; */
+    border: 1px solid rgb(121, 121, 121);
+    width: 100px;
+    height: 60px;
+        /* background-color: rgba(50, 97, 213, 0.2);
+    border: 1px solid rgb(121, 121, 121) */
+}
+
+.active {
+    /* background-color: #3261d5; */
+    background-color: rgba(50, 97, 213, 0.2);
+    border: 1px solid rgb(121, 121, 121);
+}

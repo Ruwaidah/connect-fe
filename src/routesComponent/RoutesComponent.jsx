@@ -19,6 +19,9 @@ import FriendProfile from "../components/friends/FriendProfile";
 import MessageCard from "../components/messages/MessageCard";
 import NewNotification from "../components/notifications/NewNotification";
 import FriendsRequests from "../components/friends/FriendsRequests/FriendsRequests";
+import Login from "../components/homePage/Auth/Login/Login";
+import SignUp from "../components/homePage/Auth/SignUp/SignUp";
+import Layout from "./Layout";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -31,8 +34,16 @@ const RoutesComponent = () => {
   }, [localStorage.getItem("id")]);
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="reset-password" element={<ResetPassword />} />
+      {/* <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="reset-password" element={<ResetPassword />} /> */}
+      <Route path="/" element={<Layout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="reset-password" element={<ResetPassword />} />
+      </Route>
       <Route element={<PrivateRoute />}>
         <Route
           path="/dashboard"

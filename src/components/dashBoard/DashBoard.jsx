@@ -11,7 +11,6 @@ const DashBoard = () => {
     dispatch(getMessages());
   }, []);
   
-  console.log("21312")
 
   return (
     <div className="flex">
