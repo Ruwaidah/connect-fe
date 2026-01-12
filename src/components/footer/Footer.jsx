@@ -2,12 +2,12 @@ import SocialIcon from "./SocialIcon";
 const Footer = () => {
   return (
     <footer className="bg-gray-900/70 text-white py-6 items-center w-full fixed bottom-0
-                      flex justify-between lg:h-[10vh] px-20 border border-t-gray-800
-                     max-sm:px-1">
-      <div className="felx flex-col text-lg 
+                      flex justify-between lg:h-[10vh] px-20 max-xl:px-6 border border-t-gray-800
+                     max-sm:px-2">
+      <div className="felx flex-col text-lg
                       max-sm:w-full max-sm:items-center max-sm:justify-center">
-        <p className="text-base max-sm:text-sm max-sm:text-center">Built by Ruwaidah Alfakhri </p>
-        <p className="text-gray-500 text-base max-sm:text-xs max-sm:text-center"> Full Stack Web Developer</p>
+        <p className="max-xl:text-sm max-sm:text-sm max-sm:text-start">Built by Ruwaidah Alfakhri </p>
+        <p className="text-gray-500 max-xl:text-xs max-sm:text-xs max-sm:text-start"> Full Stack Web Developer</p>
       </div>
       <div className="flex flex-col justify-center items-center">
         {/* <div className="text-base flex justify-center gap-4 max-sm:hidden">

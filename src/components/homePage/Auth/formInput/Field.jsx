@@ -3,32 +3,30 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 
-const Field = ({ label, placeholder, icon, rightIcon }) => {
-    const { register, handleSubmit, reset, formState } = useForm();
-    const { errors } = formState;
-
+const Field = ({ label, placeholder, icon, errors, rightIcon }) => {
     const isPassword = icon === "lock";
     const [showPassword, setShowPassword] = useState(false);
 
     const inputType = isPassword ? (showPassword ? "text" : "password") : "text";
 
-    console.log(errors)
+    console.log(errors, inputType)
+    console.log(errors.text && inputType == 'text')
+    console.log(errors.password && inputType == 'password')
 
+    
     return (
         <div>
             <label className="text-xs text-white/60">{label}</label>
             <div className="mt-1 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-3">
                 <Icon kind={icon} />
                 <input
-                    className="w-full bg-transparent outline-none text-sm placeholder:text-white/35"
+                    className={`w-full bg-transparent outline-none 
+                                text-sm placeholder:text-white/35
+                                ${errors.text && inputType == 'text' ? '!border-red-300' :
+                            errors.password && inputType == 'password' ? 'border-red-300' : ''
+                        }`}
                     placeholder={placeholder}
                     type={inputType}
-                    {...register("text", {
-                        required: {
-                            value: true,
-                            message: "Require",
-                        },
-                    })}
                 />
                 {rightIcon && isPassword ? (
                     <button

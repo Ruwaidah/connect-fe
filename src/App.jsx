@@ -8,7 +8,7 @@ function App() {
     <div className="flex flex-col justify-between items-center h-[100vh]">
       {/* <Header /> */}
       <div className="w-full">
-        {localStorage.getItem("id") && <NavBar />}
+        {/* {localStorage.getItem("id") && <NavBar />} */}
         <RoutesComponent />
       </div>
       {/* <Footer /> */}

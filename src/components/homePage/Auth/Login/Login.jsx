@@ -10,12 +10,13 @@ import { useState } from "react";
 import LoginWithGoogle from "./LoginInWithGoogle";
 import { Link } from "react-router-dom";
 import NavBarHomePage from "../../NavBarHomePage";
+import LoginForm from "./LoginForm";
 
 
 
 const Login = () => {
-    const dispatch = useDispatch();
-    const { register, handleSubmit, formState, reset, watch } = useForm();
+  const dispatch = useDispatch();
+  const { register, handleSubmit, formState, reset, watch } = useForm();
   const { errors } = formState;
 
   useGSAP(() => {
@@ -26,33 +27,35 @@ const Login = () => {
     });
   }, {});
 
-   const onSubmit = (data) => {
+  const onSubmit = (data) => {
     console.log(data)
     // return dispatch(loginUser(data));
   };
 
+  console.log(localStorage.getItem("token"))
 
-    if (localStorage.getItem("token")) return <Navigate to="/dashboard" />;
+
+  if (localStorage.getItem("token")) return <Navigate to="/messages" />;
 
   return (
-    <main className="login opacity-0 text-white
-                     w-[90%] xl:w-[80%]
+    <main className="login opacity-0 text-white w-[80%] max-2xl:w-[96%]
+                      max-xl:w-[96%]
                      h-[80vh] flex items-center">
       <div className="flex justify-center w-full items-center">
-        {/* Left: marketing */}
-        <section className="space-y-6 w-[56%] flex flex-col">
+        <section className="space-y-6 w-[56%] flex flex-col max-sm:hidden">
           <div className="space-y-3">
-            <h1 className="text-4xl sm:text-5xl font-extralight leading-tight">
+            <h1 className="text-4xl max-xl:text-2xl
+                            font-extralight leading-tight">
               Welcome to Connect
             </h1>
-            <p className="text-white/80 max-w-xl text-xl">
+            <p className="text-white/80 max-w-xl text-xl max-xl:text-base">
               Login to unlock powerful features.
             </p>
           </div>
           <div className="flex w-full justify-start items-center">
             <img src="./assets/login-phone.png"
-              className="w-70 h-120 mr-10" />
-            <div className="flex flex-col w-80 mt-4">
+              className="w-70 h-120 max-xl:w-50 max-xl:h-100 mr-10 max-xl:mr-4 max-lg:hidden" />
+            <div className="flex flex-col w-80 mt-4 max-xl:w-70">
               <Feature
                 title="Fast chat"
                 desc="Messages in real time."
@@ -76,40 +79,22 @@ const Login = () => {
           </div>
         </section>
 
-        {/* Right: login card */}
-        <section className="bg-gray-900/70 rounded-3xl w-140 flex justify-start">
-          <div className="mx-auto w-full lg:mx-0 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
-            {/* glow border */}
-            <div className="rounded-3xl p-6 sm:p-7">
+        <section className="bg-gray-900/70 rounded-3xl w-140 flex justify-start max-xl:w-120">
+          <div className="mx-auto w-full lg:mx-0 rounded-3xl border border-white/10 
+                          bg-white/5 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
+            <div className="rounded-3xl p-6 max-sm:p-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-normal">Login to Connect</h2>
+                  <h2 className="text-xl font-normal max-sm:text-base max-sm:mt-2">Login to Connect</h2>
                 </div>
               </div>
-
-              {/* Google button */}
               <LoginWithGoogle />
-              {/* Divider */}
-              <div className="my-5 flex items-center gap-3">
+              <div className="my-5 max-sm:my-3 flex items-center gap-3">
                 <div className="h-px flex-1 bg-white/10" />
                 <span className="text-xs text-white/50">or</span>
                 <div className="h-px flex-1 bg-white/10" />
               </div>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                {/* Inputs */}
-                <div className="space-y-3">
-                  <Field label="Email / Username" placeholder="name@example.com" icon="mail" />
-                  <Field label="Password" placeholder="••••••••" icon="lock" rightIcon="eye" />
-                </div>
-                {/* Primary button */}
-                <input
-                  className="mt-5 w-full rounded-xl bg-[#3261d5] px-4 py-3 font-normal shadow-[0_8px_30px_rgba(59,130,246,0.22)]"
-                  type="submit"
-                  value="Login"
-                />
-                  
-              </form>
-              {/* Links */}
+              <LoginForm />
               <div className="mt-4 flex items-center justify-between text-sm">
                 <button type="button" className="text-white/70 hover:text-white transition">
                   Forgot password?

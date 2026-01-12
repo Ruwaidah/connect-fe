@@ -22,6 +22,7 @@ import FriendsRequests from "../components/friends/FriendsRequests/FriendsReques
 import Login from "../components/homePage/Auth/Login/Login";
 import SignUp from "../components/homePage/Auth/SignUp/SignUp";
 import Layout from "./Layout";
+import Messages from "../components/messages/Messages";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -46,10 +47,10 @@ const RoutesComponent = () => {
       </Route>
       <Route element={<PrivateRoute />}>
         <Route
-          path="/dashboard"
+          path="/messages"
           element={[
             <NewNotification key={uniqid()} />,
-            <DashBoard key={uniqid()} />,
+            <Messages key={uniqid()} />,
           ]}
         />
         <Route

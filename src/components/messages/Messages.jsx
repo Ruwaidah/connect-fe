@@ -17,8 +17,12 @@ const Messages = () => {
     useSelector((state) => state.messages);
 
   const {
+    user,
     isStartNewChat,
     isGetFriendsLoading,
+    isGettingUserError,
+    isGettingUserErrorMessage,
+    isGettingUserLoading,
     isGetFriendsError,
     isGetFriendsErrorMessage,
     friendsList,
@@ -34,6 +38,8 @@ const Messages = () => {
       });
     }
   }, 50);
+
+  console.log(friendsList)
 
   useEffect(() => {
     dispatch(getMessages());
@@ -97,18 +103,21 @@ const Messages = () => {
     dispatch(startNewChatList(!isStartNewChat));
     dispatch(getFriends());
   };
-
   const objKeys = Object.keys(messages);
   return (
-    <div className="flex flex-col w-full h-[80vh]">
-      <div className="flex items-center justify-between p-2 py-4 bg-gray-200">
-        <div className="flex items-center">
-          <img src="./assets/msgs.png"
-            className="w-6 w-6 mr-2" />
-          <h2 className="font-bold">Messages</h2>
+    <div className="flex flex-col w-full h-[80vh] text-white">
+      <div className="flex flex-col items-center justify-between p-2 pt-4 pb-3  
+                      border border-b-white/10">
+        <div className="flex justify-between items-center w-full  mb-4">
+          <div className="flex items-center">
+            <img src="./assets/connect-logo03.png"
+              className="w-8 w-8 mr-4" />
+            <h2 className="font-bold text-lg">Chats</h2>
+          </div>
+          <img src={user && user.image ? user.image : null}
+            className="w-8 h-8 rounded-full" onClick={searchNewChat} />
         </div>
-        <img src="./assets/new-msg.png"
-          className="w-6" onClick={searchNewChat} />
+        <SearchFriendForm />
       </div>
       {isMessagesLoading || isGetFriendsLoading ? (
         <Loading />
@@ -118,7 +127,7 @@ const Messages = () => {
         </div>
       ) : isStartNewChat ? (
         <div className="StartNewChat">
-          <SearchFriendForm />
+          {/* <SearchFriendForm /> */}
           <FriendsList />
         </div>
       ) : (

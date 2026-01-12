@@ -7,15 +7,14 @@ const DashBoard = () => {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.messages);
 
+  // console.log(localStorage.clear())
   useEffect(() => {
     dispatch(getMessages());
   }, []);
-  
+
 
   return (
-    <div className="flex">
       <Messages />
-    </div>
   );
 };
 
