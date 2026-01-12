@@ -7,7 +7,7 @@ import { startNewChatList, getFriends } from "../../reducers/usersSlice";
 import { getMessages, messageRead } from "../../reducers/messagesSlice";
 import Loading from "../loading/Loading";
 import NoMessages from "./NoMessages";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import SearchFriendForm from "../friends/SearchFriendForm";
 import FriendsList from "../friends/FriendsList";
 
@@ -114,8 +114,10 @@ const Messages = () => {
               className="w-8 w-8 mr-4" />
             <h2 className="font-bold text-lg">Chats</h2>
           </div>
-          <img src={user && user.image ? user.image : null}
-            className="w-8 h-8 rounded-full" onClick={searchNewChat} />
+          <NavLink to="/profile">
+            <img src={user && user.image ? user.image : null}
+              className="w-8 h-8 rounded-full" onClick={searchNewChat} />
+          </NavLink>
         </div>
         <SearchFriendForm />
       </div>

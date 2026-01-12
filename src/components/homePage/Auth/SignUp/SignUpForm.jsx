@@ -39,12 +39,6 @@ const SignUpForm = () => {
         onSubmit={handleSubmit(onSubmit)}>
         {errors && errors.password ? (
             <div className="error-p text-xs">
-                {/* <p className="password-rule-p text-red-500"> Password Must Have:</p> */}
-                {/* <ul className="password-rule text-red-500">
-                    <li> - at least 8 characters .</li>
-                    <li> - at least one number.</li>
-                    <li> - at least one one uppercase and lowercase letter.</li>
-                </ul> */}
                 <p className="password-rule-p text-red-500 py-1 pl-2">* Use 8+ characters with a number, and both uppercase & lowercase letters.</p>
             </div>
         ) : isMatchPassword ? null : (

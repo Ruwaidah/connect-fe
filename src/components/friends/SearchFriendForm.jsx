@@ -15,7 +15,7 @@ const SearchFriendForm = () => {
 
   const onSubmit = (data) => {
     console.log(data)
-   };
+  };
 
   return (
     <div className="w-full">

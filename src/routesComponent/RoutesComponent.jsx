@@ -23,6 +23,7 @@ import Login from "../components/homePage/Auth/Login/Login";
 import SignUp from "../components/homePage/Auth/SignUp/SignUp";
 import Layout from "./Layout";
 import Messages from "../components/messages/Messages";
+import StartNewChat from "../components/messages/StartNewChat";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -52,6 +53,10 @@ const RoutesComponent = () => {
             <NewNotification key={uniqid()} />,
             <Messages key={uniqid()} />,
           ]}
+        />
+        <Route 
+          path="/new-chat-friends-list"
+          element={<StartNewChat />}
         />
         <Route
           path="/profile"
