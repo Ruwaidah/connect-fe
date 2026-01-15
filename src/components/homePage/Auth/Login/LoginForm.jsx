@@ -21,7 +21,7 @@ const LoginForm = () => {
     console.log(isAuthError, errorMessage)
 
 
-    if (localStorage.getItem("token")) return <Navigate to="/dashboard" />;
+    if (localStorage.getItem("token")) return <Navigate to="/messages" />;
 
     return <form onSubmit={handleSubmit(onSubmit)}>
         {/* Inputs */}

@@ -54,7 +54,7 @@ const RoutesComponent = () => {
             <Messages key={uniqid()} />,
           ]}
         />
-        <Route 
+        <Route
           path="/new-chat-friends-list"
           element={<StartNewChat />}
         />
