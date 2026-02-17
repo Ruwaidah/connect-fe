@@ -1,9 +1,6 @@
-// import "./Messages.css";
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { startNewChatList, getFriends } from "../../reducers/usersSlice";
 import { getMessages, messageRead } from "../../reducers/messagesSlice";
 import Loading from "../loading/Loading";
 import NoMessages from "./NoMessages";
@@ -11,146 +8,188 @@ import { Link, NavLink } from "react-router-dom";
 import SearchFriendForm from "../friends/SearchFriendForm";
 import FriendsList from "../friends/FriendsList";
 
+
+
+
 const Messages = () => {
   const dispatch = useDispatch();
-  const { messages, isMessagesLoading, isMessagesError, errorMessages } =
+  const { messages, isMessagesLoading } =
     useSelector((state) => state.messages);
 
   const {
     user,
     isStartNewChat,
     isGetFriendsLoading,
-    isGettingUserError,
-    isGettingUserErrorMessage,
-    isGettingUserLoading,
-    isGetFriendsError,
-    isGetFriendsErrorMessage,
     friendsList,
   } = useSelector((state) => state.user);
 
-  setTimeout(() => {
-    const e = document.getElementsByClassName("message");
-    if (e.length > 0) {
+
+  // Time formatter with AM/PM
+  const formatTimeAMPM = (iso) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    return d.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const chats = Object.values(messages || {})
+    .filter(Boolean)
+    .sort((a, b) => {
+      const aTime = new Date(a.messages?.at(-1)?.create_at || 0).getTime();
+      const bTime = new Date(b.messages?.at(-1)?.create_at || 0).getTime();
+      return bTime - aTime;
+    });
+
+
+
+  useEffect(() => {
+    if (!isMessagesLoading && !isStartNewChat) {
       gsap.to(".message", {
         opacity: 1,
         duration: 0.5,
         ease: "power1.inOut",
+        stagger: 0.03,
       });
     }
-  }, 50);
+  }, [isMessagesLoading, isStartNewChat, chats.length]);
 
-  console.log(friendsList)
 
   useEffect(() => {
     dispatch(getMessages());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    setTimeout(() => {
-      if (isStartNewChat) {
-        gsap.from(".StartNewChat .SearchFriendForm", {
-          duration: 1,
-          ease: "circ.out",
-          x: "100%",
-        });
+    if (!isStartNewChat) return;
+    if (isGetFriendsLoading) return;
 
-        gsap.to(".StartNewChat .SearchFriendForm", {
-          duration: 1,
-          ease: "circ.out",
-          x: "0",
-          opacity: 1,
-        });
-
-        for (let i = 0; i <= friendsList.length - 1; i++) {
-          document.getElementById(`.StartNewChat .FriendsList .friend-${i}`);
-          try {
-            gsap.from(`.StartNewChat .FriendsList #friend-${i}`, {
-              duration: 1,
-              ease: "circ.out",
-              x: "100%",
-              delay: 0.4,
-            });
-
-            gsap.to(`.StartNewChat .FriendsList #friend-${i}`, {
-              duration: 1,
-              ease: "circ.out",
-              x: "0",
-              opacity: 1,
-              delay: 0.4,
-            });
-          } catch {
-            return;
-          }
-        }
-      }
-    }, 200);
-  }, [isStartNewChat, isGetFriendsLoading]);
+    gsap.fromTo(
+      ".StartNewChat .FriendsList > *",
+      { x: "20%", opacity: 0 },
+      { x: "0%", opacity: 1, duration: 0.6, ease: "circ.out", stagger: 0.04 }
+    );
+  }, [isStartNewChat, isGetFriendsLoading, friendsList.length]);
 
   // ************************** OPEN UNREAD MESSAGE ******************************
-  const openPrivateMsg = (data) => {
+  const openPrivateMsg = (chat) => {
     dispatch(
       messageRead({
-        numberOfMsgUnread: data.numberOfMsgUnread,
         data: {
-          userId: localStorage.getItem("id"),
-          friendId: data.friend.id,
+          userId: Number(localStorage.getItem("id")),
+          friendId: Number(chat.friend.id),
         },
       })
     );
   };
 
-  const searchNewChat = () => {
-    dispatch(startNewChatList(!isStartNewChat));
-    dispatch(getFriends());
-  };
-  const objKeys = Object.keys(messages);
+
+
   return (
     <div className="flex flex-col w-full h-[80vh] text-white">
-      <div className="flex flex-col items-center justify-between p-2 pt-4 pb-3  
-                      border border-b-white/10">
-        <div className="flex justify-between items-center w-full  mb-4">
-          <div className="flex items-center">
-            <img src="./assets/connect-logo03.png"
-              className="w-8 w-8 mr-4" />
-            <h2 className="font-bold text-lg">Chats</h2>
+      <div className="flex flex-col items-center justify-between p-3 pt-4 pb-3
+                      border-b border-white/10 bg-white/[0.03] backdrop-blur-md">
+        <div className="flex justify-between items-center w-full mb-3">
+          <div className="flex items-center gap-3">
+            <img src="./assets/connect-logo03.png" className="w-8 h-8" />
+            <h2 className="font-semibold text-lg">Chats</h2>
           </div>
           <NavLink to="/profile">
-            <img src={user && user.image ? user.image : null}
-              className="w-8 h-8 rounded-full" onClick={searchNewChat} />
+            <div className="relative">
+              <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/15" />
+              {user?.image ? (
+                <img
+                  src={user.image}
+                  className="relative w-9 h-9 rounded-full object-cover ring-1 ring-white/10"
+                  alt="Profile"
+                />
+              ) : (
+                <div className="relative w-9 h-9 rounded-full ring-1 ring-white/10 bg-white/10" />
+              )}
+
+            </div>
           </NavLink>
         </div>
         <SearchFriendForm />
       </div>
       {isMessagesLoading || isGetFriendsLoading ? (
         <Loading />
-      ) : objKeys.length === 0 ? (
+      ) : chats.length === 0 ? (
         <div className="flex w-full justify-center items-center h-full">
           <NoMessages />
         </div>
       ) : isStartNewChat ? (
         <div className="StartNewChat">
-          {/* <SearchFriendForm /> */}
           <FriendsList />
         </div>
       ) : (
-        objKeys.map((msg, indx) => (
-          <Link
-            key={indx}
-            className="message"
-            onClick={() => openPrivateMsg(messages[msg])}
-            to={`/messages/${messages[msg].friend.id}`}
-          >
-            <div>
-              <h4>
-                {messages[msg].friend.firstName} {messages[msg].friend.lastName}
-              </h4>
-              <p>
-                {messages[msg].messages[messages[msg].messages.length - 1].text}
-              </p>
-            </div>
-            <p>{messages[msg].numberOfMsgUnread > 0 ? messages[msg].numberOfMsgUnread : null}</p>
-          </Link>
-        ))
+        <div className="flex flex-col gap-3 px-1 py-4 overflow-y-auto">
+          {chats.map((chat) => {
+            if (!chat?.friend) return null;
+            const last = chat.messages?.[chat.messages.length - 1];
+            const time = formatTimeAMPM(last?.create_at);
+            return (
+              <Link
+                key={chat.friend.id}
+                className="message opacity-0 group w-full rounded-2xl border border-white/15
+                bg-white/[0.04] backdrop-blur-md p-3
+                flex items-center justify-between gap-3
+                shadow-[0_0_0_1px_rgba(255,255,255,0.10),0_0_22px_rgba(60,170,255,0.08)]
+                hover:border-sky-200/30 hover:bg-white/[0.06]
+                hover:shadow-[0_0_0_1px_rgba(140,230,255,0.22),0_0_30px_rgba(60,170,255,0.14)]
+                transition"
+                onClick={() => openPrivateMsg(chat)}
+                to={`/messages/private/${chat.friend.id}`}>
+                {/* Left */}
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="relative">
+                    <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/15 opacity-0 group-hover:opacity-100 transition" />
+                    <div className="relative rounded-full p-[2px]
+                          bg-gradient-to-b from-sky-300/50 via-indigo-300/20 to-white/10
+                          shadow-[0_0_0_1px_rgba(140,230,255,0.18),0_0_18px_rgba(60,170,255,0.12)]">
+                      {chat.friend.image ? (
+                        <img
+                          src={chat.friend.image}
+                          alt=""
+                          className="h-12 w-12 rounded-full object-cover ring-1 ring-white/10"
+                        />
+                      ) : (
+                        <div className="h-12 w-12 rounded-full bg-white/10 ring-1 ring-white/10" />
+                      )}
+                    </div>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-medium truncate">
+                      {chat.friend.firstName} {chat.friend.lastName}
+                    </p>
+                    <p className="text-xs text-white/60 truncate">
+                      {last?.text || "No messages yet"}
+                    </p>
+                  </div>
+                </div>
+                {/* Right */}
+                <div className="shrink-0 flex flex-col items-end gap-2">
+                  <div className="flex items-center gap-2 text-white/60">
+                    <span className="text-[11px]">{time}</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M9 18l6-6-6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+
+                  {chat.numberOfMsgUnread > 0 && (
+                    <span className="min-w-6 h-6 px-2 rounded-full bg-sky-400/80 text-white text-xs
+                           flex items-center justify-center shadow-[0_0_18px_rgba(60,170,255,0.25)]">
+                      {chat.numberOfMsgUnread}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
+
+        </div>
+
       )}
     </div>
   );

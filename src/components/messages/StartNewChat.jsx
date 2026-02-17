@@ -12,18 +12,12 @@ const StartNewChat = () => {
         user,
         isStartNewChat,
         isGetFriendsLoading,
-        isGettingUserError,
-        isGettingUserErrorMessage,
-        isGettingUserLoading,
-        isGetFriendsError,
-        isGetFriendsErrorMessage,
         friendsList,
     } = useSelector((state) => state.user);
 
     useEffect(() => {
         dispatch(getFriends())
     }, [])
-
 
     const searchNewChat = () => {
         dispatch(startNewChatList(!isStartNewChat));
@@ -49,14 +43,17 @@ const StartNewChat = () => {
         </div>
         {friendsList.length < 1 ?
             <div className="h-full flex justify-center items-center">
-
                 <div className="flex flex-col h-full justify-center items-center">
                     <div className="flex flex-col items-center">
                         <img src="./assets/nomessage.png"
                             className="w-30 h-30" />
                         <h2 className="text-xl py-4">No friends found</h2>
                         <p className="text-xs pb-4">Invite your friends to start chatting</p>
-                        <NavLink className="bg-[#3261d5] py-2 px-10 m-2 text-sm rounded-lg">Invite Friends</NavLink>
+                        <NavLink
+                            className="bg-[#3261d5] py-2 px-10 m-2 text-sm rounded-lg"
+                            to="/addnewfriend">
+                            Invite Friends
+                        </NavLink>
                     </div>
                 </div>
             </div> :

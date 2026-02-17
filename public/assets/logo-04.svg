@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" fill="none">
+  <defs>
+    <!-- Neon stroke gradient (3D look) -->
+    <linearGradient id="neonStroke" x1="0" y1="0" x2="120" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#BFF2FF"></stop>
+      <stop offset="0.45" stop-color="#66D7FF"></stop>
+      <stop offset="1" stop-color="#2A78FF"></stop>
+    </linearGradient>
+
+    <!-- Inner highlight stroke -->
+    <linearGradient id="innerStroke" x1="0" y1="0" x2="120" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.9"></stop>
+      <stop offset="0.5" stop-color="#CFF6FF" stop-opacity="0.55"></stop>
+      <stop offset="1" stop-color="#7DD3FC" stop-opacity="0.2"></stop>
+    </linearGradient>
+
+    <!-- Glow -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"></feGaussianBlur>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 0.9 0" result="glowColor"></feColorMatrix>
+      <feMerge>
+        <feMergeNode in="glowColor"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+
+    <!-- Soft shadow to add depth -->
+    <filter id="depth" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0B1B4B" flood-opacity="0.65"></feDropShadow>
+    </filter>
+  </defs>
+
+  <!-- Coordinates (same structure as your logo-ish “nodes & links”) -->
+  <!-- Links -->
+  <g filter="url(#depth)">
+    <!-- glow layer -->
+    <g filter="url(#glow)" stroke="url(#neonStroke)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+      <path d="M60 26 L28 60"></path>
+      <path d="M60 26 L88 48"></path>
+      <path d="M60 26 L60 78"></path>
+      <path d="M28 60 L60 78"></path>
+      <path d="M60 78 L95 72"></path>
+      <path d="M95 72 L78 110"></path>
+      <path d="M60 78 L78 110"></path>
+      <path d="M88 48 L95 72"></path>
+    </g>
+
+    <!-- inner highlight layer (makes it look 3D) -->
+    <g stroke="url(#innerStroke)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9">
+      <path d="M60 26 L28 60"></path>
+      <path d="M60 26 L88 48"></path>
+      <path d="M60 26 L60 78"></path>
+      <path d="M28 60 L60 78"></path>
+      <path d="M60 78 L95 72"></path>
+      <path d="M95 72 L78 110"></path>
+      <path d="M60 78 L78 110"></path>
+      <path d="M88 48 L95 72"></path>
+    </g>
+  </g>
+
+  <!-- Nodes -->
+  <g filter="url(#depth)">
+    <!-- outer glow ring -->
+    <g filter="url(#glow)" stroke="url(#neonStroke)" stroke-width="10" opacity="0.95">
+      <circle cx="60" cy="26" r="12.5"></circle>
+      <circle cx="28" cy="60" r="10.5"></circle>
+      <circle cx="88" cy="48" r="9"></circle>
+      <circle cx="60" cy="78" r="11"></circle>
+      <circle cx="95" cy="72" r="10"></circle>
+      <circle cx="78" cy="110" r="12"></circle>
+    </g>
+
+    <!-- inner highlight ring -->
+    <g stroke="url(#innerStroke)" stroke-width="4.5" opacity="0.9">
+      <circle cx="60" cy="26" r="12.5"></circle>
+      <circle cx="28" cy="60" r="10.5"></circle>
+      <circle cx="88" cy="48" r="9"></circle>
+      <circle cx="60" cy="78" r="11"></circle>
+      <circle cx="95" cy="72" r="10"></circle>
+      <circle cx="78" cy="110" r="12"></circle>
+    </g>
+
+    <!-- tiny specular highlight dots (adds "3D glass") -->
+    <g fill="#FFFFFF" opacity="0.55">
+      <circle cx="56" cy="22" r="2.2"></circle>
+      <circle cx="24" cy="56" r="1.8"></circle>
+      <circle cx="85" cy="44" r="1.6"></circle>
+      <circle cx="56.5" cy="74" r="2.0"></circle>
+      <circle cx="91" cy="68" r="1.8"></circle>
+      <circle cx="74" cy="106" r="2.2"></circle>
+    </g>
+  </g>
+</svg>

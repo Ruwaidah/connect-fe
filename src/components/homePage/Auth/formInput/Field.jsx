@@ -1,6 +1,5 @@
 import Icon from "./Icon";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 
 
 const Field = ({ label, placeholder, icon, errors, rightIcon }) => {
@@ -9,11 +8,6 @@ const Field = ({ label, placeholder, icon, errors, rightIcon }) => {
 
     const inputType = isPassword ? (showPassword ? "text" : "password") : "text";
 
-    console.log(errors, inputType)
-    console.log(errors.text && inputType == 'text')
-    console.log(errors.password && inputType == 'password')
-
-    
     return (
         <div>
             <label className="text-xs text-white/60">{label}</label>

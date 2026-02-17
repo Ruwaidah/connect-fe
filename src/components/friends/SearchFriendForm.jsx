@@ -1,8 +1,11 @@
 // import "./SearchFriendForm.css";
 import { useForm } from "react-hook-form";
 import Icon from "../homePage/Auth/formInput/Icon";
+import { findNewFriend } from "../../reducers/usersSlice";
+import { useDispatch } from "react-redux";
 
 const SearchFriendForm = () => {
+  const dispatch = useDispatch()
   const { register, handleSubmit, formState, reset, watch } = useForm();
   const { errors } = formState
 
@@ -14,7 +17,7 @@ const SearchFriendForm = () => {
 
 
   const onSubmit = (data) => {
-    console.log(data)
+    // dispatch(findNewFriend(data))
   };
 
   return (
@@ -33,22 +36,6 @@ const SearchFriendForm = () => {
             {...register("text")}
           />
         </div>
-
-
-
-
-        {/* <input
-          placeholder="Search for friend"
-          className="search-input"
-          type="text"
-          {...register("text", {
-            required: {
-              value: true,
-              message: "Require",
-            },
-          })}
-        /> */}
-        {/* <img src="./assets/search-user.png" onClick={submitBtn} /> */}
         <input type="submit" id="search-friend-input"
           className="hidden" />
       </form>

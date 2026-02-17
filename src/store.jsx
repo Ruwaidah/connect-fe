@@ -4,7 +4,7 @@ import messageReducer from "./reducers/messagesSlice"
 
 const rootReducer = combineReducers({
   user: userReducer,
-  messages : messageReducer
+  messages: messageReducer
 });
 
 export default configureStore({

@@ -1,17 +1,18 @@
-import Header from "./components/header/Header";
 import RoutesComponent from "./routesComponent/RoutesComponent";
-import Footer from "./components/footer/Footer";
-import NavBar from "./components/navBar/NavBar";
+import { useEffect } from "react";
+import { connectSocket, disconnectSocket } from "./socket";
 
 function App() {
+  useEffect(() => {
+    connectSocket();
+    return () => disconnectSocket();
+  }, []);
+
   return (
-    <div className="flex flex-col justify-between items-center h-[100vh]">
-      {/* <Header /> */}
-      <div className="w-full h-full">
-        {/* {localStorage.getItem("id") && <NavBar />} */}
+    <div className="min-h-screen w-full flex flex-col items-center">
+      <div className="w-full flex-1 flex flex-col">
         <RoutesComponent />
       </div>
-      {/* <Footer /> */}
     </div>
   );
 }

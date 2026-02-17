@@ -1,167 +1,167 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosWithAuth from "../utils/axiosWithAuth";
-import { socket } from "../socket";
 
 const initialState = {
-  messages: [],
-  livePrivateTexting: {},
-  privateMsg: null,
+  messages: {},
   isMessagesLoading: false,
   isMessagesError: false,
   errorMessages: null,
   totalUnreadMsgs: 0,
+  activeChatFriendId: null,
 };
 
-// ************************** GET ALL MESSAGES ******************************
-export const getMessages = createAsyncThunk(
-  "GET_MESSAGES",
-  async (thunkAPI) => {
-    return await axiosWithAuth()
-      .get(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/auth/message/listmessages?userid=${localStorage.getItem("id")}`
-      )
-      .then((response) => response.data)
-      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+export const getMessages = createAsyncThunk("GET_MESSAGES", async (_, thunkAPI) => {
+  try {
+    const res = await axiosWithAuth().get(
+      `${import.meta.env.VITE_APP_URL}/auth/message/listmessages?userid=${localStorage.getItem("id")}`
+    );
+    return res.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response?.data?.message || "Error");
   }
-);
+});
 
-// *********************** GET ALL PRIVATE MESSAGE BETWEEN TWO USER *************************
 export const getMessagesBetweenTwoUsers = createAsyncThunk(
   "GET_MESSAGES_BETWEEN_TWO",
-  async (data, thunkAPI) => {
-    return await axiosWithAuth()
-      .get(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/auth/message?friendid=${data}&&userid=${localStorage.getItem(
-          "id"
-        )}`
-      )
-      .then((response) => response.data)
-      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  async (friendId, thunkAPI) => {
+    try {
+      const res = await axiosWithAuth().get(
+        `${import.meta.env.VITE_APP_URL}/auth/message?friendid=${friendId}&&userid=${localStorage.getItem("id")}`
+      );
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.response?.data?.message || "Error");
+    }
   }
 );
 
-// ************************** SEND PRIVATE MESSAGE ******************************
-export const sendMessage = createAsyncThunk(
-  "SEND_PRIVATE_MESSAGE",
-  async (data, thunkAPI) => {
-    return await axiosWithAuth()
-      .post(`${import.meta.env.VITE_APP_URL}/api/auth/message`, data.data)
-      .then((response) => ({ data: response.data, sender: data.sender }))
-      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+export const messageRead = createAsyncThunk("OPEN_UNREAD_MESSAGES", async (payload, thunkAPI) => {
+  try {
+    await axiosWithAuth().put(
+      `${import.meta.env.VITE_APP_URL}/auth/message/openmessages`,
+      payload.data
+    );
+    return payload;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response?.data?.message || "Error");
   }
-);
-
-// ************************** OPEN UNREAD MESSAGE ******************************
-export const messageRead = createAsyncThunk(
-  "OPEN_UNREAD_MESSAGES",
-  async (data, thunkAPI) => {
-    return await axiosWithAuth()
-      .put(
-        `${import.meta.env.VITE_APP_URL}/api/auth/message/openmessages`,
-        data.data
-      )
-      .then((response) => data)
-      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
-  }
-);
+});
 
 const messagesSlice = createSlice({
   name: "messages",
   initialState,
   reducers: {
-    receivedMsg: (state, action) => {
-      state.livePrivateTexting[action.payload.connectId] = action.payload;
-      state.messages[action.payload.friend.id] = action.payload;
-      state.privateMsg = action.payload;
-      // if (data.payload.messages.length !== state.msgLength) {
-      //   state.messagesList[data.payload.friend.id] = data.payload;
-      //   state.totalUnreadMsgs = state.totalUnreadMsgs + 1;
-      //   state.msgLength = data.payload.messages.length;
-      // }
+    setActiveChat: (state, action) => {
+      state.activeChatFriendId = action.payload ? String(action.payload) : null;
     },
-  },
-  extraReducers: (builder) => {
-    // ************************** GET ALL MESSAGES ******************************
-    builder.addCase(getMessages.pending, (state, action) => {
-      state.messages = [];
-      state.isMessagesLoading = true;
-      state.isMessagesError = false;
-      state.errorMessages = null;
-    });
-    builder.addCase(getMessages.fulfilled, (state, action) => {
-      state.messages = action.payload.data ? action.payload.data : {};
-      state.totalUnreadMsgs = action.payload.totalUnreadMsgs;
-      state.isMessagesLoading = false;
-      state.isMessagesError = false;
-      state.errorMessages = null;
-    });
-    builder.addCase(getMessages.rejected, (state, action) => {
-      state.messages = [];
-      state.isMessagesLoading = false;
-      state.isMessagesError = true;
-      state.errorMessages = action.payload;
-    });
+    clearActiveChat: (state) => {
+      state.activeChatFriendId = null;
+    },
 
-    // *********************** GET ALL PRIVATE MESSAGE BETWEEN TWO USER *************************
-    builder.addCase(getMessagesBetweenTwoUsers.pending, (state, action) => {
-      state.isMessagesLoading = true;
-      state.errorMessages = null;
-      state.isMessagesError = false;
-    });
-    builder.addCase(getMessagesBetweenTwoUsers.fulfilled, (state, action) => {
-      state.isMessagesLoading = false;
-      state.isMessagesError = false;
-      state.errorMessages = null;
-      state.privateMsg = action.payload;
-    });
-    builder.addCase(getMessagesBetweenTwoUsers.rejected, (state, action) => {
-      state.isMessagesLoading = false;
-      state.isMessagesError = true;
-      state.errorMessages = action.payload;
-    });
+    addIncomingMessage: (state, action) => {
+      const msg = { ...action.payload };
+      const myId = Number(localStorage.getItem("id"));
+      const friendId = String(msg.senderId === myId ? msg.receiverId : msg.senderId);
 
-    // ************************** SEND PRIVATE MESSAGE ******************************
-    builder.addCase(sendMessage.pending, (state, action) => {
-      // state.isMessagesLoading = true;
-      // state.isMessagesError = false;
-      // state.errorMessages = null;
-    });
-    builder.addCase(sendMessage.fulfilled, (state, action) => {
-      socket.emit("SEND_MESSAGE", action.payload);
-      state.isMessagesLoading = false;
-      state.isMessagesError = false;
-      state.errorMessages = null;
-      // state.privateMsg = action.payload.data;
-      state.privateMsg.messages = [
-        ...state.privateMsg["messages"],
-        action.payload.data,
-      ];
-    });
-    builder.addCase(sendMessage.rejected, (state, action) => {
-      state.isMessagesLoading = false;
-      state.isMessagesError = true;
-      state.errorMessages = action.payload;
-    });
-
-    // ************************** OPEN UNREAD MESSAGE ******************************
-    builder.addCase(messageRead.fulfilled, (state, action) => {
-      if (
-        state.messages[action.payload.data.friendId] &&
-        state.messages[action.payload.data.friendId].messages
-      ) {
-        state.totalUnreadMsgs =
-          state.totalUnreadMsgs -
-          state.messages[action.payload.data.friendId].numberOfMsgUnread;
-        state.messages[action.payload.data.friendId].numberOfMsgUnread = 0;
+      if (!state.messages) state.messages = {};
+      if (!state.messages[friendId]) {
+        state.messages[friendId] = { friend: { id: Number(friendId) }, numberOfMsgUnread: 0, messages: [] };
       }
-    });
+
+      const thread = state.messages[friendId];
+      thread.messages ||= [];
+
+      // dedupe
+      if (msg.id && thread.messages.some((m) => m.id === msg.id)) return;
+
+      const chatOpen = String(state.activeChatFriendId) === friendId;
+
+      if (chatOpen && msg.receiverId === myId) {
+        msg.isRead = true;
+        thread.numberOfMsgUnread = 0;
+      } else if (!chatOpen && msg.receiverId === myId && msg.isRead === false) {
+        thread.numberOfMsgUnread = (thread.numberOfMsgUnread || 0) + 1;
+        state.totalUnreadMsgs = (state.totalUnreadMsgs || 0) + 1;
+      }
+
+      thread.messages.push(msg);
+    },
+
+    markThreadRead: (state, action) => {
+      const friendId = String(action.payload);
+      if (state.messages?.[friendId]) {
+        state.messages[friendId].numberOfMsgUnread = 0;
+      }
+    },
+
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(getMessages.pending, (state) => {
+        state.isMessagesLoading = true;
+        state.isMessagesError = false;
+        state.errorMessages = null;
+      })
+      .addCase(getMessages.fulfilled, (state, action) => {
+        state.messages = action.payload?.data || {};
+        state.totalUnreadMsgs = action.payload?.totalUnreadMsgs || 0;
+        state.isMessagesLoading = false;
+      })
+      .addCase(getMessages.rejected, (state, action) => {
+        state.isMessagesLoading = false;
+        state.isMessagesError = true;
+        state.errorMessages = action.payload;
+      })
+
+      .addCase(getMessagesBetweenTwoUsers.pending, (state) => {
+        state.isMessagesLoading = true;
+        state.isMessagesError = false;
+        state.errorMessages = null;
+      })
+      .addCase(getMessagesBetweenTwoUsers.fulfilled, (state, action) => {
+        state.isMessagesLoading = false;
+
+        const friendId = String(action.payload.friend.id);
+
+        if (!state.messages[friendId]) {
+          state.messages[friendId] = {
+            friend: action.payload.friend,
+            numberOfMsgUnread: action.payload.numberOfMsgUnread || 0,
+            messages: [],
+          };
+        }
+
+        state.messages[friendId].friend = action.payload.friend;
+        state.messages[friendId].messages = action.payload.messages || [];
+        state.messages[friendId].numberOfMsgUnread = action.payload.numberOfMsgUnread || 0;
+      })
+      .addCase(getMessagesBetweenTwoUsers.rejected, (state, action) => {
+        state.isMessagesLoading = false;
+        state.isMessagesError = true;
+        state.errorMessages = action.payload;
+      })
+
+      .addCase(messageRead.fulfilled, (state, action) => {
+        const myId = Number(localStorage.getItem("id"));
+        const friendId = String(action.payload.data.friendId);
+        const thread = state.messages?.[friendId];
+        if (!thread) return;
+        thread.numberOfMsgUnread = 0;
+        if (Array.isArray(thread.messages)) {
+          thread.messages = thread.messages.map((m) =>
+            m.receiverId === myId ? { ...m, isRead: true } : m
+          );
+        }
+
+        let total = 0;
+        Object.values(state.messages || {}).forEach((t) => (total += t?.numberOfMsgUnread || 0));
+        state.totalUnreadMsgs = total;
+      });
   },
 });
 
-export const { receivedMsg } = messagesSlice.actions;
+export const { addIncomingMessage, setActiveChat, clearActiveChat, markThreadRead } =
+  messagesSlice.actions;
 
 export default messagesSlice.reducer;

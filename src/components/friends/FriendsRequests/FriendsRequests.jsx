@@ -1,4 +1,3 @@
-// import "./FriendsRequests.css";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap/gsap-core";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,20 +9,12 @@ import Footer from "../../footer/Footer";
 import Header from "../../header/Header";
 import NavBar from "../../navBar/NavBar";
 import Loading from "../../loading/Loading";
-import { useState } from "react";
 
 const FriendsRequests = () => {
-  const [accept, setAccept] = useState(false);
   const dispatch = useDispatch();
-  const { isGettingUserLoading, user, findFriend } = useSelector(
+  const { isGettingUserLoading, user } = useSelector(
     (state) => state.user
   );
-
-  // gsap.to(".welcome-h4", {
-  //   opacity: 1,
-  //   duration: 3,
-  //   ease: "power1.inOut",
-  // });
 
   // ************************** APPROVE FRIEND REQUEST ******************************
   const acceptFriendRequest = (friend, i) => {
@@ -69,18 +60,6 @@ const FriendsRequests = () => {
       duration: 0.5,
       ease: "power1.inOut",
     });
-
-    //     gsap.from(".Friends-Requests-list", {
-    //   ease: "circ.out",
-    //   y: "0",
-    //   delay: 2,
-    // });
-
-    // gsap.to(".Friends-Requests-list", {
-    //   duration: 1,
-    //   ease: "circ.out",
-    //   y: "-100%",
-    // });
   };
 
 
@@ -91,15 +70,11 @@ const FriendsRequests = () => {
         <NavBar />
         <div className="FriendsRequests-div">
           <div className="friend-request-header page-header">
-            {/* <div className="FriendsRequests"> */}
-            {/* <img src="./assets/friends.png" /> */}
             <h2>Friends Requests</h2>
-            {/* </div> */}
           </div>
           {isGettingUserLoading || !user ? (
             <Loading />
           ) : (
-            // <div className="FriendsRequests">
             <div className="Friends-Requests-list">
               {user.friendReq.map((u, i) => (
                 <div
@@ -118,10 +93,6 @@ const FriendsRequests = () => {
                         </div>{" "}
                       </Link>{" "}
                       <div className="requests-btn">
-                        {/* <button onClick={() => acceptFriendRequest(u)}>
-                          Confirm
-                        </button> */}
-
                         <img
                           src="./assets/yes.png"
                           onClick={() => acceptFriendRequest(u, i)}
@@ -130,7 +101,6 @@ const FriendsRequests = () => {
                           src="./assets/no.png"
                           onClick={() => rejectRequest(u, i)}
                         />
-                        {/* <button onClick={() => rejectRequest(u)}>Cancel</button> */}
                       </div>{" "}
                     </div>
                   )}

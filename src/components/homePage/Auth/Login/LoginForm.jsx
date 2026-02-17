@@ -5,33 +5,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../../../reducers/usersSlice";
 import { Navigate } from "react-router-dom";
 
-
 const LoginForm = () => {
     const dispatch = useDispatch()
-    const { register, handleSubmit, formState, reset, watch } = useForm();
+    const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const [showPassword, setShowPassword] = useState(false);
-    const { errorMessage, isAuthLoading, isAuthError } = useSelector(state => state.user)
+    const { errorMessage, isAuthError } = useSelector(state => state.user)
 
     const onSubmit = (data) => {
-        console.log(data)
         return dispatch(loginUser(data));
     };
 
-    console.log(isAuthError, errorMessage)
-
-
     if (localStorage.getItem("token")) return <Navigate to="/messages" />;
-
     return <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Inputs */}
         {isAuthError && <p className="text-red-500 text-sm">{errorMessage}</p>}
         <div className="space-y-3">
             <label className="text-xs text-white/60">Email / Username</label>
             <div className={`mt-1 flex items-center gap-2 rounded-xl 
                                 border border-white/10 bg-white/5 px-3 py-3
-                               ${errors.text ? '!border-red-300' : ''
-                } `}>
+                               ${errors.text ? '!border-red-300' : ''} `}>
                 <Icon kind="mail" />
                 <input
                     className="w-full bg-transparent outline-none 
@@ -43,8 +35,7 @@ const LoginForm = () => {
                             value: true,
                             message: "Require",
                         },
-                    })}
-                />
+                    })} />
             </div>
         </div>
         <div className="space-y-3">
@@ -74,7 +65,6 @@ const LoginForm = () => {
                 </button>
             </div>
         </div>
-        {/* Primary button */}
         <input
             className="mt-5 w-full cursor-pointer rounded-xl bg-[#3261d5] px-4 py-3 font-normal shadow-[0_8px_30px_rgba(59,130,246,0.22)]"
             type="submit"

@@ -1,16 +1,18 @@
 import { useGoogleLogin } from "@react-oauth/google";
-
-
+import { loginWithGoogle } from "../../../../reducers/usersSlice";
+import { useDispatch } from "react-redux";
 
 const LoginWithGoogle = () => {
+  const dispatch = useDispatch()
   const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
+    onSuccess: (tokenResponse) => dispatch(loginWithGoogle(tokenResponse)),
     onError: () => console.log("Login failed"),
   });
 
   return <button
     className="mt-5 max-sm:mt-4 w-full rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition px-4 py-3 flex items-center justify-center gap-3"
     type="button"
+    onClick={() => login()}
   >
     <span className="h-6 w-6 grid place-items-center rounded-md bg-white/5 border border-white/10">
       <svg width="16" height="16" viewBox="0 0 48 48">
@@ -20,7 +22,7 @@ const LoginWithGoogle = () => {
         <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1 2.8-3 5.1-5.7 6.6l.1.1 6.2 5.2C39.6 36.5 44 31.1 44 24c0-1.1-.1-2.3-.4-3.5Z" />
       </svg>
     </span>
-    <span className="text-sm font-medium">Continue with Google</span>
+    <span className="text-sm font-medium text-white">Continue with Google</span>
   </button>
 }
 export default LoginWithGoogle

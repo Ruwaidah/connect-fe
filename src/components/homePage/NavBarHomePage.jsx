@@ -1,11 +1,6 @@
-// import "./NavBarHomePage.css"
-import { useState } from "react"
 import { NavLink, Link } from "react-router-dom"
-import { useLocation } from "react-router-dom";
 
-const NavBarHomePage = (props) => {
-    const location = useLocation()
-
+const NavBarHomePage = () => {
     const baseStyles = `
   text-white h-10 w-32 
   flex items-center justify-center rounded-sm
@@ -13,7 +8,6 @@ const NavBarHomePage = (props) => {
   max-sm:text-xs max-sm:w-16 max-sm:h-8
 `.trim();
 
-    console.log(location.pathname)
     const navLinkClass = ({ isActive }) =>
         `${baseStyles} ${isActive ? "!border-gray-600" : ""
         }`;
@@ -25,14 +19,13 @@ const NavBarHomePage = (props) => {
                         max-lg:px-1
                         max-sm:border-none">
             <Link to="/" className="lg:text-2xl flex items-center text-white sm:text-base">
-                <img src="./assets/logo.png" className="w-16 h-16 mr-2 max-lg:w-12 max-lg:h-12 max-sm:mr-1" /> Connect
+                <img src="./assets/logo-04.svg" className="w-16 h-16 mr-2 max-lg:w-12 max-lg:h-12 max-sm:mr-1" /> Connect
             </Link>
             <div className="flex justify-between items-center">
                 <NavLink to='/login' end
                     className={navLinkClass}>
                     Login
                 </NavLink>
-
                 <NavLink to='/signup' end
                     className={navLinkClass}
                 >

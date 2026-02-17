@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { socket } from "../socket.jsx";
 import axiosWithAuth from "../utils/axiosWithAuth.jsx";
 
 const initialState = {
@@ -24,8 +23,16 @@ const initialState = {
   isUpdateUserLoading: false,
   isUpdateUserError: false,
   isUpdateUserErrorMessage: null,
+  isEmailAvailable: null,
   isUsernameAvailable: null,
   updateUserImageMsgError: null,
+  isUserUpdated: false,
+
+  // ************************** UPDATE USER PASSWORD ******************************
+  isUpdatePasswordLoading: false,
+  isUpdatePasswordError: false,
+  isUpdatePasswordErrorMessage: null,
+  isPasswordUpdated: false,
 
   // **************************  RESET PASSWORD **************************
   isResetPasswordLoading: false,
@@ -40,6 +47,12 @@ const initialState = {
   requestChangePasswordErrorMessage: null,
   requestChangePasswordPass: false,
   verifyEmail: null,
+
+
+  // ************************** GET FRIEND BY ID **************************
+  getFriendLoading: false,
+  getFriendError: false,
+  getFriendErrorMessage: null,
 
   // ************************** GET FRIENDS LIST **************************
   isGetFriendsLoading: false,
@@ -62,9 +75,9 @@ const initialState = {
 // ************************** LOGIN AUTH WITH GOOGLE ******************************
 export const loginWithGoogle = createAsyncThunk(
   "LOING_WITH_GOOGLE",
-  async (data, thunkAPI) => {
+  async (tokenResponse, thunkAPI) => {
     return await axios
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/google-login`, data)
+      .post(`${import.meta.env.VITE_APP_URL}/users/google-login`, { access_token: tokenResponse.access_token })
       .then((response) => response.data)
       .catch((error) =>
         thunkAPI.rejectWithValue(
@@ -79,7 +92,7 @@ export const loginUser = createAsyncThunk(
   "LOGIN_USER",
   async (data, thunkAPI) => {
     return await axios
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/login`, data)
+      .post(`${import.meta.env.VITE_APP_URL}/users/login`, data)
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
   }
@@ -88,7 +101,7 @@ export const loginUser = createAsyncThunk(
 // ************************** SIGNUP AUTH ******************************
 export const signUp = createAsyncThunk("SIGN_UP", async (data, thunkAPI) => {
   return await axios
-    .post(`${import.meta.env.VITE_APP_URL}/api/users/register`, data)
+    .post(`${import.meta.env.VITE_APP_URL}/users/register`, data)
     .then((response) => response.data)
     .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
 });
@@ -98,7 +111,7 @@ export const UserRequestChangePassword = createAsyncThunk(
   "CHANGE_PASSWORD",
   async (data, thunkAPI) => {
     return await axiosWithAuth()
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/change-password/${localStorage.getItem("id")}`, data)
+      .post(`${import.meta.env.VITE_APP_URL}/users/change-password/${localStorage.getItem("id")}`, data)
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
   }
@@ -110,7 +123,7 @@ export const resetPassword = createAsyncThunk(
   async (data, thunkAPI) => {
     return await axios
       .post(
-        `${import.meta.env.VITE_APP_URL}/api/users/send_recovery_email`,
+        `${import.meta.env.VITE_APP_URL}/users/send_recovery_email`,
         data
       )
       .then((response) => response.data)
@@ -124,7 +137,7 @@ export const checkOtp = createAsyncThunk(
   async (data, thunkAPI) => {
     const hashedOtp = localStorage.getItem("hashedOtp");
     return await axios
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/verify_otp`, {
+      .post(`${import.meta.env.VITE_APP_URL}/users/verify_otp`, {
         data,
         hashedOtp,
       })
@@ -142,7 +155,7 @@ export const requestNewPassword = createAsyncThunk(
   "REQUEST_NEW_PASSWORD",
   async (data, thunkAPI) => {
     return await axios
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/forget_password`, data)
+      .post(`${import.meta.env.VITE_APP_URL}/users/forget_password`, data)
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response));
   }
@@ -152,7 +165,7 @@ export const requestNewPassword = createAsyncThunk(
 export const getUser = createAsyncThunk("GET_USER", async (data, thunkAPI) => {
   return await axiosWithAuth()
     .get(
-      `${import.meta.env.VITE_APP_URL}/api/users/getUser/${localStorage.getItem(
+      `${import.meta.env.VITE_APP_URL}/users/getUser/${localStorage.getItem(
         "id"
       )}`
     )
@@ -166,7 +179,7 @@ export const updateUser = createAsyncThunk(
   async (data, thunkAPI) => {
     return await axiosWithAuth()
       .put(
-        `${import.meta.env.VITE_APP_URL}/${localStorage.getItem("id")}`,
+        `${import.meta.env.VITE_APP_URL}/users/updateuser/${localStorage.getItem("id")}`,
         data
       )
       .then((response) => response.data)
@@ -174,14 +187,42 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+
+// ************************** UPDATE USER PASSWORD ******************************
+export const updateUserPassword = createAsyncThunk(
+  "UPDATE_USER_PASSWORD",
+  async (data, thunkAPI) => {
+    return await axiosWithAuth()
+      .put(
+        `${import.meta.env.VITE_APP_URL}/users/updateuser-password/${localStorage.getItem("id")}`,
+        data
+      )
+      .then((response) => response.data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+  }
+);
+
+// ****************************** CHECK EMAIL AVAILABILITY ***********************************
+export const checkEmail = createAsyncThunk(
+  "CHECK_EMAIL_AVAILABILITY",
+  async (data, thunkAPI) => {
+    return await axiosWithAuth()
+      .post(`${import.meta.env.VITE_APP_URL}/users/checkemail`, data)
+      .then((response) => response.data)
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data));
+  }
+);
+
+
+
 // ****************************** CHECK USERNAME AVAILABILITY ***********************************
 export const checkUsername = createAsyncThunk(
   "CHECK_USERNAME_AVAILABILITY",
   async (data, thunkAPI) => {
     return await axiosWithAuth()
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/checkusername`, data)
+      .post(`${import.meta.env.VITE_APP_URL}/users/checkusername`, data)
       .then((response) => response.data)
-      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+      .catch((error) => thunkAPI.rejectWithValue(error.response.data));
   }
 );
 
@@ -191,10 +232,8 @@ export const changeUserImage = createAsyncThunk(
   async (data, thunkAPI) => {
     return await axiosWithAuth()
       .put(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/image?userid=${localStorage.getItem("id")}&&imageid=${
-          data.imageId
+        `${import.meta.env.VITE_APP_URL
+        }/users/image?userid=${localStorage.getItem("id")}&&imageid=${data.imageId
         }&&publicimageid=${data.publicImageId}`,
         data.image
       )
@@ -208,7 +247,7 @@ export const addNewFriend = createAsyncThunk(
   "ADD_NEW_FRIEND",
   async (data, thunkAPI) => {
     return await axiosWithAuth()
-      .post(`${import.meta.env.VITE_APP_URL}/api/users/sendrequest`, data)
+      .post(`${import.meta.env.VITE_APP_URL}/users/sendrequest`, data)
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
   }
@@ -220,10 +259,8 @@ export const approveFriendRequest = createAsyncThunk(
   async (data, thunkAPI) => {
     return await axiosWithAuth()
       .get(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/acceptfriendrequest?userrecieverequest=${
-          data.userRecieveRequest
+        `${import.meta.env.VITE_APP_URL
+        }/users/acceptfriendrequest?userrecieverequest=${data.userRecieveRequest
         }&&usersendrequest=${data.userSendRequest}`
       )
       .then((response) => {
@@ -243,10 +280,8 @@ export const cancelFriendReq = createAsyncThunk(
   async (data, action) => {
     return await axiosWithAuth()
       .delete(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/cancelrequest?userSendRequest=${
-          data.userSendRequest
+        `${import.meta.env.VITE_APP_URL
+        }/users/cancelrequest?userSendRequest=${data.userSendRequest
         }&&userRecieveRequest=${data.userRecieveRequest}`
       )
       .then((response) => ({
@@ -264,10 +299,8 @@ export const rejectFriendRequest = createAsyncThunk(
   async (data, thunkAPI) => {
     return await axiosWithAuth()
       .delete(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/rejectfriendrequest?userrecieverequest=${
-          data.userRecieveRequest
+        `${import.meta.env.VITE_APP_URL
+        }/users/rejectfriendrequest?userrecieverequest=${data.userRecieveRequest
         }&&usersendrequest=${data.userSendRequest}`
       )
       .then((response) => ({ data: response.data, friend: data }))
@@ -281,9 +314,8 @@ export const getFriends = createAsyncThunk(
   async (data, thunkAPI) => {
     return await axiosWithAuth()
       .get(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/friendslist/${localStorage.getItem("id")}`
+        `${import.meta.env.VITE_APP_URL
+        }/users/friendslist/${localStorage.getItem("id")}`
       )
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
@@ -296,9 +328,8 @@ export const findNewFriend = createAsyncThunk(
   async (data, thunkAPI) => {
     return await axiosWithAuth()
       .post(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/findfriend?userid=${localStorage.getItem("id")}`,
+        `${import.meta.env.VITE_APP_URL
+        }/users/findfriend?userid=${localStorage.getItem("id")}`,
         data
       )
       .then((response) => response.data)
@@ -312,9 +343,8 @@ export const getFriendById = createAsyncThunk(
   async (id, thunkAPI) => {
     return await axiosWithAuth()
       .get(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/getsearcheduser/${id}?userid=${localStorage.getItem("id")}`
+        `${import.meta.env.VITE_APP_URL
+        }/users/getsearcheduser/${id}?userid=${localStorage.getItem("id")}`
       )
       .then((response) => response.data)
       .catch((error) => thunkAPI.rejectWithValue(error.response.data));
@@ -327,9 +357,8 @@ export const deleteFriend = createAsyncThunk(
   async (id, thunkAPI) => {
     return await axiosWithAuth()
       .delete(
-        `${
-          import.meta.env.VITE_APP_URL
-        }/api/users/deletefriend?userid=${localStorage.getItem(
+        `${import.meta.env.VITE_APP_URL
+        }/users/deletefriend?userid=${localStorage.getItem(
           "id"
         )}&&searchFriend=${id}`
       )
@@ -372,6 +401,35 @@ const usersSlice = createSlice({
     changeTheEmail: (state) => {
       state.isOTPPage = false;
       state.isNewPassword = false;
+    },
+
+    // ****************************** CLEAR CANCEL EDIT ***********************************
+    clearEditCancel: (state) => {
+      state.isUpdateUserLoading = false;
+      state.isUpdateUserError = false;
+      state.isUpdateUserErrorMessage = null;
+      state.isEmailAvailable = null;
+      state.isUsernameAvailable = null;
+      state.updateUserImageMsgError = null;
+      state.isUserUpdated = false;
+      state.isPasswordUpdated = false;
+    },
+
+    // ****************************** CLEAR STATE ***********************************
+    clearState: (state) => {
+      state.isUpdateUserLoading = false;
+      state.isUpdateUserError = false;
+      state.isUpdateUserErrorMessage = null;
+      state.isEmailAvailable = null;
+      state.isUsernameAvailable = null;
+      state.updateUserImageMsgError = null;
+      state.isUserUpdated = false;
+      state.isPasswordUpdated = false;
+      state.findFriend = null;
+      state.findFriendLoading = false;
+      state.findFriendError = false;
+      state.findFriendErrorMessage = null;
+      state.isStartNewChat = false;
     },
 
     logout: (state) => {
@@ -461,14 +519,15 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      socket.emit("testing", action.payload);
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("id", action.payload.id);
+
       state.isAuthError = false;
       state.errorMessage = null;
       state.isAuthLoading = false;
       state.user = action.payload;
     });
+
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isAuthError = true;
       state.isAuthLoading = false;
@@ -609,23 +668,69 @@ const usersSlice = createSlice({
       state.isGettingUserLoading = true;
       state.isGettingUserError = false;
       state.isGettingUserErrorMessage = null;
+      state.isUserUpdated = false
     });
     builder.addCase(updateUser.fulfilled, (state, action) => {
       state.isGettingUserLoading = false;
       state.isGettingUserError = false;
+      state.isEmailAvailable = null;
+      state.isUsernameAvailable = null;
       state.isGettingUserErrorMessage = null;
       state.user = action.payload;
+      state.isUserUpdated = true;
     }),
       builder.addCase(updateUser.rejected, (state, action) => {
         state.isGettingUserLoading = false;
         state.isGettingUserError = true;
         state.isGettingUserErrorMessage = action.payload;
+        state.isUserUpdated = false;
       });
+
+
+
+    // ************************** UPDATE USER PASSWORD ******************************
+    builder.addCase(updateUserPassword.pending, (state, action) => {
+      state.isUpdatePasswordLoading = true;
+      state.isUpdatePasswordError = false;
+      state.isUpdatePasswordErrorMessage = null;
+      state.isPasswordUpdated = false
+    });
+    builder.addCase(updateUserPassword.fulfilled, (state, action) => {
+      state.isUpdatePasswordLoading = false;
+      state.isUpdatePasswordError = false;
+      state.isUpdatePasswordErrorMessage = null;
+      state.user = action.payload;
+      state.isPasswordUpdated = true;
+    }),
+      builder.addCase(updateUserPassword.rejected, (state, action) => {
+        state.isUpdatePasswordLoading = false;
+        state.isUpdatePasswordError = true;
+        state.isUpdatePasswordErrorMessage = action.payload;
+        state.isPasswordUpdated = false;
+      });
+
 
     // ****************************** CHECK USERNAME AVAILABILITY ***********************************
     builder.addCase(checkUsername.fulfilled, (state, action) => {
-      state.isUsernameAvailable = action.payload.message;
+      state.isUsernameAvailable = action.payload.isUsernameAvailable;
+      state.isUserUpdated = false;
     });
+    builder.addCase(checkUsername.rejected, (state, action) => {
+      state.isUsernameAvailable = action.payload.isUsernameAvailable;
+      state.isUserUpdated = false;
+    });
+
+
+    // ****************************** CHECK EMAIL AVAILABILITY ***********************************
+    builder.addCase(checkEmail.fulfilled, (state, action) => {
+      state.isEmailAvailable = action.payload.isEmailAvailable;
+      state.isUserUpdated = false;
+    });
+    builder.addCase(checkEmail.rejected, (state, action) => {
+      state.isEmailAvailable = action.payload.isEmailAvailable;
+      state.isUserUpdated = false;
+    });
+
 
     // ****************************** UPDATE USER IMAGE ***********************************
     builder.addCase(changeUserImage.fulfilled, (state, action) => {
@@ -769,21 +874,21 @@ const usersSlice = createSlice({
 
     // ************************************* GET FRIEND BY ID *************************************
     builder.addCase(getFriendById.pending, (state, action) => {
-      state.findFriendLoading = true;
-      state.findFriendError = false;
-      state.findFriendErrorMessage = null;
+      state.getFriendLoading = true;
+      state.getFriendError = false;
+      state.getFriendErrorMessage = null;
       state.findFriend = null;
     });
     builder.addCase(getFriendById.fulfilled, (state, action) => {
-      state.findFriendLoading = false;
-      state.findFriendError = false;
-      state.findFriendErrorMessage = null;
+      state.getFriendLoading = false;
+      state.getFriendError = false;
+      state.getFriendErrorMessage = null;
       state.findFriend = action.payload;
     });
     builder.addCase(getFriendById.rejected, (state, action) => {
-      state.findFriendLoading = false;
-      state.findFriendError = true;
-      state.findFriendErrorMessage = action.payload;
+      state.getFriendLoading = false;
+      state.getFriendError = true;
+      state.getFriendErrorMessage = action.payload;
       state.findFriend = null;
     });
 
@@ -814,6 +919,8 @@ export const {
   clearFriendSearch,
   startNewChatList,
   deletingFriendUser,
+  clearEditCancel,
+  clearState
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

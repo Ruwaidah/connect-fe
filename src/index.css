@@ -1,191 +1,26 @@
 @import "tailwindcss";
 
-html {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
-  width: 100%;
-  margin: 0 auto;
-  height: 100dvh;
-  background-color: whitesmoke;
-  font-family: "Cabin", sans-serif;
-  font-family: 'Inter', sans-serif;
-  box-sizing: border-box;
-  box-shadow: 1px 10px 20px 1px lightgray;
-  /* position: relative; */
 }
 
+html,
 body {
-  margin: 0;
-}
-
-p {
-  margin: 0;
-}
-
-a {
-  text-decoration: none;
-  outline: none;
-}
-
-input {
-  outline: none;
-  /* border: none; */
-}
-
-.logo-img {
-  width: 60px;
-  height: 60px;
-}
-
-/* 
-.error-input {
-  border: rgb(212, 61, 61) solid 1px !important;
-  background-color: rgb(248, 237, 237) !important;
-}
-
-.error-para {
-  height: 20px;
-  color: rgb(206, 49, 49);
-  width: 20%;
-  width: 100%;
-  padding-bottom: 10px;
-}
-
-.Loading-div {
-  width: 100%;
-  height: 80vh;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-}
-
-.Loading-div p {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  color: rgb(41, 80, 41);
-  font-size: 1.2rem;
-}
-
-.component-div {
-  background-color: whitesmoke;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
   overflow: hidden;
 }
 
-.component-div .mid-section {
-  display: flex;
-  height: 83vh;
+body {
+  background: whitesmoke;
+  font-family: "Inter", sans-serif;
 }
-
-.component-div .mid-section .section-2-div {
-  height: 80vh;
-  width: 100%;
-}
-
-.component-div .mid-section .section-2-div .page-header,
-.component-div .mid-section .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: antiquewhite;
-  padding: 10px 10px;
-  font-size: 1rem;
-  width: 99.5%;
-  box-sizing: border-box;
-  margin: 0 auto;
-}
-
-.component-div .mid-section .page-header div {
-  display: flex;
-}
-
-.component-div .mid-section .page-header div img {
-  margin-right: 4px;
-}
-
-.component-div .mid-section .section-2-div .page-header h2,
-.component-div .mid-section .page-header h2 {
-  margin: 0;
-  color: rgb(56, 34, 5);
-  font-size: 1.2rem;
-}
-
-.component-div .mid-section .section-2-div .page-header img,
-.component-div .mid-section .page-header img {
-  width: 26px;
-  height: 26px;
-  cursor: pointer;
-}
-
-.NoList {
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#MessageCard-component .mid-section {
-  height: 84vh;
-}
-
-.blur-div,
-.blur-div-out .NavBar,
-.blur-div-out .img-blur,
-.blur-div-out .Header,
-.blur-div-out #Footer {
-  filter: blur(2px) !important;
-}
-
-@media screen and (max-width: 1500px) {
-  html {
-    width: 100%;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .component-div .mid-section {
-    height: 85vh;
-  }
-
-  .component-div .mid-section .section-2-div .page-header,
-  .component-div .mid-section .page-header {
-    padding: 8px 16px;
-  }
-
-  .component-div .mid-section .section-2-div .page-header h2,
-  .component-div .mid-section .page-header h2 {
-    font-size: 1rem;
-  }
-  .component-div .mid-section .section-2-div .page-header img,
-  .component-div .mid-section .page-header a,
-  .component-div .mid-section .page-header img {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .component-div .mid-section .section-2-div .page-header {
-    padding: 8px 10px;
-  }
-  .component-div .mid-section .section-2-div .page-header img,
-  .component-div .mid-section .page-header a,
-  .component-div .mid-section .page-header img {
-    width: 20px;
-    height: 20px;
-  }
-}
-@media screen and (max-width: 500px) {
-  .component-div {
-    height: 98vh;
-  }
-  #MessageCard-component .mid-section {
-    height: 86.5vh;
-  }
-} */

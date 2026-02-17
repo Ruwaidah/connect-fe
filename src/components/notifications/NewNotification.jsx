@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { socket } from "../../socket";
 import { useDispatch } from "react-redux";
-import { receivedMsg } from "../../reducers/messagesSlice";
+import UnderConstruction from "../underConstruction/UnderConstruction";
+// import { receivedMsg } from "../../reducers/messagesSlice";
 
 
 
@@ -11,7 +12,7 @@ const NewNotification = () => {
   useEffect(() => {
     socket.on("MESSAGE_RECEIVE", (data) => {
 
-      //   if (window.location.hash == `#/messages/${data.friend.id}`) {
+      //   if (window.location.hash == `#/messages/private/${data.friend.id}`) {
       //     dispatch(
       //       messageRead({
       //         numberOfMsgUnread: data.numberOfMsgUnread,
@@ -22,10 +23,10 @@ const NewNotification = () => {
       //       })
       //     );
       //   }
-      dispatch(receivedMsg(data));
+      // dispatch(receivedMsg(data));
     });
   }, []);
-  return <div className="NewNotification"></div>;
+  return <UnderConstruction imageSrc="/assets/under-construction01.png"/>
 };
 
 export default NewNotification;

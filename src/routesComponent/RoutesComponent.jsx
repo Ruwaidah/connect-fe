@@ -1,21 +1,16 @@
 import { Route, Routes } from "react-router-dom";
-import uniqid from "uniqid";
 import { socket } from "../socket";
 import { useDispatch } from "react-redux";
 import HomePage from "../components/homePage/HomePage";
 import PrivateRoute from "./PrivateRoute";
 import ResetPassword from "../components/homePage/Auth/ResetPassword/ResetPassword";
-import DashBoard from "../components/dashBoard/DashBoard";
 import { useEffect } from "react";
 import { getUser } from "../reducers/usersSlice";
-import Profile from "../components/profile/Profile";
-import Header from "../components/header/Header";
 import Friends from "../components/friends/Friends";
 import AddNewFriendForm from "../components/friends/AddNewFriendForm";
 import Setting from "../components/setting/Setting";
 import NoPageFound from "../components/noPageFound/NoPageFound";
 import FriendCard from "../components/friends/FriendCard";
-import FriendProfile from "../components/friends/FriendProfile";
 import MessageCard from "../components/messages/MessageCard";
 import NewNotification from "../components/notifications/NewNotification";
 import FriendsRequests from "../components/friends/FriendsRequests/FriendsRequests";
@@ -24,6 +19,12 @@ import SignUp from "../components/homePage/Auth/SignUp/SignUp";
 import Layout from "./Layout";
 import Messages from "../components/messages/Messages";
 import StartNewChat from "../components/messages/StartNewChat";
+import ProfileForm from "../components/profile/ProfileForm";
+import AccountSetting from "../components/setting/AccountSetting";
+import EditUsername from "../components/setting/account/editUsername/EditUsername";
+import EditEmail from "../components/setting/account/editEmail/EditEmail";
+import EditPassword from "../components/setting/account/editPassword/EditPassword";
+import ProfileCard from "../components/profile/ProfileCard";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -36,10 +37,6 @@ const RoutesComponent = () => {
   }, [localStorage.getItem("id")]);
   return (
     <Routes>
-      {/* <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="reset-password" element={<ResetPassword />} /> */}
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
@@ -49,10 +46,7 @@ const RoutesComponent = () => {
       <Route element={<PrivateRoute />}>
         <Route
           path="/messages"
-          element={[
-            <NewNotification key={uniqid()} />,
-            <Messages key={uniqid()} />,
-          ]}
+          element={<Messages />}
         />
         <Route
           path="/new-chat-friends-list"
@@ -60,50 +54,55 @@ const RoutesComponent = () => {
         />
         <Route
           path="/profile"
-          element={[
-            <NewNotification key={uniqid()} />,
-            <Profile key={uniqid()} />,
-          ]}
+          element={<ProfileCard />}
+        />
+        <Route
+          path="/edit-profile"
+          element={<ProfileForm />}
         />
         <Route
           path="/friends"
-          element={[
-            <NewNotification key={uniqid()} />,
-            <Friends key={uniqid()} />,
-          ]}
+          element={<Friends />}
         />
         <Route
           path="/friend/profile/:friendid"
-          element={[
-            <NewNotification key={uniqid()} />,
-            <FriendProfile key={uniqid()} />,
-          ]}
+          element={<FriendCard />}
         />
         <Route
-          path="/messages/:friendid"
-          element={[
-            ,
-            <NewNotification key={uniqid()} />,
-            <MessageCard key={uniqid()} />,
-          ]}
+          path="/messages/private/:friendid"
+          element={<MessageCard />}
         />
         <Route
           path="/addnewfriend"
-          element={[
-            <NewNotification key={uniqid()} />,
-            <AddNewFriendForm key={uniqid()} />,
-          ]}
+          element={<AddNewFriendForm />}
         />
         <Route
-          path="//friend-request"
-          element={[
-            <NewNotification key={uniqid()} />,
-            <FriendsRequests key={uniqid()} />,
-          ]}
+          path="/friend-request"
+          element={<FriendsRequests />}
         />
         <Route
           path="/setting"
-          element={[<NewNotification key={uniqid()} />, <Setting key={uniqid()} />]}
+          element={<Setting />}
+        />
+        <Route
+          path="/setting/account"
+          element={<AccountSetting />}
+        />
+        <Route
+          path="/setting/editusername"
+          element={<EditUsername />}
+        />
+        <Route
+          path="/setting/editemail"
+          element={<EditEmail />}
+        />
+        <Route
+          path="/setting/editpassword"
+          element={<EditPassword />}
+        />
+        <Route
+          path="/notifications"
+          element={<NewNotification />}
         />
       </Route>
       <Route path="*" element={<NoPageFound />} />

@@ -1,24 +1,11 @@
-import { useGSAP } from "@gsap/react";
 import {
-  loginWithGoogle,
   clearChangePassword,
 } from "../../reducers/usersSlice";
-import gsap from "gsap";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Login from "./Auth/Login/Login";
-import SignUp from "./Auth/SignUp/SignUp";
-import Footer from "../footer/Footer";
-import Header from "../header/Header";
-import NavBarHomePage from "./NavBarHomePage";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-  const { isAuthLoading, isAuthError, errorMessage, user } = useSelector(
-    (state) => state.user
-  );
-  const [isLoginForm, setIsLoginForm] = useState(true);
-  const [isLogin, setIsLogin] = useState(null)
 
   const dispatch = useDispatch();
 
@@ -26,28 +13,6 @@ const HomePage = () => {
     dispatch(clearChangePassword());
   }, []);
 
-  // useGSAP(() => {
-  //   gsap.to(".welcome-h4", {
-  //     opacity: 1,
-  //     duration: 3,
-  //     ease: "power1.inOut",
-  //   });
-  // }, {});
-
-  const googleLogin = (data) => {
-    dispatch(loginWithGoogle(data));
-  };
-
-  const errorLoginGoogle = (data) => {
-    return
-  };
-
-
-  // ************************ CLICK SIGNUP BUTTON ********************
-  const createAccount = () => setIsLoginForm(false);
-
-  // ************************ CLICK LOGIN BUTTON ********************
-  const clickLoginButton = () => setIsLoginForm(true);
 
   return (
     <div className="w-[80%] flex justify-around
@@ -77,7 +42,6 @@ const HomePage = () => {
                                   max-sm:text-sm max-sm:py-2 max-sm:w-full max-sm:rounded-md">
                 Get Started
               </Link>
-              {/* <button className="px-6 py-3 bg-white border border-gray-300 rounded-md">View Demo</button> */}
             </div>
           </div>
         </section>
