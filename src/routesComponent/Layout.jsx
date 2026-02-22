@@ -8,7 +8,7 @@ const Layout = () => {
 
   return (
     <div className="w-full h-[100dvh] overflow-hidden flex flex-col items-center
-                    bg-[url('./assets/background.png')] bg-cover bg-center bg-no-repeat">
+                    bg-[url('/background.png')] bg-cover bg-center bg-no-repeat">
       <NavBarHomePage />
       <main className="w-full flex-1 overflow-auto flex justify-center">
         <Outlet />
