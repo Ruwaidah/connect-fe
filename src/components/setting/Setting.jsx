@@ -6,11 +6,11 @@ import { useEffect } from "react";
 const Setting = () => {
   const navigate = useNavigate();
   let targets;
-  useEffect(() => {
-    targets = document.querySelectorAll(".list");
-    gsap.set(targets, { xPercent: 100 });
-    gsap.set(targets[0], { xPercent: 0 });
-  }, []);
+  // useEffect(() => {
+  //   targets = document.querySelectorAll(".list");
+  //   gsap.set(targets, { xPercent: 100 });
+  //   gsap.set(targets[0], { xPercent: 0 });
+  // }, []);
 
 
   return (

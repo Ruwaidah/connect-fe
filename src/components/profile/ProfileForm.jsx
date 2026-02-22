@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { updateUser } from "../../reducers/usersSlice";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { checkUsername } from "../../reducers/usersSlice";
@@ -19,7 +20,6 @@ const ProfileForm = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      username: "",
       bio: "",
     },
   });
@@ -42,7 +42,6 @@ const ProfileForm = () => {
       reset({
         firstName: user.firstName || "",
         lastName: user.lastName || "",
-        username: user.username || "",
         bio: user.bio || "",
       });
     }
@@ -52,23 +51,25 @@ const ProfileForm = () => {
 
   useEffect(() => {
     if (!user) return;
-    if (usernameValue && usernameValue !== user.username) {
-      dispatch(checkUsername({ username: usernameValue }));
-    }
-  }, [dispatch, user, usernameValue]);
+  }, [dispatch, user]);
 
   const onSubmit = (data) => {
+    console.log(data)
     const fd = new FormData();
     fd.append("firstName", data.firstName || "");
     fd.append("lastName", data.lastName || "");
-    fd.append("username", data.username || "");
     fd.append("bio", data.bio || "");
     if (isImageChange && img) {
       fd.append("image", img);
+      fd.append("public_id", user.public_id);
+      fd.append("image_id", user.image_id)
     }
+
+    console.log(fd)
     dispatch(updateUser(fd));
   };
 
+  console.log(user)
 
   if (isGettingUserLoading || !user)
     return <Loading />
@@ -96,13 +97,7 @@ const ProfileForm = () => {
           <p className="text-xs mt-2 min-h-5 text-center">
             {errors.firstName?.message ||
               errors.lastName?.message ||
-              errors.username?.message ||
-              errors.bio?.message ||
-              (usernameValue !== user.username
-                ? isUsernameAvailable
-                  ? "Username available"
-                  : "Username not available"
-                : "")}
+              errors.bio?.message}
           </p>
 
           <div className="flex flex-col justify-center items-center w-full mt-8">
@@ -155,40 +150,14 @@ const ProfileForm = () => {
               })}
             />
           </div>
-          <div className="flex flex-col w-[96%] mt-2">
-            <p className="text-sm">Username</p>
-            <input
-              type="text"
-              className={`${inputBase} ${errors.username ? inputErr : inputOk}`}
-              {...register("username", {
-                required: {
-                  value: true,
-                  message: "Require",
-                },
-                pattern: {
-                  value: /^(?=.{3,20}$)[a-zA-Z0-9._]+$/,
-                  message: "Invaild Username",
-                },
-                maxLength: {
-                  value: 20,
-                  message: "Username is too Long",
-                },
-                minLength: {
-                  value: 3,
-                  message: "Username is too Short",
-                },
-              })}
-            />
-          </div>
           <button
-            disabled={!isUsernameAvailable}
+            // disabled={!isDirty || !isImageChange}
             type="submit"
             className="w-[96%] mt-4 h-11 rounded-xl border border-sky-300/25
                         bg-white/[0.06] backdrop-blur-md text-sm text-white
                         shadow-[0_0_0_1px_rgba(140,230,255,0.18),0_0_18px_rgba(60,170,255,0.12)]
                         hover:border-sky-200/45 hover:bg-white/[0.08]
-                        transition active:scale-[0.99]"
-          >
+                        transition active:scale-[0.99]">
             Save Changes
           </button>
         </form>

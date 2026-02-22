@@ -84,10 +84,10 @@ const Messages = () => {
     );
   };
 
-
+console.log(messages)
 
   return (
-    <div className="flex flex-col w-full h-[80vh] text-white">
+    <div className="message flex flex-col w-full h-[80vh] text-white">
       <div className="flex flex-col items-center justify-between p-3 pt-4 pb-3
                       border-b border-white/10 bg-white/[0.03] backdrop-blur-md">
         <div className="flex justify-between items-center w-full mb-3">
