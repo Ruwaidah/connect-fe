@@ -30,10 +30,9 @@ const ProfileCard = () => {
           </div>
           <p>Profile</p>
         </div>
-        <div className="rounded-full border border-[#4555ad]/90">
+        <div className="h-30 w-30 flex justify-center items-center p-1 rounded-full border border-[#4555ad]/90">
           <img src={user.image}
-            width="100px"
-            className="rounded-full m-1" />
+            className="rounded-full w-full h-full" />
         </div>
         <div className="w-full flex flex-col items-center justify-center h-26">
           <h2 className="font-bold text-2xl">{user.firstName} {user.lastName}</h2>

@@ -174,18 +174,17 @@ export const getUser = createAsyncThunk("GET_USER", async (data, thunkAPI) => {
 });
 
 // ************************** UPDATE USER ******************************
-export const updateUser = createAsyncThunk(
-  "UPDATE_USER",
-  async (data, thunkAPI) => {
-    return await axiosWithAuth()
-      .put(
-        `${import.meta.env.VITE_APP_URL}/users/updateuser/${localStorage.getItem("id")}`,
-        data
-      )
-      .then((response) => response.data)
-      .catch((error) => thunkAPI.rejectWithValue(error.response.data.message));
+export const updateUser = createAsyncThunk("UPDATE_USER", async (data, thunkAPI) => {
+  try {
+    const res = await axiosWithAuth().put(
+      `${import.meta.env.VITE_APP_URL}/users/updateuser/${localStorage.getItem("id")}`,
+      data
+    );
+    return res.data;
+  } catch (err) {
+    return thunkAPI.rejectWithValue(err.response?.data?.message || "Update failed");
   }
-);
+});
 
 
 // ************************** UPDATE USER PASSWORD ******************************
@@ -529,6 +528,7 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(loginUser.rejected, (state, action) => {
+      console.log(action.payload)
       state.isAuthError = true;
       state.isAuthLoading = false;
       state.errorMessage = action.payload;

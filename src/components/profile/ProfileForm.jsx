@@ -54,18 +54,15 @@ const ProfileForm = () => {
   }, [dispatch, user]);
 
   const onSubmit = (data) => {
-    console.log(data)
     const fd = new FormData();
-    fd.append("firstName", data.firstName || "");
-    fd.append("lastName", data.lastName || "");
-    fd.append("bio", data.bio || "");
+    fd.append("firstName", data.firstName?.trim() || "");
+    fd.append("lastName", data.lastName?.trim() || "");
+    fd.append("bio", data.bio?.trim() || "");
+    fd.append("public_id", user.public_id || "");
+    fd.append("image_id", String(user.image_id || ""));
     if (isImageChange && img) {
       fd.append("image", img);
-      fd.append("public_id", user.public_id);
-      fd.append("image_id", user.image_id)
     }
-
-    console.log(fd)
     dispatch(updateUser(fd));
   };
 
