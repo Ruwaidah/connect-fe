@@ -19,7 +19,7 @@ const NavBarHomePage = () => {
                         max-lg:px-1
                         max-sm:border-none">
             <Link to="/" className="lg:text-2xl flex items-center text-white sm:text-base">
-                <img src="./assets/logo-04.svg" className="w-16 h-16 mr-2 max-lg:w-12 max-lg:h-12 max-sm:mr-1" /> Connect
+                <img src="./assets/logo.png" className="w-16 h-16 mr-2 max-lg:w-12 max-lg:h-12 max-sm:mr-1" /> Connect
             </Link>
             <div className="flex justify-between items-center">
                 <NavLink to='/login' end

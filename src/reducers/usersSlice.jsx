@@ -276,7 +276,7 @@ export const approveFriendRequest = createAsyncThunk(
 // ************************** CANCEL FRIEND REQUEST ******************************
 export const cancelFriendReq = createAsyncThunk(
   "CANCEL_FRIEND_REQUEST",
-  async (data, action) => {
+  async (data, thunkAPI) => {
     return await axiosWithAuth()
       .delete(
         `${import.meta.env.VITE_APP_URL
