@@ -3,7 +3,6 @@
 
 A full-stack, real-time messaging application built to enable fast, secure, and reliable communication between team members in operational environments.
 
-You can find the deployed project at [Connect](https://message-app-ukya.onrender.com)
 
 #### Note
 
@@ -11,7 +10,7 @@ You can find the deployed project at [Connect](https://message-app-ukya.onrender
 
 ## 🚀 Live Demo
 
-🔗 [FrontEnd URL](https://message-app-ukya.onrender.com)
+🔗 [Connect](https://message-app-ukya.onrender.com)
 
 
 ## 📌 Project Purpose
