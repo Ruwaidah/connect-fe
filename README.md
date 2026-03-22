@@ -1,4 +1,4 @@
-
+# Connect 
 ## 📩 Real-Time Messaging & Collaboration Platform
 
 A full-stack, real-time messaging application built to enable fast, secure, and reliable communication between team members in operational environments.
@@ -11,9 +11,7 @@ You can find the deployed project at [Connect](https://message-app-ukya.onrender
 
 ## 🚀 Live Demo
 
-🔗 Frontend: [FrontEnd URL](https://message-app-ukya.onrender.com)
-
-🔗 Backend API: [BackEnd URL](https://hashtagserver.onrender.com)
+🔗 [FrontEnd URL](https://message-app-ukya.onrender.com)
 
 
 ## 📌 Project Purpose
@@ -127,8 +125,6 @@ The application supports instant message delivery, user authentication, and scal
 Ruwaidah Alfakhri
 
 Full Stack Developer
-
-🔗 [LinkedIn](https://www.linkedin.com/in/ruwaidah-a-930b9a8b/)
 
 
 ## For Testing
