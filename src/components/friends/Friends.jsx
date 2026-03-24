@@ -41,17 +41,54 @@ const Friends = () => {
       {user ? (
         <>
           {" "}
-          {user.friendReq.filter(
-            (d) => d.userRecieveRequest == localStorage.getItem("id")
-          ).length > 0 ? (
-            <Link className="friend-request-div" to="/friend-request">
-              {" "}
-              <p className="friend-request-p">{`You have ${user.friendReq.filter(
-                (d) => d.userRecieveRequest == localStorage.getItem("id")
-              ).length
-                } friends request`}</p>
+          {user?.friendReq?.filter((d) => String(d.userRecieveRequest) === String(localStorage.getItem("id"))).length > 0 && (
+            <Link
+              to="/friend-request"
+              className="w-[96%] mt-2 mb-2 group rounded-2xl border border-sky-300/20
+               bg-white/[0.04] backdrop-blur-md px-4 py-3
+               shadow-[0_0_0_1px_rgba(140,230,255,0.10),0_0_22px_rgba(60,170,255,0.08)]
+               hover:border-sky-200/30 hover:bg-white/[0.06]
+               hover:shadow-[0_0_0_1px_rgba(140,230,255,0.18),0_0_30px_rgba(60,170,255,0.12)]
+               transition flex items-center justify-between"
+            >
+              {/* Left */}
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="h-10 w-10 rounded-xl border border-sky-300/25 bg-sky-400/10
+                      grid place-items-center
+                      shadow-[0_0_18px_rgba(60,170,255,0.12)]">
+                  {/* users icon */}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-sky-200">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M19 8v6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M22 11h-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+
+                <div className="min-w-0">
+                  <p className="text-sm font-medium truncate text-white/90">
+                    Friend Requests
+                  </p>
+                  <p className="text-xs text-white/60 truncate">
+                    Review who wants to connect
+                  </p>
+                </div>
+              </div>
+
+              {/* Right */}
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="min-w-6 h-6 px-2 rounded-full bg-sky-400/80 text-white text-xs
+                       flex items-center justify-center
+                       shadow-[0_0_18px_rgba(60,170,255,0.25)]">
+                  {user.friendReq.filter((d) => String(d.userRecieveRequest) === String(localStorage.getItem("id"))).length}
+                </span>
+
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-white/60 group-hover:text-white/80 transition">
+                  <path d="M9 18l6-6-6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
             </Link>
-          ) : null}{" "}
+          )}
           <SearchFriendForm />
           <FriendsList />
         </>
