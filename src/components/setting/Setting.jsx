@@ -1,141 +1,148 @@
-import { Link, useNavigate } from "react-router-dom";
-import gsap from "gsap";
+import { Link } from "react-router-dom";
 import LogOut from "../logout/LogOut.jsx";
-import { useEffect } from "react";
+import Header from "../header/Header";
+
+const itemClass =
+  "w-full h-14 rounded-2xl px-3 flex items-center justify-between gap-3 " +
+  "border border-white/12 bg-white/[0.04] backdrop-blur-xl " +
+  "shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_18px_50px_rgba(0,0,0,0.25)] " +
+  "hover:bg-white/[0.06] hover:border-sky-200/25 transition active:scale-[0.99]";
+
+const leftWrap = "flex items-center gap-3 min-w-0";
+const iconWrap =
+  "h-10 w-10 rounded-xl grid place-items-center bg-white/[0.04] border border-white/10 " +
+  "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]";
+
+const Chevron = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-white/60">
+    <path d="M9 18l6-6-6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
 const Setting = () => {
-  const navigate = useNavigate();
-  let targets;
-  // useEffect(() => {
-  //   targets = document.querySelectorAll(".list");
-  //   gsap.set(targets, { xPercent: 100 });
-  //   gsap.set(targets[0], { xPercent: 0 });
-  // }, []);
-
-
   return (
-    <div className="flex flex-col text-white justify-center items-center w-full">
-      <div className="h-20 w-full text-center flex items-center justify-center">
-        <div className="fixed left-2">
-          <svg
-            onClick={() => navigate(-1)}
-            width="18" height="18"
-            viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke="#ffffff"><g id="SVGRepo_bgCarrier"
-              strokeWidth="0"></g><g id="SVGRepo_tracerCarrier"
-                strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 7L10 12L15 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-        </div>
-        <p>Setting</p>
-      </div>
-      <div className="mt-10 flex flex-col w-[98%]">
-        <Link className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50"
-          to="/setting/account">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/profile-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">Account</button>
-              <p className="text-[11px]">Profile, Email, Password</p>
+    <div className="w-full h-full text-white flex flex-col">
+      <Header title="Settings" showBack />
+
+      <div className="mx-auto w-full max-w-md px-4 py-5 pb-24">
+        {/* Account */}
+        <Link className={itemClass} to="/setting/account">
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/profile-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">Account</p>
+              <p className="text-[11px] text-white/55 truncate">Profile, Email, Password</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </Link>
 
-        <div className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/security-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">Security</button>
-              <p className="text-[11px]">Manage account security</p>
+        {/* Security */}
+        <div className={`${itemClass} mt-2`}>
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/security-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">Security</p>
+              <p className="text-[11px] text-white/55 truncate">Manage account security</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </div>
 
-        <div className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/chat-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">Chats</button>
-              <p className="text-[11px]">chats theme, History, Media</p>
+        {/* Chats */}
+        <div className={`${itemClass} mt-2`}>
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/chat-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">Chats</p>
+              <p className="text-[11px] text-white/55 truncate">Theme, History, Media</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </div>
-        <div className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/notifications-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">Notifications</button>
-              <p className="text-[11px]">Message alerts</p>
+
+        {/* Notifications */}
+        <div className={`${itemClass} mt-2`}>
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/notifications-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">Notifications</p>
+              <p className="text-[11px] text-white/55 truncate">Message alerts</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </div>
-        <div className="bg-[#20274d]/70 h-14 flex items-center mb-  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/appearance-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">Appearance</button>
-              <p className="text-[11px]">Theme, Backgrounds</p>
+
+        {/* Appearance */}
+        <div className={`${itemClass} mt-2`}>
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/appearance-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">Appearance</p>
+              <p className="text-[11px] text-white/55 truncate">Theme, Backgrounds</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </div>
-        <div className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/social-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">Social</button>
-              <p className="text-[11px]">Find friends, Contacts sync</p>
+
+        {/* Social */}
+        <div className={`${itemClass} mt-2`}>
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/social-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">Social</p>
+              <p className="text-[11px] text-white/55 truncate">Find friends, Contacts sync</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </div>
-        <div className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/app-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">App</button>
-              <p className="text-[11px]">Language, Storage, Backup</p>
+
+        {/* App */}
+        <div className={`${itemClass} mt-2`}>
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/app-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">App</p>
+              <p className="text-[11px] text-white/55 truncate">Language, Storage, Backup</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </div>
-        <div className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50">
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="./assets/support-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <button className="text-sm">Support</button>
-              <p className="text-[11px]">Help, Privacy & Terms</p>
+
+        {/* Support */}
+        <div className={`${itemClass} mt-2`}>
+          <div className={leftWrap}>
+            <div className={iconWrap}>
+              <img src="/assets/support-icon.png" className="w-6 h-6" alt="" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white/90 truncate">Support</p>
+              <p className="text-[11px] text-white/55 truncate">Help, Privacy & Terms</p>
             </div>
           </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+          <Chevron />
         </div>
-      </div>
-      <div className="w-[98%] flex flex-col items-center justify-center">
-        {" "}
-        <div className="w-full">
+
+        {/* Logout */}
+        <div className="mt-4">
           <LogOut />
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 

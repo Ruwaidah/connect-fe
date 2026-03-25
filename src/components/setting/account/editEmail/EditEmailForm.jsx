@@ -31,7 +31,7 @@ const EditEmailForm = () => {
     const emailChanged = user?.email && emailValue.trim() !== user.email;
 
     const disableForEmail = emailChanged && isEmailAvailable === false;
-    const isSubmitDisabled = disableForEmail || !isValid;
+    const isSubmitDisabled = !emailChanged || disableForEmail || !isValid;
 
 
     useEffect(() => {
@@ -94,18 +94,20 @@ const EditEmailForm = () => {
                                 {errors.email.message}
                             </p>
                         ) : isDirty && emailChanged ? (
-                            isEmailAvailable ? (
+                            isEmailAvailable === true ? (
                                 <p className="ml-2 text-sm text-[#3dff8f] drop-shadow-[0_0_8px_rgba(61,255,143,0.5)]">
                                     Email available
                                 </p>
-                            ) : (
+                            ) : isEmailAvailable === false ? (
                                 <p className="ml-2 text-sm text-[#ff5a5f] drop-shadow-[0_0_8px_rgba(255,90,95,0.5)]">
                                     Email unavailable
                                 </p>
+                            ) : (
+                                <p className="ml-2 text-sm text-white/50">Checking…</p>
                             )
                         ) : isUserUpdated ? (
                             <p className="flex items-center gap-2 rounded-xl bg-[#3dff8f]/10 px-4 py-3 text-[#3dff8f]
-      shadow-[0_0_18px_rgba(61,255,143,0.35)]">
+    shadow-[0_0_18px_rgba(61,255,143,0.35)]">
                                 Email updated successfully 🚀
                             </p>
                         ) : null}

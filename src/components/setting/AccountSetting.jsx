@@ -1,91 +1,109 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Loading from "../loading/Loading";
+import Header from "../header/Header";
 import { clearEditCancel } from "../../reducers/usersSlice";
 
+const Chevron = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-white/60">
+    <path d="M9 18l6-6-6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const Row = ({ to, icon, title, subtitle, danger, onClick }) => {
+  const base =
+    "w-full h-14 rounded-2xl px-3 flex items-center justify-between gap-3 " +
+    "border border-white/12 bg-white/[0.04] backdrop-blur-xl " +
+    "shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_18px_50px_rgba(0,0,0,0.25)] " +
+    "hover:bg-white/[0.06] hover:border-sky-200/25 transition active:scale-[0.99]";
+
+  const dangerCls =
+    "border-rose-300/20 bg-rose-400/10 hover:bg-rose-400/12 hover:border-rose-200/30";
+
+  return (
+    <Link to={to} onClick={onClick} className={`${base} ${danger ? dangerCls : ""}`}>
+      <div className="flex items-center gap-3 min-w-0">
+        <div
+          className={`h-10 w-10 rounded-xl grid place-items-center border
+          ${danger ? "bg-rose-400/10 border-rose-300/15" : "bg-white/[0.04] border-white/10"}
+          shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]`}
+        >
+          {icon}
+        </div>
+
+        <div className="min-w-0">
+          <p className={`text-sm font-medium truncate ${danger ? "text-rose-100" : "text-white/90"}`}>
+            {title}
+          </p>
+          {subtitle ? (
+            <p className="text-[11px] text-white/55 truncate">{subtitle}</p>
+          ) : null}
+        </div>
+      </div>
+
+      <Chevron />
+    </Link>
+  );
+};
 
 const AccountSetting = () => {
-  const navigate = useNavigate();
-  const {
-    user,
-  } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
 
+  return (
+    <div className="w-full h-full text-white flex flex-col">
+      <Header
+        title="Account"
+        showBack
+      />
 
-  return <div className="flex flex-col w-full text-white items-center justify-center">
-    <div className="h-20 w-full text-center flex flex-col items-center justify-center">
-      <div className="flex items-center h-6">
-        <div className="fixed left-2">
-          <svg
-            onClick={() => navigate(-1)}
-            width="18" height="18"
-            viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke="#ffffff"><g id="SVGRepo_bgCarrier"
-              strokeWidth="0"></g><g id="SVGRepo_tracerCarrier"
-                strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 7L10 12L15 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-        </div>
-        <p>Account</p>
+      <div className="mx-auto w-full max-w-md px-4 pb-24">
+        <p className="mt-2 text-xs text-[#7a789a]">
+          Manage your profile and credentials
+        </p>
+
+        {!user ? (
+          <div className="mt-8">
+            <Loading />
+          </div>
+        ) : (
+          <div className="mt-5 flex flex-col gap-2">
+            <Row
+              to="/setting/editusername"
+              title="Username"
+              subtitle={user.username}
+              icon={<img src="/assets/profile-icon.png" className="w-5 h-5" alt="" />}
+            />
+
+            <Row
+              to="/setting/editemail"
+              title="Email"
+              subtitle={user.email}
+              icon={<img src="/assets/email-icon.png" className="w-5 h-5" alt="" />}
+            />
+
+            <Row
+              to="/setting/editpassword"
+              title="Password"
+              subtitle="**********"
+              onClick={() => dispatch(clearEditCancel())}
+              icon={<img src="/assets/lock-icon.png" className="w-5 h-5" alt="" />}
+            />
+
+            <div className="mt-3">
+              <Row
+                to="/setting/account"
+                title="Delete Account"
+                subtitle="Permanently remove your account"
+                danger
+                icon={<img src="/assets/delete-icon.png" className="w-5 h-5" alt="" />}
+              />
+            </div>
+          </div>
+        )}
       </div>
-      <p className="text-xs text-[#7a789a]">Manage your profile and credentials</p>
     </div>
-    {!user ? <Loading /> :
-      <div className="flex flex-col w-[98%] mt-10">
-        <Link className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50"
-          to="/setting/editusername">
-          <div className="flex items-center">
-            <img className="w-5 h-5"
-              src="../../assets/profile-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <p className="text-sm">Username</p>
-              <p className="text-xs text-[#7a789a]">{user.username}</p>
-            </div>
-          </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-        </Link>
-        <Link className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50"
-          to="/setting/editemail">
-          <div className="flex items-center">
-            <img className="w-6 h-5"
-              src="../../assets/email-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <p className="text-sm">Email</p>
-              <p className="text-xs text-[#7a789a]">{user.email}</p>
-            </div>
-          </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-        </Link>
-        <Link className="bg-[#20274d]/70 h-14 flex items-center mb-1  
-                       justify-between w-full pl-2 rounded-md border border-[#20274d]/50"
-          to="/setting/editpassword"
-          onClick={() => clearEditCancel()}>
-          <div className="flex items-center">
-            <img className="w-6 h-6"
-              src="../../assets/lock-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <p className="text-sm">Password</p>
-              <p className="text-xs text-[#7a789a]">**********</p>
-            </div>
-          </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-        </Link>
-
-        <Link className="h-14 flex items-center mb-1 
-        bg-[#f35353]/20 rounded-md border border-[#f35353]/20
-                       justify-between w-full pl-2"
-          to="/setting/account">
-          <div className="flex items-center">
-            <img className="w-5 h-5"
-              src="../../assets/delete-icon.png" />
-            <div className="flex flex-col items-start ml-2">
-              <p className="text-sm text-[#c77f8f]">Delete Account</p>
-            </div>
-          </div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 7L15 12L10 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-        </Link>
-      </div>}
-  </div>;
+  );
 };
 
 export default AccountSetting;

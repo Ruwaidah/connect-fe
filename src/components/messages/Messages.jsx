@@ -7,6 +7,7 @@ import NoMessages from "./NoMessages";
 import { Link, NavLink } from "react-router-dom";
 import SearchFriendForm from "../friends/SearchFriendForm";
 import FriendsList from "../friends/FriendsList";
+import Header from "../header/Header";
 
 
 
@@ -84,35 +85,22 @@ const Messages = () => {
     );
   };
 
-console.log(messages)
+  console.log(messages)
 
   return (
     <div className="message flex flex-col w-full h-[80vh] text-white">
-      <div className="flex flex-col items-center justify-between p-3 pt-4 pb-3
-                      border-b border-white/10 bg-white/[0.03] backdrop-blur-md">
-        <div className="flex justify-between items-center w-full mb-3">
-          <div className="flex items-center gap-3">
-            <img src="./assets/connect-logo03.png" className="w-8 h-8" />
-            <h2 className="font-semibold text-lg">Chats</h2>
-          </div>
+      <Header
+        title="Chats"
+        showBack={false}
+        leftIcon={<img src="/assets/logo.png" className="w-10 h-10" alt="Connect" />}
+        right={
           <NavLink to="/profile">
-            <div className="relative">
-              <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/15" />
-              {user?.image ? (
-                <img
-                  src={user.image}
-                  className="relative w-9 h-9 rounded-full object-cover ring-1 ring-white/10"
-                  alt="Profile"
-                />
-              ) : (
-                <div className="relative w-9 h-9 rounded-full ring-1 ring-white/10 bg-white/10" />
-              )}
-
-            </div>
+            <img className="w-9 h-9 rounded-full ring-1 ring-white/10 object-cover" src={user?.image || ""} />
           </NavLink>
-        </div>
+        }
+      >
         <SearchFriendForm />
-      </div>
+      </Header>
       {isMessagesLoading || isGetFriendsLoading ? (
         <Loading />
       ) : chats.length === 0 ? (
