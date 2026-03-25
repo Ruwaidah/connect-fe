@@ -1,35 +1,24 @@
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import EditPasswordForm from "./EditPasswordForm";
 import Loading from "../../../loading/Loading";
+import EditPasswordForm from "./EditPasswordForm";
+import Header from "../../../header/Header"; // ✅ adjust path if needed
 
 const EditPassword = () => {
-    const navigate = useNavigate();
-    const {
-        user,
-    } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
+  return (
+    <div className="w-full h-full text-white flex flex-col">
+      <Header title="Password" showBack>
+        <p className="text-xs text-[#7a789a] text-center">
+          Update your password securely
+        </p>
+      </Header>
 
-    return <div className="h-full flex flex-col text-white justify-start items-center w-full">
-
-        <div className="h-20 w-full text-center flex items-center justify-center">
-            <div className="fixed left-2">
-                <svg
-                    onClick={() => navigate(-1)}
-                    width="18" height="18"
-                    viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    stroke="#ffffff"><g id="SVGRepo_bgCarrier"
-                        strokeWidth="0"></g><g id="SVGRepo_tracerCarrier"
-                            strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 7L10 12L15 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-            </div>
-            <div className="flex flex-col">
-                <p>Password</p>
-            </div>
-        </div>
+      <div className="mx-auto w-full max-w-md px-4 py-6 pb-24">
         {!user ? <Loading /> : <EditPasswordForm />}
+      </div>
     </div>
-}
+  );
+};
 
-
-export default EditPassword
+export default EditPassword;
