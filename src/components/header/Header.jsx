@@ -4,9 +4,9 @@ const Header = ({
   title = "",
   showBack = false,
   onBack,
-  leftIcon = null,   // JSX (logo) when showBack=false
-  right = null,      // JSX (button/link/icon)
-  children = null,   // second row (Search, tabs, etc.)
+  leftIcon = null,
+  right = null,
+  children = null,
 }) => {
   const navigate = useNavigate();
 
@@ -42,7 +42,7 @@ const Header = ({
           <div className="shrink-0">{right}</div>
         </div>
 
-        {/* Extra row (Search) */}
+        {/* (Search) */}
         {children ? <div className="mt-3">{children}</div> : null}
       </div>
 

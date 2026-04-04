@@ -88,7 +88,7 @@ const Messages = () => {
   console.log(messages)
 
   return (
-    <div className="message flex flex-col w-full h-[80vh] text-white">
+    <div className="w-full h-full text-white flex flex-col">
       <Header
         title="Chats"
         showBack={false}

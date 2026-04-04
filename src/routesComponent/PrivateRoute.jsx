@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import AppShell from "./AppShell";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
 import NavBar from "../components/navBar/NavBar";
@@ -45,10 +46,10 @@ const PrivateRoute = () => {
   }, [dispatch, token, activeChatFriendId]);
 
   return token ? (
-    <div className="bg-[url('../../assets/bg-003.png')] w-full bg-cover bg-center h-[100vh] flex flex-col items-center">
+    <AppShell>
       <Outlet />
       {!hideNav && <NavBar />}
-    </div>
+    </AppShell>
   ) : (
     <Navigate to="/" />
   );

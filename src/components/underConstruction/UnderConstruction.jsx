@@ -23,16 +23,16 @@ const UnderConstruction = ({ imageSrc }) => {
                    overflow-hidden"
             >
                 <div className="relative">
-                    <img
+                    {/* <img
                         src={imageSrc}
                         alt="Under construction"
                         className="w-full h-auto object-cover select-none"
                         draggable={false}
-                    />
+                    /> */}
                     <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-[#050a14]/70" />
                 </div>
 
-                <div className="px-4 pb-5 pt-4">
+                <div className="px-4 pb-5 pt-10">
                     <div className="flex items-center justify-between gap-3">
                         <button
                             type="button"
