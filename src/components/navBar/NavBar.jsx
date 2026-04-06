@@ -17,7 +17,10 @@ const NavBar = () => {
   const iconClass = ({ isActive }) => (isActive ? activeIcon : baseIcon);
 
   return (
-    <div className="sticky bottom-0 z-50 w-full">
+    <nav className="fixed bottom-0 inset-x-0 z-50
+      bg-gray-900/70 backdrop-blur-xl
+      border-t border-white/10
+      shadow-[0_-10px_30px_rgba(0,0,0,0.35)]">
       <div className="border-t border-white/10 bg-gray-900/70 backdrop-blur-xl px-4 py-3">
         <div className="flex items-center justify-around">
           <NavLink to="/messages" onClick={() => dispatch(clearState())} className={linkClass}>
@@ -64,7 +67,7 @@ const NavBar = () => {
           </NavLink>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

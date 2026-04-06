@@ -34,7 +34,7 @@ const ProfileImage = ({ setImg, setIsImageChange }) => {
   };
 
   return (
-    <div className="w-[98%] flex justify-center items-center">
+    <div className="w-[98%] flex justify-center items-center mt-10">
       <div className="w-full flex flex-col items-center justify-center">
         <div className="rounded-full border border-[#4555ad]/90 w-30 h-30 p-1">
           <img

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Header from "../header/Header";
 
 const UnderConstruction = ({ imageSrc }) => {
     const navigate = useNavigate();
@@ -8,6 +9,8 @@ const UnderConstruction = ({ imageSrc }) => {
             className="relative w-full min-h-[100svh] overflow-hidden
                  flex items-center justify-center px-4"
         >
+             {/* Header */}
+      {/* <Header title="Profile" showBack /> */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#050a14]/70 via-[#070d18]/55 to-[#050a14]/80" />
             <div className="absolute inset-0 backdrop-blur-[1px]" />
 
