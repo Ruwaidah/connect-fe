@@ -4,7 +4,7 @@ const Header = ({ title = "Title", subtitle, right, showBack = true }) => {
   const navigate = useNavigate();
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50
+    <header className="fixed top-0 inset-x-0 z-50 py-2
       bg-white/[0.03] backdrop-blur-xl
       border-b border-white/10
       shadow-[0_10px_30px_rgba(0,0,0,0.25)]">

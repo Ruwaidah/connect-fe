@@ -54,14 +54,11 @@ const AccountSetting = () => {
     <div className="w-full h-full text-white flex flex-col">
       <Header
         title="Account"
+        subtitle=" Manage your profile and credentials"
         showBack
       />
 
-      <div className="mx-auto w-full max-w-md px-4 pb-24">
-        <p className="mt-2 text-xs text-[#7a789a]">
-          Manage your profile and credentials
-        </p>
-
+      <div className="mx-auto w-full max-w-md px-4 pb-24 mt-10">
         {!user ? (
           <div className="mt-8">
             <Loading />

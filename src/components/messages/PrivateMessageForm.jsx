@@ -32,7 +32,6 @@ const PrivateMessageForm = () => {
   const msgValue = watch("msg");
 
 
-  // Auto-resize textarea whenever text changes
   useEffect(() => {
     const el = textareaRef.current;
     if (!el) return;

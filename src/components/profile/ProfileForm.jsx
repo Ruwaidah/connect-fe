@@ -67,7 +67,6 @@ const ProfileForm = () => {
     dispatch(updateUser(fd));
   };
 
-  console.log(user)
 
   if (isGettingUserLoading || !user)
     return <Loading />

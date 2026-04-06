@@ -23,11 +23,9 @@ const ProfileImage = ({ setImg, setIsImageChange }) => {
 
     setErrorImage(null);
 
-    // ✅ send File to parent (for multer)
     setImg(file);
     setIsImageChange(true);
 
-    // ✅ preview
     const reader = new FileReader();
     reader.onload = () => setImageUpload(reader.result);
     reader.readAsDataURL(file);

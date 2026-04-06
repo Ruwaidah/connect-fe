@@ -4,6 +4,7 @@ import { getFriends, startNewChatList } from "../../reducers/usersSlice";
 import Loading from "../loading/Loading";
 import { NavLink } from "react-router-dom";
 import SearchFriendForm from "../friends/SearchFriendForm";
+import Header from "../header/Header";
 
 const StartNewChat = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,20 @@ const StartNewChat = () => {
   return (
     <div className="w-full h-full text-white flex flex-col">
       {/* Header */}
+      <Header
+        title="New Chat"
+        subtitle="Pick a friend to start"
+        showBack
+        right={
+          <NavLink to="/profile">
+            <img className="w-9 h-9 rounded-full ring-1 ring-white/10 object-cover" src={user?.image || ""} />
+          </NavLink>
+        }
+      >
+        <SearchFriendForm />
+      </Header>
+
+      {/* 
       <div className="sticky top-0 z-40 w-full border-b border-white/10 bg-white/[0.03] backdrop-blur-xl">
         <div className="mx-auto max-w-md px-4 pt-4 pb-3">
           <div className="flex items-center justify-between">
@@ -61,7 +76,7 @@ const StartNewChat = () => {
             <SearchFriendForm />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Body */}
       <div className="mx-auto w-full max-w-md px-4 py-4 pb-24 flex-1">
@@ -100,10 +115,10 @@ const StartNewChat = () => {
                            active:scale-[0.99] transition"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M19 8v6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M22 11h-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M19 8v6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M22 11h-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 Invite Friends
               </NavLink>
