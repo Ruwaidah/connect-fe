@@ -24,7 +24,7 @@ const Setting = () => {
     <div className="w-full h-full text-white flex flex-col">
       <Header title="Settings" showBack />
 
-      <div className="mx-auto w-full max-w-md px-4 py-5 pb-24">
+      <div className="mx-auto w-full max-w-md px-4 py-5 pb-24 mt-10">
         {/* Account */}
         <Link className={itemClass} to="/setting/account">
           <div className={leftWrap}>
