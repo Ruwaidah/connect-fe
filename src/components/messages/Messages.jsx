@@ -10,8 +10,6 @@ import FriendsList from "../friends/FriendsList";
 import Header from "../header/Header";
 
 
-
-
 const Messages = () => {
   const dispatch = useDispatch();
   const { messages, isMessagesLoading } =
@@ -44,9 +42,6 @@ const Messages = () => {
       return bTime - aTime;
     });
 
-
-
-
   useEffect(() => {
     dispatch(getMessages());
   }, [dispatch]);
@@ -62,7 +57,7 @@ const Messages = () => {
     );
   }, [isStartNewChat, isGetFriendsLoading, friendsList.length]);
 
-  // ************************** OPEN UNREAD MESSAGE ******************************
+  // OPEN UNREAD MESSAGE
   const openPrivateMsg = (chat) => {
     dispatch(
       messageRead({

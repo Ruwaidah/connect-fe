@@ -51,11 +51,6 @@ const NoMessages = () => {
             Start a New Chat
           </NavLink>
         </div>
-
-        {/* Tip */}
-        <p className="mt-3 text-[11px] text-white/45">
-          Tip: You can search friends from the top bar.
-        </p>
       </div>
     </div>
   );
