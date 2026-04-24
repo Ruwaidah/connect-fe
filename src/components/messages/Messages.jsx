@@ -46,17 +46,6 @@ const Messages = () => {
 
 
 
-  useEffect(() => {
-    if (!isMessagesLoading && !isStartNewChat) {
-      gsap.to(".message", {
-        opacity: 1,
-        duration: 0.5,
-        ease: "power1.inOut",
-        stagger: 0.03,
-      });
-    }
-  }, [isMessagesLoading, isStartNewChat, chats.length]);
-
 
   useEffect(() => {
     dispatch(getMessages());
@@ -85,7 +74,6 @@ const Messages = () => {
     );
   };
 
-  console.log(messages)
 
   return (
     <div className="w-full h-full text-white flex flex-col">
@@ -95,7 +83,7 @@ const Messages = () => {
         leftIcon={<img src="/assets/logo.png" className="w-10 h-10" alt="Connect" />}
         right={
           <NavLink to="/profile">
-            <img className="w-9 h-9 rounded-full ring-1 ring-white/10 object-cover" src={user?.image || ""} />
+            <img className="w-9 h-9 rounded-full ring-1 ring-white/10 object-cover" src={user?.image || null} />
           </NavLink>
         }
       >

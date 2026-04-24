@@ -1,20 +1,10 @@
-import { useGSAP } from "@gsap/react";
 import Feature from "./FeatureLoginPage";
-import gsap from "gsap";
 import { Navigate } from "react-router-dom";
 import LoginWithGoogle from "./LoginInWithGoogle";
 import { Link } from "react-router-dom";
 import LoginForm from "./LoginForm";
 
 const Login = () => {
-  useGSAP(() => {
-    gsap.to(".login", {
-      opacity: 1,
-      duration: 1,
-      ease: "power1.inOut",
-    });
-  }, {});
-
 
   if (localStorage.getItem("token")) return <Navigate to="/messages" />;
 

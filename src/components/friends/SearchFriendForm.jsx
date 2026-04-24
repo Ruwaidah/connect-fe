@@ -17,7 +17,7 @@ const SearchFriendForm = () => {
 
 
   const onSubmit = (data) => {
-    // dispatch(findNewFriend(data))
+    dispatch(findNewFriend(data))
   };
 
   return (
@@ -25,15 +25,15 @@ const SearchFriendForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={`mt-1 flex items-center gap-2 rounded-xl 
                                 border border-white/10 bg-white/5 px-3 py-2
-                               ${errors.text ? '!border-red-300' : ''
+                               ${errors.username ? '!border-red-300' : ''
           } `}>
           <Icon kind="search" />
           <input
             className="w-full bg-transparent outline-none 
                                 text-sm placeholder:text-white/35"
             placeholder="Search"
-            type="text"
-            {...register("text")}
+            type="username"
+            {...register("username")}
           />
         </div>
         <input type="submit" id="search-friend-input"
