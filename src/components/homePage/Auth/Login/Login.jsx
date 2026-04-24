@@ -9,7 +9,7 @@ const Login = () => {
   if (localStorage.getItem("token")) return <Navigate to="/messages" />;
 
   return (
-    <main className="login opacity-0 text-white w-[80%] max-2xl:w-[96%]
+    <main className="login text-white w-[80%] max-2xl:w-[96%]
                       max-xl:w-[96%]
                      h-[80vh] flex items-center">
       <div className="flex justify-center w-full items-center">
