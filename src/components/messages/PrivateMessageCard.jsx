@@ -45,7 +45,6 @@ const PrivateMessageCard = () => {
 
   return (
     <div className="w-full min-h-screen text-white flex flex-col">
-      {/* FIXED header */}
       <Header
         title={`${friend.firstName} ${friend.lastName}`}
         subtitle="Private chat"
@@ -62,9 +61,7 @@ const PrivateMessageCard = () => {
         }
       />
 
-      {/* CONTENT (push below fixed header) */}
       <div className="pt-14 flex-1 flex flex-col">
-        {/* MESSAGES */}
         <div className="flex-1 overflow-y-auto px-3 py-4">
           {sortedMessages.length === 0 ? (
             <div className="h-full grid place-items-center">
@@ -83,7 +80,6 @@ const PrivateMessageCard = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* INPUT pinned at bottom */}
         <div className="px-2 pb-2">
           <PrivateMessageForm />
         </div>
