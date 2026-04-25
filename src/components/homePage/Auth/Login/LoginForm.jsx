@@ -10,7 +10,7 @@ const LoginForm = () => {
     const { register, handleSubmit, formState } = useForm();
     const { errors } = formState;
     const [showPassword, setShowPassword] = useState(false);
-    const { errorMessage, isAuthError } = useSelector(state => state.user)
+    const { isAuthError, errorMessage, isAuthLoading } = useSelector(state => state.user)
 
     const onSubmit = (data) => {
         return dispatch(loginUser(data));
@@ -65,11 +65,34 @@ const LoginForm = () => {
                 </button>
             </div>
         </div>
-        <input
+        {/* <input
             className="mt-5 w-full cursor-pointer rounded-xl bg-[#3261d5] px-4 py-3 font-normal shadow-[0_8px_30px_rgba(59,130,246,0.22)]"
             type="submit"
             value="Login"
-        />
+        /> */}
+        <button
+            type="submit"
+            disabled={isAuthLoading}
+            className={`w-full mt-4  h-11 rounded-xl border border-sky-300/25
+    transition active:scale-[0.99]
+    ${isAuthLoading
+                    ? "bg-white/[0.03] opacity-60 cursor-not-allowed"
+                    : "bg-white/[0.06] hover:bg-white/[0.08] shadow-[0_0_0_1px_rgba(140,230,255,0.18),0_0_18px_rgba(60,170,255,0.12)]"
+                }`}
+        >
+            {isAuthLoading ? (
+                <span className="flex items-center justify-center gap-2">
+                    <span className="h-4 w-4 rounded-full border border-white/30 border-t-white animate-spin" />
+                    Logging in...
+                </span>
+            ) : (
+                "Login"
+            )}
+        </button>
+
+        {isAuthError ? (
+            <p className="mt-2 text-xs text-rose-300">{errorMessage}</p>
+        ) : null}
     </form>
 }
 

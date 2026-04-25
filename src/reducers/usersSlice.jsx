@@ -510,7 +510,6 @@ const usersSlice = createSlice({
 
     // ************************** LOGIN AUTH ******************************
     builder.addCase(loginUser.pending, (state) => {
-      state.isAuthError = false;
       state.errorMessage = null;
       state.isAuthError = false;
       state.isAuthLoading = true;
@@ -538,7 +537,6 @@ const usersSlice = createSlice({
     builder.addCase(signUp.pending, (state, action) => {
       state.isAuthError = false;
       state.errorMessage = null;
-      state.isAuthError = false;
       state.isAuthLoading = true;
       state.user = null;
     });

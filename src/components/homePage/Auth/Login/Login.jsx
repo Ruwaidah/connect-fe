@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import LoginForm from "./LoginForm";
 
 const Login = () => {
-
   if (localStorage.getItem("token")) return <Navigate to="/messages" />;
 
   return (
