@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Header from "../header/Header";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -108,21 +109,22 @@ const FriendCard = () => {
 
   return (
     <div className="flex flex-col w-full text-white items-center justify-center">
-      <div className="h-20 w-full text-center flex items-center justify-center">
-        <div className="fixed left-2">
-          <svg
-            onClick={() => {
-              navigate(-1)
-              dispatch(clearFriendSearch())
-            }}
-            width="18" height="18"
-            viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke="#ffffff"><g id="SVGRepo_bgCarrier"
-              strokeWidth="0"></g><g id="SVGRepo_tracerCarrier"
-                strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15 7L10 12L15 17" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-        </div> <p>User Profile</p>
-      </div>
+      <Header
+        title="User Profile"
+        subtitle={`@${findFriend.username}`}
+        showBack
+        right={
+          <div className="h-10 w-10 rounded-full overflow-hidden ring-1 ring-white/10 bg-white/10">
+            {findFriend.image ? (
+              <img
+                src={findFriend.image}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            ) : null}
+          </div>
+        }
+      />
       {isDeleteUser ? (
         <div className="">
           <p>Delete Friend?</p>
@@ -139,7 +141,7 @@ const FriendCard = () => {
           </div>
         </div>
       ) : null}
-      <div className="flex flex-col w-full justify-center items-center">
+      <div className="flex flex-col w-full justify-center items-center pt-10">
         <div
           className="flex flex-col w-full justify-center items-center">
           <div className="flex flex-col">

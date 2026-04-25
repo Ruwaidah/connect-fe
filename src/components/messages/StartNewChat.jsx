@@ -37,9 +37,9 @@ const StartNewChat = () => {
         <SearchFriendForm />
       </Header>
 
-      <div className="mx-auto w-full max-w-md px-4 pt-4 pb-24 flex-1">
+      <div className="mx-auto w-full max-w-md px-1 pt-1 pb-24 flex-1">
         {friendsList?.length < 1 ? (
-          <div className="mt-10 w-full flex items-center justify-center">
+          <div className="mt-1 w-full flex items-center justify-center">
             <div className="w-full max-w-[360px] text-center">
               <div className="relative mx-auto w-24 h-24">
                 <div className="absolute -inset-4 rounded-full blur-2xl bg-sky-400/15" />
@@ -78,7 +78,7 @@ const StartNewChat = () => {
             </div>
           </div>
         ) :
-          < div className="mt-4 flex flex-col gap-2">
+          < div className="flex flex-col gap-2">
             {friendsList.map((f) => (
               <NavLink
                 key={f.friendId}

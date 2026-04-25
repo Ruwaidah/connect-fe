@@ -4,11 +4,11 @@ const Header = ({ title = "Title", subtitle, right, showBack = true, children })
   const navigate = useNavigate();
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50
+    <header className="inset-x-0 z-50
       bg-white/[0.03] backdrop-blur-xl
       border-b border-white/10
       shadow-[0_10px_30px_rgba(0,0,0,0.25)] w-full">
-      
+
       <div className="w-full px-2 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0">
           {showBack ? (

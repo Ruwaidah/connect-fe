@@ -28,7 +28,7 @@ const ProfileCard = () => {
       <Header title="Profile" showBack />
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-md px-4 py-6 mt-30">
+      <div className="mx-auto w-full max-w-md px-4 py-6 mt-4">
         {/* Avatar + Name */}
         <div className="flex flex-col items-center text-center">
           <div className="relative">
