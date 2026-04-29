@@ -95,7 +95,7 @@ const Messages = () => {
           <FriendsList />
         </div>
       ) : (
-        <div className="flex flex-col gap-3 px-1 py-4 overflow-y-auto">
+        <div className="mt-26 flex flex-col gap-3 px-1 py-4 overflow-y-auto">
           {chats.map((chat) => {
             if (!chat?.friend) return null;
             const last = chat.messages?.[chat.messages.length - 1];
@@ -103,7 +103,7 @@ const Messages = () => {
             return (
               <Link
                 key={chat.friend.id}
-                className="message opacity-0 group w-full rounded-2xl border border-white/15
+                className="message group w-full rounded-2xl border border-white/15
                 bg-white/[0.04] backdrop-blur-md p-3
                 flex items-center justify-between gap-3
                 shadow-[0_0_0_1px_rgba(255,255,255,0.10),0_0_22px_rgba(60,170,255,0.08)]
@@ -112,7 +112,7 @@ const Messages = () => {
                 transition"
                 onClick={() => openPrivateMsg(chat)}
                 to={`/messages/private/${chat.friend.id}`}>
-                {/* Left */}
+
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="relative">
                     <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/15 opacity-0 group-hover:opacity-100 transition" />
@@ -139,7 +139,7 @@ const Messages = () => {
                     </p>
                   </div>
                 </div>
-                {/* Right */}
+
                 <div className="shrink-0 flex flex-col items-end gap-2">
                   <div className="flex items-center gap-2 text-white/60">
                     <span className="text-[11px]">{time}</span>

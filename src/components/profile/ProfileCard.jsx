@@ -23,7 +23,7 @@ const ProfileCard = () => {
     "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.05)]";
 
   return (
-    <div className="w-full h-full text-white flex flex-col">
+    <div className="w-full h-full text-white flex flex-col mt-26">
       {/* Header */}
       <Header title="Profile" showBack />
 

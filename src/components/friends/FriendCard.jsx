@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Header from "../header/Header";
+import ConfirmDialog from "./ConfirmDialog";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -108,50 +109,35 @@ const FriendCard = () => {
     );
 
   return (
-    <div className="flex flex-col w-full text-white items-center justify-center">
+    <div className="flex flex-col w-full text-white items-center justify-center mt-16">
       <Header
         title="User Profile"
         subtitle={`@${findFriend.username}`}
         showBack
-        right={
-          <div className="h-10 w-10 rounded-full overflow-hidden ring-1 ring-white/10 bg-white/10">
-            {findFriend.image ? (
-              <img
-                src={findFriend.image}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            ) : null}
-          </div>
-        }
       />
       {isDeleteUser ? (
-        <div className="">
-          <p>Delete Friend?</p>
-          <div>
-            <div onClick={deletingUser}>
-              <img src="./assets/yes.png" />
-              <button>Yes</button>
-            </div>
-            <div onClick={() => dispatch(deletingFriendUser(false))}>
-              {" "}
-              <img src="./assets/no.png" />
-              <button>No</button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDialog
+          open={isDeleteUser}
+          title="Delete friend?"
+          description={`This will remove @${findFriend.username} from your friends list.`}
+          confirmText="Delete"
+          cancelText="Cancel"
+          tone="danger"
+          onCancel={() => dispatch(deletingFriendUser(false))}
+          onConfirm={deletingUser}
+        />
       ) : null}
       <div className="flex flex-col w-full justify-center items-center pt-10">
         <div
           className="flex flex-col w-full justify-center items-center">
           <div className="flex flex-col">
-            <div className="relative mt-2">
+            <div className="relative">
               <div
                 className="absolute -inset-2 rounded-full blur-xl
                             bg-sky-400/20"
               />
               <div
-                className="relative rounded-full p-[2px]
+                className="h-29 w-29 relative rounded-full p-[2px]
                           bg-gradient-to-b from-sky-300/60 via-indigo-300/20 to-white/10
                           shadow-[0_0_0_1px_rgba(140,230,255,0.35),0_0_26px_rgba(60,170,255,0.25),0_14px_40px_rgba(0,0,0,0.55)]"
               >
@@ -199,9 +185,9 @@ const FriendCard = () => {
           findFriend.friendReq.userRecieveRequest === findFriend.id ? (
             <div className="flex flex-col w-full items-center">
               <p className="bg-[#20274d]/40 h-10 w-[96%] flex items-center justify-center mt-8 
-                            rounded-md border border-[#20274d]/50">Friend request Sent</p>
+                            rounded-xl border border-[#20274d]/10">Friend request Sent</p>
               <button
-                className="mt-1 mb-2 w-[98%] rounded-2xl border border-white/15
+                className="mt-1 mb-2 w-[98%] rounded-xl border border-white/15
                             bg-white/[0.04] backdrop-blur-md p-3 text-sm
                             shadow-[0_0_0_1px_rgba(255,255,255,0.12),0_0_28px_rgba(60,170,255,0.10)]"
                 onClick={cancelRequest}

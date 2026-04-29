@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getFriends } from "../../reducers/usersSlice";
@@ -21,7 +21,7 @@ const Friends = () => {
 
 
   return (
-    <div className="flex flex-col h-full w-full text-white justify-start items-center">
+    <div className="flex flex-col h-full w-full text-white justify-start items-center mt-30">
       <Header
         title="Friends"
         showBack
@@ -41,7 +41,9 @@ const Friends = () => {
 
           </Link>
         }
-      />
+      >
+        {user ? <SearchFriendForm /> : null}
+      </Header>
       {user ? (
         <>
           {" "}
@@ -93,7 +95,6 @@ const Friends = () => {
               </div>
             </Link>
           )}
-          <SearchFriendForm />
           <FriendsList />
         </>
       ) : (

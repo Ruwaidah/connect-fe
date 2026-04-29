@@ -15,13 +15,12 @@ const SearchFriendForm = () => {
     document.getElementById("search-friend-input").click();
   };
 
-
   const onSubmit = (data) => {
     dispatch(findNewFriend(data))
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full px-1">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={`mt-1 flex items-center gap-2 rounded-xl 
                                 border border-white/10 bg-white/5 px-3 py-2

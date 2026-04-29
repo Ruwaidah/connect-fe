@@ -77,7 +77,7 @@ const FriendsList = () => {
   else if (friendsList.length === 0) return <NoFriends />;
 
   return (
-    <div className="w-full px-1 pb-6 mt-2">
+    <div className="w-full px-1 pb-6">
       <div className="flex flex-col gap-3">
         {friendsList.map((u, i) => (
           <div

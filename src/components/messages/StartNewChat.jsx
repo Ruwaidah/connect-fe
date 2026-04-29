@@ -18,7 +18,7 @@ const StartNewChat = () => {
   console.log(friendsList)
 
   return (
-    <div className="w-full h-full text-white flex flex-col">
+    <div className="w-full h-full text-white flex flex-col mt-28">
       <Header
         title="New Chat"
         subtitle="Pick a friend to start"
@@ -78,8 +78,9 @@ const StartNewChat = () => {
             </div>
           </div>
         ) :
-          < div className="flex flex-col gap-2">
-            {friendsList.map((f) => (
+          <div className="flex flex-col gap-2">
+            {friendsList.length<1? <div>No Friend</div> :
+             friendsList.map((f) => (
               <NavLink
                 key={f.friendId}
                 to={`/messages/private/${f.friendId}`}

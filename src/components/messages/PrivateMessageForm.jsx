@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import { socket } from "../../socket";
 import { addIncomingMessage } from "../../reducers/messagesSlice";
 
-
 const PrivateMessageForm = () => {
   const dispatch = useDispatch();
   const { friendid } = useParams();
@@ -27,7 +26,6 @@ const PrivateMessageForm = () => {
     maxLength: { value: 100, message: "Message too long" },
   });
 
-
   const textareaRef = useRef(null);
   const msgValue = watch("msg");
 
@@ -42,7 +40,6 @@ const PrivateMessageForm = () => {
   const onSubmit = ({ msg }) => {
     const myId = Number(localStorage.getItem("id"));
     const receiverId = Number(friend.id);
-
     const optimistic = {
       id: `tmp-${Date.now()}`,
       senderId: myId,
@@ -52,19 +49,14 @@ const PrivateMessageForm = () => {
       create_at: new Date().toISOString(),
       friend: friend,
     };
-
     dispatch(addIncomingMessage({ message: optimistic, myId }));
-
     const clientId = crypto.randomUUID?.() || `c-${Date.now()}`;
-
     socket.emit("SEND_MESSAGE", { senderId: myId, receiverId, text: msg, clientId });
-
-
     reset();
   };
 
   return (
-    <div className="w-full px-1 pb-1">
+    <div className="w-full px-1 pb-1 fixed bottom-0 left-0">
       <form onSubmit={handleSubmit(onSubmit)} className="w-full">
         <div
           className="flex items-end gap-2 rounded-2xl border border-white/15

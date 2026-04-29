@@ -72,7 +72,7 @@ const ProfileForm = () => {
     return <Loading />
   else
     return (
-      <div className="w-full h-full text-white flex flex-col">
+      <div className="w-full h-full text-white flex flex-col mt-26">
         <Header title="Edit Profile" showBack />
         <ProfileImage
           setImg={setImg}

@@ -51,7 +51,7 @@ const AccountSetting = () => {
   const { user } = useSelector((state) => state.user);
 
   return (
-    <div className="w-full h-full text-white flex flex-col">
+    <div className="w-full h-full text-white flex flex-col mt-8">
       <Header
         title="Account"
         subtitle=" Manage your profile and credentials"

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearState } from "../../reducers/usersSlice";
 
 const baseIcon =
@@ -9,6 +9,7 @@ const activeIcon =
 
 const NavBar = () => {
   const dispatch = useDispatch();
+  const { totalUnreadMsgs } = useSelector((state) => state.messages);
 
   const linkClass = ({ isActive }) =>
     `group flex items-center justify-center w-12 h-10 rounded-xl transition
@@ -24,18 +25,34 @@ const NavBar = () => {
       <div className="border-t border-white/10 bg-gray-900/70 backdrop-blur-xl px-4 py-3">
         <div className="flex items-center justify-around">
           <NavLink to="/messages" onClick={() => dispatch(clearState())} className={linkClass}>
-            {({ isActive }) => (<svg className={isActive ? activeIcon : baseIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#cccccc">
-              <path
-                d="M3 7.2C3 6.08 3 5.52 3.218 5.092c.192-.376.498-.682.874-.874C4.52 4 5.08 4 6.2 4h11.6c1.12 0 1.68 0 2.108.218.376.192.682.498.874.874C21 5.52 21 6.08 21 7.2V20l-3.324-1.662A3.3 3.3 0 0 0 16.245 18H6.2c-1.12 0-1.68 0-2.108-.218a2 2 0 0 1-.874-.874C3 16.48 3 15.92 3 14.8V7.2Z"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>)}
+            {({ isActive }) => (
+              <div className="relative">
+                <svg className={isActive ? activeIcon : baseIcon}
+                  width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#cccccc">
+                  <path
+                    d="M3 7.2C3 6.08 3 5.52 3.218 5.092c.192-.376.498-.682.874-.874C4.52 4 5.08 4 6.2 4h11.6c1.12 0 1.68 0 2.108.218.376.192.682.498.874.874C21 5.52 21 6.08 21 7.2V20l-3.324-1.662A3.3 3.3 0 0 0 16.245 18H6.2c-1.12 0-1.68 0-2.108-.218a2 2 0 0 1-.874-.874C3 16.48 3 15.92 3 14.8V7.2Z"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {totalUnreadMsgs > 0 && (
+                  <span
+                    className="absolute -top-2 -right-2 min-w-5 h-5 px-1
+            rounded-full text-[11px] font-semibold
+            flex items-center justify-center
+            bg-sky-400 text-white
+            border border-white/20
+            shadow-[0_0_18px_rgba(60,170,255,0.30)]"
+                  >
+                    {totalUnreadMsgs > 99 ? "99+" : totalUnreadMsgs}
+                  </span>
+                )}
+              </div>)}
           </NavLink>
 
           <NavLink to="/profile" onClick={() => dispatch(clearState())} className={linkClass}>
-           {( <svg className={iconClass} width="18" height="18" viewBox="0 0 32 32" fill="#cccccc">
+            {(<svg className={iconClass} width="18" height="18" viewBox="0 0 32 32" fill="#cccccc">
               <path d="M16,16A7,7,0,1,0,9,9,7,7,0,0,0,16,16ZM16,4a5,5,0,1,1-5,5A5,5,0,0,1,16,4Z" />
               <path d="M17,18H15A11,11,0,0,0,4,29a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1A11,11,0,0,0,17,18ZM6.06,28A9,9,0,0,1,15,20h2a9,9,0,0,1,8.94,8Z" />
             </svg>)}

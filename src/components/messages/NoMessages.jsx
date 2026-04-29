@@ -4,7 +4,6 @@ const NoMessages = () => {
   return (
     <div className="w-full h-full min-h-[calc(100vh-160px)] flex items-center justify-center px-4">
       <div className="w-full max-w-[520px] text-center">
-        {/* Glow + image */}
         <div className="relative mx-auto w-[92px] h-[92px] sm:w-[110px] sm:h-[110px]">
           <div className="absolute -inset-6 rounded-full blur-3xl bg-sky-400/20" />
           <img
@@ -14,7 +13,6 @@ const NoMessages = () => {
           />
         </div>
 
-        {/* Title + subtitle */}
         <h2 className="mt-5 text-[20px] sm:text-[22px] font-semibold text-white drop-shadow-[0_10px_28px_rgba(0,0,0,0.55)]">
           No chats yet
         </h2>
@@ -22,7 +20,6 @@ const NoMessages = () => {
           Start a new conversation with a friend.
         </p>
 
-        {/* Button */}
         <div className="mt-6 flex justify-center">
           <NavLink
             to="/new-chat-friends-list"

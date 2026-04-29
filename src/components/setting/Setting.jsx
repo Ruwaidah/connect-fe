@@ -21,10 +21,10 @@ const Chevron = () => (
 
 const Setting = () => {
   return (
-    <div className="w-full h-full text-white flex flex-col">
+    <div className="w-full h-full text-white flex flex-col mt-6">
       <Header title="Settings" showBack />
 
-      <div className="mx-auto w-full max-w-md px-4 py-5 pb-24 mt-10">
+      <div className="mx-auto w-full max-w-md px-2 py-5 pb-24 mt-10">
         {/* Account */}
         <Link className={itemClass} to="/setting/account">
           <div className={leftWrap}>

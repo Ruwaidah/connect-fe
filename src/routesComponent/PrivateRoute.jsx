@@ -6,6 +6,7 @@ import NavBar from "../components/navBar/NavBar";
 import { socket, connectSocket, disconnectSocket } from "../socket";
 import {
   addIncomingMessage,
+  getMessages,
   setActiveChat,
   clearActiveChat,
   markThreadRead,
@@ -24,6 +25,10 @@ const PrivateRoute = () => {
     if (m?.[1]) dispatch(setActiveChat(m[1]));
     else dispatch(clearActiveChat());
   }, [dispatch, location.pathname]);
+
+  useEffect(() => {
+    dispatch(getMessages());
+  }, [dispatch]);
 
   useEffect(() => {
     if (!token) return;

@@ -1,9 +1,11 @@
 import { useMemo } from "react";
+import Header from "../header/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { findNewFriend } from "../../reducers/usersSlice";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import Icon from "../homePage/Auth/formInput/Icon";
+import SearchFriendForm from "./SearchFriendForm";
 
 const AddNewFriendForm = () => {
   const navigate = useNavigate();
@@ -40,79 +42,16 @@ const AddNewFriendForm = () => {
   if (hasResult && isMe) return <Navigate to="/profile" />;
 
   return (
-    <div className="w-full min-h-[100svh] text-white flex flex-col">
+    <div className="w-full min-h-[100svh] text-white flex flex-col mt-26">
       {/* Header */}
-      <div className="h-16 w-full px-4 flex items-center gap-3
-                      border-b border-white/10 bg-white/[0.03] backdrop-blur-md">
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="h-10 w-10 rounded-xl border border-white/10 bg-white/[0.03]
-                     grid place-items-center text-white/80
-                     hover:bg-white/[0.06] hover:text-white transition
-                     shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
-          aria-label="Back"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M15 18l-6-6 6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-
-        <div className="flex-1 text-center">
-          <p className="font-semibold leading-none">Find Friend</p>
-          <p className="text-[11px] text-white/50 mt-1">Search by username</p>
-        </div>
-
-        <div className="w-10" />
-      </div>
-
-      {/* Search */}
-      <div className="px-1 pt-4">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div
-            className={`flex items-center gap-2 rounded-2xl px-3 py-2
-                        border bg-white/[0.04] backdrop-blur-md
-                        shadow-[0_0_0_1px_rgba(255,255,255,0.10),0_0_22px_rgba(60,170,255,0.08)]
-                        transition
-                        ${errors.username ? "border-red-400/60" : "border-white/15"}
-                        focus-within:border-sky-200/35 focus-within:bg-white/[0.06]`}
-          >
-            <span className="h-9 w-9 rounded-xl bg-white/[0.05] border border-white/10 grid place-items-center text-white/70">
-              <Icon kind="search" />
-            </span>
-
-            <input
-              className="w-full bg-transparent outline-none text-sm text-white
-                         placeholder:text-white/35"
-              placeholder="Search username..."
-              type="text"
-              autoComplete="off"
-              {...register("username", {
-                required: "Username is required",
-                minLength: { value: 2, message: "Too short" },
-              })}
-            />
-
-            <button
-              type="submit"
-              disabled={findFriendLoading || !usernameValue?.trim()}
-              className={`h-9 px-4 rounded-xl text-sm font-semibold border transition
-                          active:scale-[0.99]
-                          ${findFriendLoading || !usernameValue?.trim()
-                  ? "border-white/10 bg-white/[0.03] text-white/40"
-                  : "border-sky-300/25 bg-sky-500/15 text-white hover:bg-sky-400/20 hover:border-sky-200/40"
-                }`}
-            >
-              {findFriendLoading ? "Searching..." : "Search"}
-            </button>
-          </div>
-
-          <div className="min-h-[18px] mt-2 text-xs text-red-300">
-            {errors.username?.message || ""}
-          </div>
-        </form>
-      </div>
-
+      <Header
+        title="Find Friend"
+        subtitle="Search by username"
+        showBack
+        right={<div className="w-10" />}
+      >
+        <SearchFriendForm />
+      </Header>
       {/* Results */}
       <div className="flex-1 px-1 pb-[calc(env(safe-area-inset-bottom)+16px)]">
         {findFriendLoading ? (
@@ -123,7 +62,7 @@ const AddNewFriendForm = () => {
           </div>
         ) : hasNoMatch ? (
           <div className="mt-10 flex justify-center">
-            <div className="rounded-2xl border border-white/12 bg-white/[0.04] backdrop-blur-md px-5 py-4 text-center">
+            <div className="px-5 py-4 text-center">
               <p className="font-medium">No match</p>
               <p className="text-sm text-white/60 mt-1">Try another username.</p>
             </div>
@@ -166,7 +105,7 @@ const AddNewFriendForm = () => {
           </div>
         ) : (
           <div className="mt-10 flex justify-center">
-            <div className="rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-md px-6 py-6 text-center">
+            <div className="px-2 pt-6 text-center">
               <p className="font-medium">Find friends</p>
               <p className="text-sm text-white/60 mt-1">
                 Search by username to send a friend request.

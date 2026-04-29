@@ -7,7 +7,7 @@ const EditEmail = () => {
     const { user } = useSelector((state) => state.user);
 
     return (
-        <div className="w-full h-full text-white flex flex-col">
+        <div className="w-full h-full text-white flex flex-col mt-10">
             <Header title="Email" showBack>
                 <p className="text-xs text-[#7a789a]">
                     Enter your new email address

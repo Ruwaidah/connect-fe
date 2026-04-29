@@ -61,12 +61,12 @@ const EditPasswordForm = () => {
 
     return (
         <div className="flex flex-col w-full items-center">
-            <p className="text-xs text-[#7a789a] text-center w-[80%]">
+            <p className="w-full text-xs text-[#7a789a] text-start px-2 mb-4">
                 Enter your current password and a new password to change it
             </p>
 
             <form
-                className="mt-24 w-full flex flex-col justify-center items-center"
+                className="w-full flex flex-col justify-center items-center"
                 onSubmit={handleSubmit(onSubmit)}
             >
                 {/* Current Password */}

@@ -7,7 +7,7 @@ const EditPassword = () => {
   const { user } = useSelector((state) => state.user);
 
   return (
-    <div className="w-full h-full text-white flex flex-col">
+    <div className="w-full h-full text-white flex flex-col mt-18">
       <Header title="Password"
         subtitle="Update your password securely"
         showBack>

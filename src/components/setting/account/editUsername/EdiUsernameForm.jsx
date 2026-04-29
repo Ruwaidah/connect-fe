@@ -83,10 +83,10 @@ const EditUsernameForm = () => {
                 {isDirty && usernameChanged && (
                     <p
                         className={`mt-2 text-sm ${errors.username
-                                ? "text-[#ff5a5f] drop-shadow-[0_0_8px_rgba(255,90,95,0.5)]"
-                                : isUsernameAvailable
-                                    ? "text-[#3dff8f] drop-shadow-[0_0_8px_rgba(61,255,143,0.5)]"
-                                    : "text-[#ff5a5f] drop-shadow-[0_0_8px_rgba(255,90,95,0.5)]"
+                            ? "text-[#ff5a5f] drop-shadow-[0_0_8px_rgba(255,90,95,0.5)]"
+                            : isUsernameAvailable
+                                ? "text-[#3dff8f] drop-shadow-[0_0_8px_rgba(61,255,143,0.5)]"
+                                : "text-[#ff5a5f] drop-shadow-[0_0_8px_rgba(255,90,95,0.5)]"
                             }`}
                     >
                         {errors.username?.message ||
