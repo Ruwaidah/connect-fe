@@ -71,7 +71,6 @@ const messagesSlice = createSlice({
       const thread = state.messages[friendId];
       thread.messages ||= [];
 
-      // dedupe
       if (msg.id && thread.messages.some((m) => m.id === msg.id)) return;
 
       const chatOpen = String(state.activeChatFriendId) === friendId;

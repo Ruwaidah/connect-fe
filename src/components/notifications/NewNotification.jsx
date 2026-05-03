@@ -26,7 +26,7 @@ const NewNotification = () => {
       // dispatch(receivedMsg(data));
     });
   }, []);
-  return <UnderConstruction imageSrc="/assets/under-construction01.png"/>
+  return <UnderConstruction imageSrc="/assets/under-construction01.png" />
 };
 
 export default NewNotification;

@@ -41,9 +41,7 @@ const ProfileImage = ({ setImg, setIsImageChange }) => {
             alt="Profile"
           />
         </div>
-
         {errorImage && <p className="text-red-400 text-xs mt-2">{errorImage}</p>}
-
         <input
           className="hidden"
           type="file"
@@ -51,7 +49,6 @@ const ProfileImage = ({ setImg, setIsImageChange }) => {
           accept="image/png,image/jpeg"
           onChange={changeImage}
         />
-
         <button
           type="button"
           className="bg-[#20274d]/70 h-10 text-sm flex items-center mt-4

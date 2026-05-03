@@ -65,11 +65,6 @@ const LoginForm = () => {
                 </button>
             </div>
         </div>
-        {/* <input
-            className="mt-5 w-full cursor-pointer rounded-xl bg-[#3261d5] px-4 py-3 font-normal shadow-[0_8px_30px_rgba(59,130,246,0.22)]"
-            type="submit"
-            value="Login"
-        /> */}
         <button
             type="submit"
             disabled={isAuthLoading}

@@ -7,9 +7,7 @@ import { useNavigate } from "react-router-dom";
 const EditUsernameForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { isUsernameAvailable, isUserUpdated, user } = useSelector((state) => state.user);
-
     const {
         register,
         handleSubmit,
@@ -24,7 +22,6 @@ const EditUsernameForm = () => {
 
     const usernameValue = watch("username");
     const usernameChanged = usernameValue && user && usernameValue !== user.username;
-
     const disableForUsername = usernameChanged && isUsernameAvailable === false;
     const disableForErrors = Object.keys(errors).length > 0;
     const isSubmitDisabled = disableForUsername || disableForErrors || !usernameChanged;
@@ -55,7 +52,6 @@ const EditUsernameForm = () => {
                    shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_18px_55px_rgba(0,0,0,0.35)]"
             >
                 <p className="mb-2 text-sm text-white/80">New Username</p>
-
                 <input
                     type="text"
                     onKeyDown={(e) => {
@@ -79,7 +75,6 @@ const EditUsernameForm = () => {
                         },
                     })}
                 />
-
                 {isDirty && usernameChanged && (
                     <p
                         className={`mt-2 text-sm ${errors.username
@@ -94,7 +89,6 @@ const EditUsernameForm = () => {
                     </p>
                 )}
             </div>
-
             {/* Rules */}
             <ol
                 className="w-[98%] list-disc list-inside text-xs rounded-3xl
@@ -130,7 +124,6 @@ const EditUsernameForm = () => {
                 >
                     Save Username
                 </button>
-
                 <button
                     type="button"
                     onClick={cancelEdit}

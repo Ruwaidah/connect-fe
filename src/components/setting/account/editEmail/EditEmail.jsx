@@ -13,7 +13,6 @@ const EditEmail = () => {
                     Enter your new email address
                 </p>
             </Header>
-
             <div className="mx-auto w-full max-w-md px-4 py-6 pb-24">
                 {!user ? <Loading /> : <EditEmailForm />}
             </div>

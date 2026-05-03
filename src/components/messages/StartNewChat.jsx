@@ -36,7 +36,6 @@ const StartNewChat = () => {
         }>
         <SearchFriendForm />
       </Header>
-
       <div className="mx-auto w-full max-w-md px-1 pt-1 pb-24 flex-1">
         {friendsList?.length < 1 ? (
           <div className="mt-1 w-full flex items-center justify-center">
@@ -49,14 +48,12 @@ const StartNewChat = () => {
                   className="relative w-24 h-24 object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.45)]"
                 />
               </div>
-
               <h2 className="mt-4 text-lg font-semibold text-white/90">
                 No friends found
               </h2>
               <p className="mt-1 text-xs text-white/60">
                 Invite friends to start chatting.
               </p>
-
               <NavLink
                 to="/addnewfriend"
                 className="mt-5 mx-auto h-11 w-full max-w-[260px] rounded-2xl
@@ -79,57 +76,57 @@ const StartNewChat = () => {
           </div>
         ) :
           <div className="flex flex-col gap-2">
-            {friendsList.length<1? <div>No Friend</div> :
-             friendsList.map((f) => (
-              <NavLink
-                key={f.friendId}
-                to={`/messages/private/${f.friendId}`}
-                className="group w-full rounded-2xl border border-white/12 bg-white/[0.04] backdrop-blur-xl
+            {friendsList.length < 1 ? <div>No Friend</div> :
+              friendsList.map((f) => (
+                <NavLink
+                  key={f.friendId}
+                  to={`/messages/private/${f.friendId}`}
+                  className="group w-full rounded-2xl border border-white/12 bg-white/[0.04] backdrop-blur-xl
                  px-3 py-3 flex items-center gap-3
                  shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.25)]
                  hover:border-sky-200/30 hover:bg-white/[0.06]
                  transition"
-              >
-                <div className="relative shrink-0">
-                  <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/10 opacity-0 group-hover:opacity-100 transition" />
-                  {f.image ? (
-                    <img
-                      src={f.image}
-                      alt=""
-                      className="relative h-12 w-12 rounded-full object-cover ring-1 ring-white/10"
-                    />
-                  ) : (
-                    <div className="relative h-12 w-12 rounded-full bg-white/10 ring-1 ring-white/10" />
-                  )}
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-white/90 truncate">
-                    {f.firstName} {f.lastName}
-                  </p>
-                  <p className="text-xs text-white/55 truncate">@{f.username}</p>
-                  <p className="mt-1 text-[11px] text-white/60 truncate">
-                    {f.bio ? f.bio : "No status"}
-                  </p>
-                </div>
-
-                <svg
-                  className="shrink-0 text-white/40 group-hover:text-white/70 transition"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
                 >
-                  <path
-                    d="M9 18l6-6-6-6"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </NavLink>
-            ))}
+                  <div className="relative shrink-0">
+                    <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/10 opacity-0 group-hover:opacity-100 transition" />
+                    {f.image ? (
+                      <img
+                        src={f.image}
+                        alt=""
+                        className="relative h-12 w-12 rounded-full object-cover ring-1 ring-white/10"
+                      />
+                    ) : (
+                      <div className="relative h-12 w-12 rounded-full bg-white/10 ring-1 ring-white/10" />
+                    )}
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-white/90 truncate">
+                      {f.firstName} {f.lastName}
+                    </p>
+                    <p className="text-xs text-white/55 truncate">@{f.username}</p>
+                    <p className="mt-1 text-[11px] text-white/60 truncate">
+                      {f.bio ? f.bio : "No status"}
+                    </p>
+                  </div>
+
+                  <svg
+                    className="shrink-0 text-white/40 group-hover:text-white/70 transition"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path
+                      d="M9 18l6-6-6-6"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </NavLink>
+              ))}
           </div>
         }
       </div>

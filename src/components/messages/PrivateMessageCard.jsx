@@ -118,10 +118,8 @@ const PrivateMessageCard = () => {
               );
             })
           )}
-
           <div ref={messagesEndRef} />
         </div>
-
         <div className="pb-2 px-2">
           <PrivateMessageForm />
         </div>

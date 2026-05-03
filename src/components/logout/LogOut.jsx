@@ -1,4 +1,3 @@
-// import "./LogOut.css";
 import { useDispatch } from "react-redux";
 import { logout } from "../../reducers/usersSlice";
 import { NavLink } from "react-router-dom";
@@ -21,9 +20,7 @@ const LogOut = () => {
       >
         <img className="w-6 h-6"
           src="./assets/logout-icon.png" />
-
         <span className="ml-4 text-[#e497b3]">Log Out</span>
-
       </NavLink>
     </div>
   );

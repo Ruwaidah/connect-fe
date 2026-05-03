@@ -49,7 +49,6 @@ const ResetPassword = () => {
             )}
           </div>
         </div>
-
         <p className="text-center text-xs text-white/40 mt-4">
           Secure recovery • Connect
         </p>
