@@ -1,122 +1,256 @@
 import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import {
+  Navigate,
+  NavLink,
+} from "react-router-dom";
+
 import Header from "../header/Header";
-import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
-import { findNewFriend } from "../../reducers/usersSlice";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
-import Icon from "../homePage/Auth/formInput/Icon";
 import SearchFriendForm from "./SearchFriendForm";
+import Loading from "../loading/Loading";
 
 const AddNewFriendForm = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { findFriendLoading, findFriend } = useSelector((state) => state.user);
-
   const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({
-    defaultValues: { username: "" },
-    mode: "onSubmit",
-  });
+    findFriendLoading,
+    findFriend,
+  } = useSelector((state) => state.user);
 
-  const usernameValue = watch("username");
-
-  const onSubmit = ({ username }) => {
-    const value = username?.trim();
-    if (!value) return;
-    dispatch(findNewFriend({ username: value }));
-  };
+  const currentUserId = localStorage.getItem("id");
 
   const isMe = useMemo(() => {
-    if (!findFriend?.id) return false;
-    return String(findFriend.id) === String(localStorage.getItem("id"));
-  }, [findFriend]);
+    if (!findFriend?.id || !currentUserId) {
+      return false;
+    }
 
-  const hasNoMatch = Boolean(findFriend?.message);
-  const hasResult = Boolean(findFriend?.id) && !hasNoMatch;
+    return (
+      String(findFriend.id) ===
+      String(currentUserId)
+    );
+  }, [findFriend?.id, currentUserId]);
 
-  if (hasResult && isMe) return <Navigate to="/profile" />;
+  const hasNoMatch = Boolean(
+    findFriend?.message && !findFriend?.id
+  );
+
+  const hasResult = Boolean(
+    findFriend?.id && !findFriend?.message
+  );
+
+  if (hasResult && isMe) {
+    return <Navigate to="/profile" replace />;
+  }
+
+  const initials =
+    `${findFriend?.firstName?.charAt(0) || ""}${findFriend?.lastName?.charAt(0) || ""
+    }` || "U";
 
   return (
-    <div className="w-full min-h-[100svh] text-white flex flex-col mt-26">
-      {/* Header */}
+    <div className="min-h-[100dvh] w-full text-white">
       <Header
         title="Find Friend"
         subtitle="Search by username"
         showBack
-        right={<div className="w-10" />}
       >
         <SearchFriendForm />
       </Header>
-      {/* Results */}
-      <div className="flex-1 px-1 pb-[calc(env(safe-area-inset-bottom)+16px)]">
+
+      <main
+        className="
+          mx-auto flex min-h-[100dvh] w-full
+          max-w-[520px] flex-col
+          px-3 pb-[96px] pt-[112px]
+        "
+      >
         {findFriendLoading ? (
-          <div className="mt-10 flex justify-center">
-            <div className="rounded-2xl border border-white/12 bg-white/[0.04] backdrop-blur-md px-5 py-4">
-              <p className="text-sm text-white/80">Searching...</p>
-            </div>
+          <div className="flex flex-1 items-center justify-center">
+            <Loading />
           </div>
         ) : hasNoMatch ? (
-          <div className="mt-10 flex justify-center">
-            <div className="px-5 py-4 text-center">
-              <p className="font-medium">No match</p>
-              <p className="text-sm text-white/60 mt-1">Try another username.</p>
+          <div className="flex flex-1 items-center justify-center px-4">
+            <div className="w-full max-w-[360px] text-center">
+              <div
+                className="
+                  mx-auto grid h-20 w-20 place-items-center
+                  rounded-full border border-white/10
+                  bg-white/[0.04]
+                  text-white/45
+                  shadow-[0_0_30px_rgba(56,189,248,0.08)]
+                "
+              >
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="7"
+                    strokeWidth="1.5"
+                  />
+
+                  <path
+                    d="m20 20-4-4"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+
+                  <path
+                    d="M8.5 8.5l5 5M13.5 8.5l-5 5"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+
+              <h2 className="mt-5 text-xl font-semibold text-white">
+                No friend found
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-white/55">
+                We could not find anyone with that username.
+                Check the spelling and try again.
+              </p>
             </div>
           </div>
         ) : hasResult ? (
-          <div className="mt-4">
+          <div className="pt-3">
+            <p className="mb-3 px-1 text-xs font-medium uppercase tracking-wide text-white/40">
+              Search result
+            </p>
+
             <NavLink
               to={`/friend/profile/${findFriend.id}`}
-              className="group w-full rounded-2xl border border-white/15 bg-white/[0.04]
-                         backdrop-blur-md p-3 flex items-center gap-3
-                         shadow-[0_0_0_1px_rgba(255,255,255,0.10),0_0_22px_rgba(60,170,255,0.08)]
-                         hover:border-sky-200/30 hover:bg-white/[0.06] transition"
+              className="
+                group flex w-full items-center gap-3
+                rounded-2xl border border-white/10
+                bg-[#0b1220]/55 p-3
+                backdrop-blur-xl
+                shadow-[0_8px_28px_rgba(0,0,0,0.22),0_0_0_1px_rgba(255,255,255,0.04)]
+                transition
+                hover:border-sky-300/30
+                hover:bg-[#142342]/65
+                hover:shadow-[0_12px_34px_rgba(0,0,0,0.28),0_0_22px_rgba(60,170,255,0.10)]
+              "
             >
-              <div className="relative">
-                <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/10 opacity-0 group-hover:opacity-100 transition" />
-                {findFriend.image ? (
-                  <img
-                    src={findFriend.image}
-                    alt=""
-                    className="relative h-12 w-12 rounded-full object-cover ring-1 ring-white/15"
-                  />
-                ) : (
-                  <div className="relative h-12 w-12 rounded-full bg-white/10 ring-1 ring-white/10" />
-                )}
+              <div className="relative shrink-0">
+                <div
+                  className="
+                    absolute -inset-1 rounded-full
+                    bg-sky-400/20 opacity-0 blur-lg
+                    transition group-hover:opacity-100
+                  "
+                />
+
+                <div
+                  className="
+                    relative rounded-full p-[2px]
+                    bg-gradient-to-b
+                    from-sky-300/60
+                    via-indigo-300/20
+                    to-white/10
+                  "
+                >
+                  {findFriend.image ? (
+                    <img
+                      src={findFriend.image}
+                      alt={`${findFriend.firstName || ""} ${findFriend.lastName || ""
+                        }`}
+                      className="
+                        h-14 w-14 rounded-full
+                        object-cover ring-1 ring-white/10
+                      "
+                    />
+                  ) : (
+                    <div
+                      className="
+                        grid h-14 w-14 place-items-center
+                        rounded-full bg-white/10
+                        text-sm font-semibold text-white/70
+                        ring-1 ring-white/10
+                      "
+                    >
+                      {initials}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <div className="min-w-0">
-                <p className="font-medium truncate">
-                  {findFriend.firstName} {findFriend.lastName}
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-white">
+                  {findFriend.firstName}{" "}
+                  {findFriend.lastName}
                 </p>
-                <p className="text-xs text-white/60 truncate">@{findFriend.username}</p>
+
+                {findFriend.username ? (
+                  <p className="mt-0.5 truncate text-xs text-sky-200/75">
+                    @{findFriend.username}
+                  </p>
+                ) : null}
+
+                <p className="mt-1 truncate text-xs text-white/45">
+                  {findFriend.bio || "No status"}
+                </p>
               </div>
 
-              <div className="ml-auto text-white/60 group-hover:text-white transition">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path d="M9 18l6-6-6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              <div
+                className="
+                  grid h-10 w-10 shrink-0 place-items-center
+                  rounded-xl border border-white/10
+                  bg-white/[0.03] text-white/35
+                  transition
+                  group-hover:border-sky-300/20
+                  group-hover:bg-white/[0.06]
+                  group-hover:text-white/75
+                "
+              >
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="m9 18 6-6-6-6"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </div>
             </NavLink>
           </div>
         ) : (
-          <div className="mt-10 flex justify-center">
-            <div className="px-2 pt-6 text-center">
-              <p className="font-medium">Find friends</p>
-              <p className="text-sm text-white/60 mt-1">
-                Search by username to send a friend request.
-              </p>
-              <div className="mt-4 flex justify-center">
-                <img className="w-28 opacity-80" src="./assets/find-friend.png" alt="Find friend" />
+          <div className="flex flex-1 items-center justify-center px-4">
+            <div className="w-full max-w-[360px] text-center">
+              <div className="relative mx-auto h-28 w-28">
+                <div className="absolute -inset-5 rounded-full bg-sky-400/15 blur-3xl" />
+
+                <img
+                  src="/assets/find-friend.png"
+                  alt="Find a friend"
+                  className="
+                    relative h-full w-full object-contain
+                    drop-shadow-[0_14px_30px_rgba(0,0,0,0.45)]
+                  "
+                />
               </div>
+
+              <h2 className="mt-5 text-xl font-semibold text-white">
+                Find new friends
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-white/55">
+                Enter a username above to find someone and
+                send a friend request.
+              </p>
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

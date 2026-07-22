@@ -1,52 +1,137 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { checkEmail, clearEditCancel, updateUser } from "../../../../reducers/usersSlice";
+
+import {
+    checkEmail,
+    clearEditCancel,
+    updateUser,
+} from "../../../../reducers/usersSlice";
 
 const EditEmailForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { isEmailAvailable, isUserUpdated, user,
+    const {
+        user,
+        isEmailAvailable,
+        isUserUpdated,
+        isUserUpdateLoading,
+        isUserUpdateError,
+        userUpdateErrorMessage,
     } = useSelector((state) => state.user);
+
+    const [isCheckingEmail, setIsCheckingEmail] =
+        useState(false);
 
     const {
         register,
         handleSubmit,
-        formState: { errors, isDirty, isValid },
         reset,
         watch,
+        formState: {
+            errors,
+            isDirty,
+            isValid,
+        },
     } = useForm({
-        defaultValues: { email: "" },
+        defaultValues: {
+            email: "",
+        },
         mode: "onChange",
         reValidateMode: "onChange",
     });
 
     useEffect(() => {
-        if (user?.email) reset({ email: user.email });
-    }, [user, reset]);
+        if (!user?.email) return;
 
-    const emailValue = watch("email") || "";
-    const emailChanged = user?.email && emailValue.trim() !== user.email;
+        reset({
+            email: user.email,
+        });
+    }, [user?.email, reset]);
 
-    const disableForEmail = emailChanged && isEmailAvailable === false;
-    const isSubmitDisabled = !emailChanged || disableForEmail || !isValid;
+    const emailValue = watch("email", "").trim();
 
+    const originalEmail =
+        user?.email?.trim().toLowerCase() || "";
+
+    const normalizedEmail =
+        emailValue.toLowerCase();
+
+    const emailChanged =
+        Boolean(originalEmail) &&
+        normalizedEmail !== originalEmail;
 
     useEffect(() => {
-        if (!user?.email) return;
-        if (errors.email) return;
-        if (!emailChanged) return;
+        if (!emailChanged || errors.email || !emailValue) {
+            setIsCheckingEmail(false);
+            return;
+        }
 
-        dispatch(checkEmail({ email: emailValue.trim() }));
-    }, [dispatch, user, emailValue, emailChanged, errors.email]);
+        setIsCheckingEmail(true);
 
+        const timer = setTimeout(async () => {
+            try {
+                await dispatch(
+                    checkEmail({
+                        email: normalizedEmail,
+                    })
+                ).unwrap();
+            } catch (error) {
+                console.error("Email check failed:", error);
+            } finally {
+                setIsCheckingEmail(false);
+            }
+        }, 500);
 
-    const onSubmit = (data) => {
-        const email = (data.email || "").trim();
-        dispatch(updateUser({ email }));
-        reset({ email });
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [
+        dispatch,
+        normalizedEmail,
+        emailValue,
+        emailChanged,
+        errors.email,
+    ]);
+
+    const emailUnavailable =
+        emailChanged &&
+        !isCheckingEmail &&
+        isEmailAvailable === false;
+
+    const emailAvailable =
+        emailChanged &&
+        !isCheckingEmail &&
+        isEmailAvailable === true;
+
+    const submitDisabled =
+        !isDirty ||
+        !emailChanged ||
+        !isValid ||
+        !emailAvailable ||
+        isCheckingEmail ||
+        isUserUpdateLoading;
+
+    const onSubmit = async (data) => {
+        const email = data.email.trim().toLowerCase();
+
+        if (submitDisabled) return;
+
+        try {
+            await dispatch(
+                updateUser({
+                    email,
+                })
+            ).unwrap();
+
+            reset({
+                email,
+            });
+        } catch (error) {
+            console.error("Email update failed:", error);
+        }
     };
 
     const cancelEdit = () => {
@@ -54,91 +139,224 @@ const EditEmailForm = () => {
         navigate(-1);
     };
 
-    const inputClass = `w-full rounded-xl px-4 py-2 text-white placeholder-white/40
-  bg-white/0 backdrop-blur-xs border focus:outline-none transition
-  ${errors.email || (isDirty && emailChanged && isEmailAvailable === false)
-            ? "border-[#ff5a5f]/60 shadow-[0_0_0_1px_rgba(255,90,95,0.6),0_0_12px_rgba(255,90,95,0.35),0_0_28px_rgba(255,90,95,0.25)]"
-            : "border-sky-300/35 shadow-[0_0_0_1px_rgba(110,200,255,0.35),0_0_18px_rgba(60,160,255,0.25),inset_0_0_18px_rgba(120,220,255,0.10)] focus:border-sky-200/70 focus:shadow-[0_0_0_1px_rgba(140,230,255,0.60),0_0_24px_rgba(60,170,255,0.35),0_0_70px_rgba(60,140,255,0.18),inset_0_0_18px_rgba(150,240,255,0.16)]"
-        }`;
+    const inputClass = `
+    h-12 w-full rounded-xl border
+    bg-white/[0.05] px-4
+    text-sm text-white
+    outline-none backdrop-blur-md
+    transition
+    placeholder:text-white/30
+    ${errors.email || emailUnavailable
+            ? `
+          border-rose-400/55
+          shadow-[0_0_0_1px_rgba(255,90,95,0.25),0_0_18px_rgba(255,90,95,0.14)]`
+            : emailAvailable
+                ? `
+            border-emerald-400/45
+            shadow-[0_0_0_1px_rgba(52,211,153,0.18),0_0_18px_rgba(52,211,153,0.12)]`
+                : `
+            border-white/15
+            shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]
+            focus:border-sky-200/55
+            focus:bg-white/[0.07]
+            focus:ring-2
+            focus:ring-sky-300/15`}`;
 
     return (
         <form
-            className="mt-14 w-full h-[60%] flex flex-col justify-center items-center"
             onSubmit={handleSubmit(onSubmit)}
+            className="mx-auto w-full max-w-[460px] space-y-5"
         >
-            <div className="flex flex-col w-full justify-center items-center">
-                <div className="w-[98%]">
-                    <p className="mb-2 ml-1 text-md text-[#7a789a]">
-                        Enter your new email address
-                    </p>
+            <section
+                className="
+          rounded-2xl border border-white/10
+          bg-[#0b1220]/35 p-5
+          backdrop-blur-xl
+          shadow-[0_8px_28px_rgba(0,0,0,0.22),0_0_0_1px_rgba(255,255,255,0.04)]
+        "
+            >
+                <label
+                    htmlFor="email"
+                    className="mb-2 block text-sm font-medium text-white/75"
+                >
+                    New email address
+                </label>
 
-                    <input
-                        type="email"
-                        onKeyDown={(e) => {
-                            if (e.key === " ") e.preventDefault();
-                        }}
-                        className={inputClass}
-                        {...register("email", {
-                            setValueAs: (v) => (v || "").trim(),
-                            required: { value: true, message: "Email is required" },
-                            pattern: {
-                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: "Invalid email format",
-                            },
-                        })}
-                    />
-
-                    <div className="h-12 flex items-center">
-                        {errors.email ? (
-                            <p className="ml-2 text-sm text-[#ff5a5f] drop-shadow-[0_0_8px_rgba(255,90,95,0.5)]">
-                                {errors.email.message}
-                            </p>
-                        ) : isDirty && emailChanged ? (
-                            isEmailAvailable === true ? (
-                                <p className="ml-2 text-sm text-[#3dff8f] drop-shadow-[0_0_8px_rgba(61,255,143,0.5)]">
-                                    Email available
-                                </p>
-                            ) : isEmailAvailable === false ? (
-                                <p className="ml-2 text-sm text-[#ff5a5f] drop-shadow-[0_0_8px_rgba(255,90,95,0.5)]">
-                                    Email unavailable
-                                </p>
-                            ) : (
-                                <p className="ml-2 text-sm text-white/50">Checking…</p>
-                            )
-                        ) : isUserUpdated ? (
-                            <p className="flex items-center gap-2 rounded-xl bg-[#3dff8f]/10 px-4 py-3 text-[#3dff8f]
-    shadow-[0_0_18px_rgba(61,255,143,0.35)]">
-                                Email updated successfully 🚀
-                            </p>
-                        ) : null}
-                    </div>
-
-                </div>
-            </div>
-
-            <div className="w-full flex items-center justify-around">
                 <input
-                    type="submit"
-                    value="Save"
-                    disabled={isSubmitDisabled}
-                    className={`
-            rounded-xl px-10 py-1 text-white w-[48%] transition active:scale-[0.99]
-            ${isSubmitDisabled
-                            ? "bg-white/[0.03] opacity-50 cursor-not-allowed border border-white/10"
-                            : "bg-sky-500/20 border border-sky-300/35 shadow-[0_0_0_1px_rgba(120,220,255,0.35),0_10px_30px_rgba(40,120,255,0.20),0_0_30px_rgba(80,200,255,0.18)] hover:bg-sky-400/25 hover:shadow-[0_0_0_1px_rgba(160,240,255,0.45),0_12px_34px_rgba(40,120,255,0.25),0_0_40px_rgba(80,200,255,0.22)]"
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="name@example.com"
+                    className={inputClass}
+                    onKeyDown={(event) => {
+                        if (event.key === " ") {
+                            event.preventDefault();
                         }
-          `}
+                    }}
+                    {...register("email", {
+                        setValueAs: (value) =>
+                            String(value || "")
+                                .trim()
+                                .toLowerCase(),
+                        required: "Email is required.",
+                        pattern: {
+                            value:
+                                /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message:
+                                "Enter a valid email address.",
+                        },
+                    })}
                 />
 
-                <button
+                <div className="mt-2 min-h-5 px-1">
+                    {errors.email ? (
+                        <p className="text-xs text-rose-300">
+                            {errors.email.message}
+                        </p>
+                    ) : isCheckingEmail ? (
+                        <p className="flex items-center gap-2 text-xs text-white/50">
+                            <span
+                                className="
+                            h-3.5 w-3.5 animate-spin
+                            rounded-full border-2
+                            border-white/20 border-t-sky-200"/>
+                            Checking email availability...
+                        </p>
+                    ) : emailUnavailable ? (
+                        <p className="flex items-center gap-1.5 text-xs text-rose-300">
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                    strokeWidth="1.7"
+                                />
+
+                                <path
+                                    d="m9 9 6 6m0-6-6 6"
+                                    strokeWidth="1.7"
+                                    strokeLinecap="round"
+                                />
+                            </svg>
+
+                            This email is already in use.
+                        </p>
+                    ) : emailAvailable ? (
+                        <p className="flex items-center gap-1.5 text-xs text-emerald-300">
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    d="m5 12 4 4L19 6"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+
+                            Email is available.
+                        </p>
+                    ) : !emailChanged && emailValue ? (
+                        <p className="text-xs text-white/35">
+                            This is your current email address.
+                        </p>
+                    ) : (
+                        <p className="text-xs text-white/35">
+                            We will use this address for account
+                            notifications and recovery.
+                        </p>
+                    )}
+                </div>
+            </section>
+
+            {isUserUpdated ? (
+                <div
                     className="
-            rounded-xl px-10 py-1 text-white/60 w-[48%]
-            bg-white/[0.03] border border-white/10
-            shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]
-            hover:text-white/80 hover:border-white/15 transition"
+                    flex items-center gap-3
+                    rounded-xl border border-emerald-400/20
+                    bg-emerald-500/10 px-4 py-3
+                    text-sm text-emerald-200">
+                    <div
+                        className="
+                    grid h-8 w-8 shrink-0 place-items-center
+                    rounded-lg bg-emerald-400/10">
+                        <svg
+                            width="17"
+                            height="17"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor">
+                            <path
+                                d="m5 12 4 4L19 6"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                    </div>
+
+                    Email updated successfully.
+                </div>
+            ) : null}
+
+            {isUserUpdateError ? (
+                <div
+                    role="alert"
+                    className="
+            rounded-xl border border-rose-400/25
+            bg-rose-500/10 px-4 py-3
+            text-sm text-rose-200
+          "
+                >
+                    {userUpdateErrorMessage ||
+                        "Unable to update your email."}
+                </div>
+            ) : null}
+
+            <div className="space-y-3">
+                <button
+                    type="submit"
+                    disabled={submitDisabled}
+                    className={`
+                    flex h-12 w-full items-center justify-center
+                    rounded-xl border text-sm font-semibold transition
+                    active:scale-[0.99]
+                    ${submitDisabled
+                            ? `
+                    cursor-not-allowed
+                    border-white/10
+                    bg-[#111827]/70
+                    text-white/35
+                        `: `
+                    border-sky-300/35
+                    bg-sky-500/25
+                    text-white
+                    shadow-[0_10px_30px_rgba(40,120,255,0.18)]
+                    hover:bg-sky-400/30`}`}>
+                    {isUserUpdateLoading ? "Saving email..." : "Save Email"}
+                </button>
+                <button
                     type="button"
                     onClick={cancelEdit}
-                >
+                    disabled={isUserUpdateLoading}
+                    className="
+                    h-12 w-full rounded-xl
+                    border border-white/10
+                    bg-[#111827]/65
+                    text-sm font-medium text-white/70
+                    transition
+                    hover:bg-[#182033]/80
+                    hover:text-white">
                     Cancel
                 </button>
             </div>

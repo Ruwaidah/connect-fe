@@ -1,147 +1,155 @@
 import { Link } from "react-router-dom";
+
 import LogOut from "../logout/LogOut.jsx";
 import Header from "../header/Header";
 
-const itemClass =
-  "w-full h-14 rounded-2xl px-3 flex items-center justify-between gap-3 " +
-  "border border-white/12 bg-white/[0.04] backdrop-blur-xl " +
-  "shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_18px_50px_rgba(0,0,0,0.25)] " +
-  "hover:bg-white/[0.06] hover:border-sky-200/25 transition active:scale-[0.99]";
-
-const leftWrap = "flex items-center gap-3 min-w-0";
-const iconWrap =
-  "h-10 w-10 rounded-xl grid place-items-center bg-white/[0.04] border border-white/10 " +
-  "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]";
-
 const Chevron = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-white/60">
-    <path d="M9 18l6-6-6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    className="shrink-0 text-white/35 transition group-hover:translate-x-0.5 group-hover:text-white/70"
+  >
+    <path
+      d="m9 18 6-6-6-6"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
+const settingsItems = [
+  {
+    title: "Account",
+    subtitle: "Profile, email and password",
+    icon: "/assets/profile-icon.png",
+    to: "/setting/account",
+  },
+  {
+    title: "Security",
+    subtitle: "Manage account security",
+    icon: "/assets/security-icon.png",
+    to: "/setting/security",
+  },
+  {
+    title: "Chats",
+    subtitle: "Theme, history and media",
+    icon: "/assets/chat-icon.png",
+    to: "/setting/chats",
+  },
+  {
+    title: "Notifications",
+    subtitle: "Message alerts",
+    icon: "/assets/notifications-icon.png",
+    to: "/setting/notifications",
+  },
+  {
+    title: "Appearance",
+    subtitle: "Theme and backgrounds",
+    icon: "/assets/appearance-icon.png",
+    to: "/setting/appearance",
+  },
+  {
+    title: "Social",
+    subtitle: "Find friends and contacts",
+    icon: "/assets/social-icon.png",
+    to: "/setting/social",
+  },
+  {
+    title: "App",
+    subtitle: "Language, storage and backup",
+    icon: "/assets/app-icon.png",
+    to: "/setting/app",
+  },
+  {
+    title: "Support",
+    subtitle: "Help, privacy and terms",
+    icon: "/assets/support-icon.png",
+    to: "/setting/support",
+  },
+];
+
 const Setting = () => {
   return (
-    <div className="w-full h-full text-white flex flex-col mt-6">
+    <div className="min-h-[100dvh] w-full text-white">
       <Header title="Settings" showBack />
 
-      <div className="mx-auto w-full max-w-md px-2 py-5 pb-24 mt-10">
-        {/* Account */}
-        <Link className={itemClass} to="/setting/account">
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/profile-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">Account</p>
-              <p className="text-[11px] text-white/55 truncate">Profile, Email, Password</p>
-            </div>
-          </div>
-          <Chevron />
-        </Link>
+      <main
+        className="
+          mx-auto w-full max-w-[520px]
+          px-3 pb-[100px] pt-[76px]
+        "
+      >
+        <section>
+          <p className="mb-3 px-1 text-xs font-medium uppercase tracking-[0.16em] text-white/35">
+            Preferences
+          </p>
 
-        {/* Security */}
-        <div className={`${itemClass} mt-2`}>
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/security-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">Security</p>
-              <p className="text-[11px] text-white/55 truncate">Manage account security</p>
-            </div>
-          </div>
-          <Chevron />
-        </div>
+          <div className="space-y-2">
+            {settingsItems.map((item) => (
+              <Link
+                key={item.title}
+                to={item.to}
+                className="
+                  group flex min-h-16 w-full
+                  items-center gap-3
+                  rounded-2xl border border-white/10
+                  bg-[#0b1220]/50 px-3 py-3
+                  backdrop-blur-xl
+                  shadow-[0_8px_28px_rgba(0,0,0,0.22),0_0_0_1px_rgba(255,255,255,0.04)]
+                  transition
+                  hover:border-sky-300/25
+                  hover:bg-[#142342]/65
+                  hover:shadow-[0_12px_34px_rgba(0,0,0,0.28),0_0_22px_rgba(60,170,255,0.10)]
+                  active:scale-[0.99]
+                "
+              >
+                <div
+                  className="
+                    grid h-10 w-10 shrink-0 place-items-center
+                    rounded-xl border border-white/10
+                    bg-white/[0.04]
+                    shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]
+                  "
+                >
+                  <img
+                    src={item.icon}
+                    alt=""
+                    className="h-6 w-6 object-contain opacity-85"
+                  />
+                </div>
 
-        {/* Chats */}
-        <div className={`${itemClass} mt-2`}>
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/chat-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">Chats</p>
-              <p className="text-[11px] text-white/55 truncate">Theme, History, Media</p>
-            </div>
-          </div>
-          <Chevron />
-        </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-white/90">
+                    {item.title}
+                  </p>
 
-        {/* Notifications */}
-        <div className={`${itemClass} mt-2`}>
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/notifications-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">Notifications</p>
-              <p className="text-[11px] text-white/55 truncate">Message alerts</p>
-            </div>
-          </div>
-          <Chevron />
-        </div>
+                  <p className="mt-0.5 truncate text-xs text-white/45">
+                    {item.subtitle}
+                  </p>
+                </div>
 
-        {/* Appearance */}
-        <div className={`${itemClass} mt-2`}>
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/appearance-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">Appearance</p>
-              <p className="text-[11px] text-white/55 truncate">Theme, Backgrounds</p>
-            </div>
+                <Chevron />
+              </Link>
+            ))}
           </div>
-          <Chevron />
-        </div>
+        </section>
 
-        {/* Social */}
-        <div className={`${itemClass} mt-2`}>
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/social-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">Social</p>
-              <p className="text-[11px] text-white/55 truncate">Find friends, Contacts sync</p>
-            </div>
-          </div>
-          <Chevron />
-        </div>
+        <section className="mt-6">
+          <p className="mb-3 px-1 text-xs font-medium uppercase tracking-[0.16em] text-white/35">
+            Session
+          </p>
 
-        {/* App */}
-        <div className={`${itemClass} mt-2`}>
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/app-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">App</p>
-              <p className="text-[11px] text-white/55 truncate">Language, Storage, Backup</p>
-            </div>
-          </div>
-          <Chevron />
-        </div>
-
-        {/* Support */}
-        <div className={`${itemClass} mt-2`}>
-          <div className={leftWrap}>
-            <div className={iconWrap}>
-              <img src="/assets/support-icon.png" className="w-6 h-6" alt="" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-sm font-medium text-white/90 truncate">Support</p>
-              <p className="text-[11px] text-white/55 truncate">Help, Privacy & Terms</p>
-            </div>
-          </div>
-          <Chevron />
-        </div>
-
-        {/* Logout */}
-        <div className="mt-4">
           <LogOut />
-        </div>
-      </div>
+        </section>
+
+        <p className="mt-6 text-center text-[11px] text-white/30">
+          Connect version 1.0
+        </p>
+      </main>
     </div>
   );
 };

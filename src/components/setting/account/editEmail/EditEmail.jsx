@@ -1,21 +1,35 @@
 import { useSelector } from "react-redux";
+
 import Loading from "../../../loading/Loading";
 import EditEmailForm from "./EditEmailForm";
 import Header from "../../../header/Header";
 
 const EditEmail = () => {
-    const { user } = useSelector((state) => state.user);
+    const { user, isGettingUserLoading } = useSelector(
+        (state) => state.user
+    );
 
     return (
-        <div className="w-full h-full text-white flex flex-col mt-10">
-            <Header title="Email" showBack>
-                <p className="text-xs text-[#7a789a]">
-                    Enter your new email address
-                </p>
-            </Header>
-            <div className="mx-auto w-full max-w-md px-4 py-6 pb-24">
-                {!user ? <Loading /> : <EditEmailForm />}
-            </div>
+        <div className="min-h-[100dvh] w-full text-white">
+            <Header
+                title="Email"
+                subtitle="Enter your new email address"
+                showBack
+            />
+
+            <main
+                className="
+                    mx-auto flex min-h-[100dvh] w-full
+                    max-w-[520px] flex-col
+                    px-4 pb-[100px] pt-[96px]">
+                {isGettingUserLoading || !user ? (
+                    <div className="flex flex-1 items-center justify-center">
+                        <Loading />
+                    </div>
+                ) : (
+                    <EditEmailForm />
+                )}
+            </main>
         </div>
     );
 };

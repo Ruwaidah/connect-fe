@@ -1,132 +1,286 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { clearChangePassword, requestNewPassword } from "../../../../reducers/usersSlice";
+
+import {
+  clearChangePassword,
+  requestNewPassword,
+} from "../../../../reducers/usersSlice";
 
 const NewPassword = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const {
+    isAuthLoading,
+    isAuthError,
+    errorMessage,
+  } = useSelector((state) => state.user);
+
+  const [showPassword, setShowPassword] = useState({
+    newPsw: false,
+    retypePsw: false,
+  });
+
   const {
     register,
     handleSubmit,
     watch,
+    getValues,
     formState: { errors, isValid },
-  } = useForm({ mode: "onChange" });
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      newPsw: "",
+      retypePsw: "",
+    },
+  });
 
   const passwordPattern =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+  const newPassword = watch("newPsw", "");
+  const confirmPassword = watch("retypePsw", "");
 
-  const card =
-    "w-[96%] max-w-sm rounded-2xl border border-sky-300/25 bg-white/[0.04] backdrop-blur-md p-5 " +
-    "shadow-[0_0_0_1px_rgba(110,200,255,0.28),0_0_22px_rgba(60,160,255,0.18),inset_0_0_18px_rgba(120,220,255,0.08)]";
+  const passwordsMatch =
+    confirmPassword.length > 0 &&
+    newPassword === confirmPassword;
 
-  const inputWrap = (hasErr) =>
-    `flex items-center justify-between w-full rounded-xl px-4 py-2 border ${hasErr
-      ? "border-[#ff5a5f]/60 shadow-[0_0_0_1px_rgba(255,90,95,0.6),0_0_12px_rgba(255,90,95,0.35),0_0_28px_rgba(255,90,95,0.25)]"
-      : "border-sky-300/35 shadow-[0_0_0_1px_rgba(110,200,255,0.35),0_0_18px_rgba(60,160,255,0.25),inset_0_0_18px_rgba(120,220,255,0.10)]"
-    } bg-white/0 backdrop-blur-xs`;
+  const disableSubmit =
+    !isValid ||
+    !passwordsMatch ||
+    isAuthLoading;
 
-  const input =
-    "flex-1 bg-transparent outline-none px-3 text-sm text-white placeholder-white/40";
-
-  const primaryBtn =
-    "mb-0 w-full rounded-xl py-2.5 text-white bg-sky-500/20 border border-sky-300/35 " +
-    "shadow-[0_0_0_1px_rgba(120,220,255,0.35),0_10px_30px_rgba(40,120,255,0.20),0_0_30px_rgba(80,200,255,0.18)] " +
-    "hover:bg-sky-400/25 hover:shadow-[0_0_0_1px_rgba(160,240,255,0.45),0_12px_34px_rgba(40,120,255,0.25),0_0_40px_rgba(80,200,255,0.22)] " +
-    "active:scale-[0.99] transition disabled:opacity-40 disabled:cursor-not-allowed";
+  const togglePassword = (field) => {
+    setShowPassword((current) => ({
+      ...current,
+      [field]: !current[field],
+    }));
+  };
 
   const cancelChangePassword = () => {
-    navigate("/")
-    dispatch(clearChangePassword())
+    dispatch(clearChangePassword());
+    navigate("/", { replace: true });
   };
 
-  const onSubmit = (data) => {
-    dispatch(
-      requestNewPassword({
-        password: data.newPsw,
-      })
-    );
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(
+        requestNewPassword({
+          password: data.newPsw,
+        })
+      ).unwrap();
+
+      dispatch(clearChangePassword());
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const newP = watch("newPsw");
-  const confirmP = watch("retypePsw");
-  const notMatch = !!confirmP && newP !== confirmP;
-  const disableSubmit = !isValid || notMatch;
+  const fieldClass = (hasError) => `
+    flex h-12 w-full items-center
+    rounded-xl border px-4
+    bg-white/[0.05] transition
+    ${
+      hasError
+        ? "border-rose-400/60"
+        : "border-white/15 focus-within:border-sky-200/60"
+    }
+  `;
 
   return (
-    <div className="w-full flex justify-center px-2">
-      <div className={card}>
-        <h3 className="text-lg font-semibold text-white">Create new password</h3>
-        <p className="text-sm text-white/60 mt-1">
-          Make sure it’s strong and easy to remember.
-        </p>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
-          <div className="space-y-1">
-            <label className="text-sm text-[#7a789a] ml-1">New Password</label>
-            <div className={inputWrap(!!errors.newPsw)}>
-              <input
-                type="password"
-                placeholder="New password"
-                className={input}
-                {...register("newPsw", {
-                  required: "Required",
-                  pattern: {
-                    value: passwordPattern,
-                    message:
-                      "8+ chars, uppercase, lowercase, number, special (@$!%*?&)",
-                  },
-                })}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-sm text-[#7a789a] ml-1">Confirm New Password</label>
-            <div className={inputWrap(!!errors.retypePsw || notMatch)}>
-              <input
-                type="password"
-                placeholder="Confirm password"
-                className={input}
-                {...register("retypePsw", {
-                  required: "Required",
-                  validate: (v) => v === newP || "Passwords do not match",
-                })}
-              />
-            </div>
-            {notMatch && (
-              <p className="text-xs text-[#ff5a5f] pl-2">{errors.retypePsw && errors.retypePsw.message}</p>
-            )}
-          </div>
-
-          <ol
-            className={`list-disc list-inside text-sm rounded-xl px-4 py-3 border
-            ${errors.newPsw || (errors.retypePsw && errors.retypePsw.type !== "validate")
-                ? "text-[#ff5a5f] border-[#ff5a5f]/60"
-                : "text-white/80 border-sky-300/25"}
-            bg-white/[0.03]`}
+    <div className="w-full">
+      <div className="text-center">
+        <div
+          className="
+            mx-auto grid h-12 w-12 place-items-center
+            rounded-2xl border border-sky-300/25
+            bg-sky-500/10 text-sky-200
+          "
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
           >
-            <li className="list-none mb-2 text-white/60">Password must contain at least:</li>
-            <li>One number</li>
-            <li>One uppercase and one lowercase letter</li>
-            <li>One special character: <span>@ $ ! % * ? &</span></li>
-            <li>8 or more characters</li>
-          </ol>
+            <rect
+              x="5"
+              y="10"
+              width="14"
+              height="10"
+              rx="2"
+              strokeWidth="1.6"
+            />
 
-          <button type="submit" disabled={disableSubmit} className={primaryBtn}>
-            Submit
-          </button>
+            <path
+              d="M8 10V7a4 4 0 0 1 8 0v3"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
 
-          <Link to="/" onClick={cancelChangePassword} className="mt-2 block w-full rounded-xl py-2.5 text-center text-white/70
-                          bg-white/[0.03] border border-white/12
-                          shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]
-                          hover:text-white hover:bg-white/[0.06] hover:border-white/20 transition">
-            <div className="text-center">Cancel</div>
-          </Link>
-        </form>
+        <h1 className="mt-4 text-xl font-semibold text-white">
+          Create new password
+        </h1>
+
+        <p className="mt-1 text-sm text-white/60">
+          Make sure it is strong and easy to remember.
+        </p>
       </div>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-6 space-y-4"
+      >
+        <div>
+          <label className="mb-1.5 block text-sm text-white/70">
+            New password
+          </label>
+
+          <div className={fieldClass(Boolean(errors.newPsw))}>
+            <input
+              type={
+                showPassword.newPsw
+                  ? "text"
+                  : "password"
+              }
+              placeholder="Enter new password"
+              className="
+                min-w-0 flex-1 bg-transparent
+                text-sm text-white outline-none
+                placeholder:text-white/30
+              "
+              {...register("newPsw", {
+                required: "Password is required.",
+                pattern: {
+                  value: passwordPattern,
+                  message:
+                    "Use 8+ characters, uppercase, lowercase, number and special character.",
+                },
+              })}
+            />
+
+            <button
+              type="button"
+              onClick={() => togglePassword("newPsw")}
+              className="text-sm text-white/55"
+            >
+              {showPassword.newPsw ? "Hide" : "Show"}
+            </button>
+          </div>
+
+          {errors.newPsw ? (
+            <p className="mt-1 text-xs text-rose-300">
+              {errors.newPsw.message}
+            </p>
+          ) : null}
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-sm text-white/70">
+            Confirm password
+          </label>
+
+          <div
+            className={fieldClass(
+              Boolean(errors.retypePsw)
+            )}
+          >
+            <input
+              type={
+                showPassword.retypePsw
+                  ? "text"
+                  : "password"
+              }
+              placeholder="Confirm new password"
+              className="
+                min-w-0 flex-1 bg-transparent
+                text-sm text-white outline-none
+                placeholder:text-white/30
+              "
+              {...register("retypePsw", {
+                required: "Please confirm your password.",
+                validate: (value) =>
+                  value === getValues("newPsw") ||
+                  "Passwords do not match.",
+              })}
+            />
+
+            <button
+              type="button"
+              onClick={() => togglePassword("retypePsw")}
+              className="text-sm text-white/55"
+            >
+              {showPassword.retypePsw ? "Hide" : "Show"}
+            </button>
+          </div>
+
+          {errors.retypePsw ? (
+            <p className="mt-1 text-xs text-rose-300">
+              {errors.retypePsw.message}
+            </p>
+          ) : null}
+        </div>
+
+        {isAuthError && errorMessage ? (
+          <div
+            className="
+              rounded-xl border border-rose-400/25
+              bg-rose-500/10 px-4 py-3
+              text-sm text-rose-200
+            "
+          >
+            {errorMessage}
+          </div>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={disableSubmit}
+          className={`
+            h-11 w-full rounded-xl border
+            text-sm font-semibold transition
+            ${
+              disableSubmit
+                ? `
+                  cursor-not-allowed
+                  border-white/10
+                  bg-white/[0.04]
+                  text-white/35
+                `
+                : `
+                  border-sky-300/35
+                  bg-sky-500/20
+                  text-white
+                  hover:bg-sky-400/25
+                `
+            }
+          `}
+        >
+          {isAuthLoading
+            ? "Updating password..."
+            : "Update password"}
+        </button>
+
+        <button
+          type="button"
+          onClick={cancelChangePassword}
+          className="
+            h-11 w-full rounded-xl
+            border border-white/10
+            bg-white/[0.03]
+            text-sm text-white/65
+            hover:bg-white/[0.06]
+          "
+        >
+          Cancel
+        </button>
+      </form>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { gsap } from "gsap";
 import { useDispatch, useSelector } from "react-redux";
 import { rejectFriendRequest, approveFriendRequest } from "../../../reducers/usersSlice";
 import Loading from "../../loading/Loading";
+import Header from "../../header/Header";
 
 const FriendsRequests = () => {
   const dispatch = useDispatch();
@@ -60,35 +61,14 @@ const FriendsRequests = () => {
   const incoming = (user.friendReq || []).filter((r) => r.userRecieveRequest === user.id);
 
   return (
-    <div className="min-h-screen w-full text-white bg-[url('/assets/bg-003.png')] bg-cover bg-center">
-      {/* Top bar */}
-      <div className="sticky top-0 z-40 w-full border-b border-white/10 bg-white/[0.03] backdrop-blur-xl">
-        <div className="mx-auto max-w-md px-4 h-16 flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="h-10 w-10 rounded-xl border border-white/10 bg-white/[0.03]
-                       grid place-items-center text-white/80 hover:text-white
-                       hover:bg-white/[0.06] transition
-                       shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]"
-            aria-label="Back"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M15 18l-6-6 6-6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-
-          <div className="min-w-0">
-            <p className="font-semibold truncate">Friend Requests</p>
-            <p className="text-xs text-white/55 truncate">
-              {incoming.length} pending
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen w-full text-white bg-[url('/assets/bg-003.png')] bg-cover bg-center mt-16">
+      <Header
+        title="Friend Requests"
+        subtitle={incoming.length}
+      />
 
       {/* Content */}
-      <div className="mx-auto max-w-md px-3 py-4 pb-24">
+      <div className="mx-auto px-2 py-1 pb-2">
         {incoming.length === 0 ? (
           <div className="mt-8 rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-xl p-6
                           shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_10px_40px_rgba(0,0,0,0.35)]">
@@ -101,7 +81,7 @@ const FriendsRequests = () => {
               <div
                 key={`${u.userSendRequest}-${i}`}
                 id={`request-user-card-${i}`}
-                className="rounded-3xl border border-sky-300/20 bg-white/[0.04] backdrop-blur-xl p-3
+                className="rounded-3xl border border-sky-300/20 bg-white/[0.04] backdrop-blur-xl p-2
                            shadow-[0_0_0_1px_rgba(140,230,255,0.10),0_18px_60px_rgba(0,0,0,0.35)]
                            hover:border-sky-200/30 hover:bg-white/[0.06] transition"
               >

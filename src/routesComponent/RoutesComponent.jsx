@@ -12,7 +12,6 @@ import Setting from "../components/setting/Setting";
 import NoPageFound from "../components/noPageFound/NoPageFound";
 import FriendCard from "../components/friends/FriendCard";
 import MessageCard from "../components/messages/MessageCard";
-import NewNotification from "../components/notifications/NewNotification";
 import FriendsRequests from "../components/friends/FriendsRequests/FriendsRequests";
 import Login from "../components/homePage/Auth/Login/Login";
 import SignUp from "../components/homePage/Auth/SignUp/SignUp";
@@ -25,6 +24,7 @@ import EditUsername from "../components/setting/account/editUsername/EditUsernam
 import EditEmail from "../components/setting/account/editEmail/EditEmail";
 import EditPassword from "../components/setting/account/editPassword/EditPassword";
 import ProfileCard from "../components/profile/ProfileCard";
+import Notifications from "../components/notifications/Notifications";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -102,7 +102,7 @@ const RoutesComponent = () => {
         />
         <Route
           path="/notifications"
-          element={<NewNotification />}
+          element={<Notifications />}
         />
       </Route>
       <Route path="*" element={<NoPageFound />} />

@@ -1,205 +1,268 @@
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+
 import {
   checkOtp,
   clearChangePassword,
 } from "../../../../reducers/usersSlice";
-import { Link } from "react-router-dom";
+
+const fields = [
+  "firstNum",
+  "secondNum",
+  "thirdNum",
+  "fourthNum",
+];
 
 const OTP = () => {
   const dispatch = useDispatch();
-  const { otpErrorMessage, isOtpError, isOtpLoading, verifyEmail } =
-    useSelector((state) => state.user);
+  const inputRefs = useRef([]);
+
+  const {
+    otpErrorMessage,
+    isOtpError,
+    isOtpLoading,
+    verifyEmail,
+  } = useSelector((state) => state.user);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
     setValue,
     getValues,
+    setFocus,
+    formState: { errors, isValid },
   } = useForm({
-    defaultValues: { firstNum: "", secondtNum: "", thirdNum: "", fourthNum: "" },
-    mode: "onSubmit",
+    defaultValues: {
+      firstNum: "",
+      secondNum: "",
+      thirdNum: "",
+      fourthNum: "",
+    },
+    mode: "onChange",
   });
 
   useEffect(() => {
-    const onKeyDown = (e) => {
-      const ids = ["firstNum", "secondtNum", "thirdNum", "fourthNum"];
-      if (!ids.includes(e.target.id)) return;
-
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleSubmit(onSubmit)();
-        return;
-      }
-
-      // BACKSPACE DELETE OR BACK TO PREV IF EMPTY 
-      if (e.key === "Backspace") {
-        e.preventDefault();
-        const el = document.getElementById(e.target.id);
-        if (!el) return;
-
-        const name = e.target.id;
-        const currentVal = getValues(name);
-
-        if (currentVal) {
-          el.value = "";
-          setValue(name, "", { shouldDirty: true, shouldValidate: true });
-          return;
-        }
-
-        const prev = el.previousElementSibling;
-        if (prev?.id) {
-          prev.focus();
-          prev.value = "";
-          setValue(prev.id, "", { shouldDirty: true, shouldValidate: true });
-        }
-      }
-    };
-
-    const onKeyPress = (e) => {
-      const ids = ["firstNum", "secondtNum", "thirdNum", "fourthNum"];
-      if (!ids.includes(e.target.id)) return;
-
-      if (/^[0-9]$/.test(e.key)) {
-        e.preventDefault();
-        const el = document.getElementById(e.target.id);
-        if (!el) return;
-
-        el.value = e.key;
-        setValue(e.target.id, e.key, { shouldDirty: true, shouldValidate: true });
-
-        const next = el.nextElementSibling;
-        if (next?.id) next.focus();
-      }
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    document.addEventListener("keypress", onKeyPress);
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("keypress", onKeyPress);
-    };
-  }, [handleSubmit, setValue, getValues]);
+    setFocus("firstNum");
+  }, [setFocus]);
 
   const onSubmit = (data) => {
-    const numberCode = Object.values(data).join("");
-    if (numberCode.length !== 4) return;
-    if (isOtpLoading) return;
-    dispatch(checkOtp(numberCode));
-  }
+    const code = fields.map((field) => data[field]).join("");
 
-  const notRightEmail = () => {
-    dispatch(clearChangePassword());
+    if (code.length !== 4 || isOtpLoading) return;
+
+    dispatch(checkOtp(code));
+  };
+
+  const handleInput = (event, index, fieldName) => {
+    const value = event.target.value
+      .replace(/\D/g, "")
+      .slice(-1);
+
+    setValue(fieldName, value, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+
+    if (value && index < fields.length - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyDown = (event, index, fieldName) => {
+    if (event.key !== "Backspace") return;
+
+    const currentValue = getValues(fieldName);
+
+    if (currentValue) {
+      setValue(fieldName, "", {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+
+      return;
+    }
+
+    if (index > 0) {
+      const previousField = fields[index - 1];
+
+      setValue(previousField, "", {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handlePaste = (event) => {
+    event.preventDefault();
+
+    const digits = event.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 4)
+      .split("");
+
+    fields.forEach((field, index) => {
+      setValue(field, digits[index] || "", {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    });
+
+    const lastIndex = Math.min(digits.length - 1, 3);
+
+    if (lastIndex >= 0) {
+      inputRefs.current[lastIndex]?.focus();
+    }
   };
 
   return (
-    <div className="OTP w-full min-h-[40vh] flex items-center justify-center px-2">
-      <div
-        className="w-full max-w-[360px]
-                 rounded-3xl border border-white/15
-                 bg-[#0b1220]/40 backdrop-blur-xl
-                 shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_10px_40px_rgba(0,0,0,0.35)]
-                 p-5">
-        <div className="mb-3">
-          <p className="text-white font-semibold text-lg">Check your Email</p>
-          <p className="text-white/70 text-sm mt-1 leading-relaxed">
-            We sent you a 4-digit code to{" "}
-            <span className="text-sky-200 font-medium break-all">{verifyEmail}</span>
-          </p>
-
-          <div className="mt-2 flex items-center gap-2 text-sm">
-            <span className="text-white/60">Not you?</span>
-            <Link
-              onClick={notRightEmail}
-              className="text-sky-200 hover:text-sky-100 underline underline-offset-4"
-            >
-              Change Email
-            </Link>
-          </div>
-        </div>
-        <div className="min-h-[18px] mb-3">
-          <p
-            className={
-              isOtpLoading
-                ? "text-sky-200 text-xs"
-                : isOtpError
-                  ? "text-red-300 text-xs"
-                  : ""
-            }
+    <div className="w-full">
+      <div className="text-center">
+        <div
+          className="
+            mx-auto grid h-12 w-12 place-items-center
+            rounded-2xl border border-sky-300/25
+            bg-sky-500/10 text-sky-200
+          "
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
           >
-            {isOtpLoading ? "Loading ..." : isOtpError ? otpErrorMessage : null}
-          </p>
+            <path
+              d="M4 6h16v12H4V6Z"
+              strokeWidth="1.6"
+              strokeLinejoin="round"
+            />
+
+            <path
+              d="m4 7 8 6 8-6"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex justify-between gap-2">
-            <input
-              id="firstNum"
-              type="text"
-              maxLength="1"
-              className={`h-12 w-12 rounded-2xl text-center text-lg font-semibold
-                        bg-white/[0.06] text-white outline-none
-                        border ${errors.firstNum ? "border-red-400/60" : "border-white/12"}
-                        focus:border-sky-200/50 focus:ring-2 focus:ring-sky-300/20
-                        shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]`}
-              {...register("firstNum", {
-                required: { value: true, message: "Require" },
-                pattern: { value: /[0-9]/, message: "Only Numbers" },
-              })}
-            />
-            <input
-              id="secondtNum"
-              type="text"
-              maxLength="1"
-              className={`h-12 w-12 rounded-2xl text-center text-lg font-semibold
-                        bg-white/[0.06] text-white outline-none
-                        border ${errors.secondtNum ? "border-red-400/60" : "border-white/12"}
-                        focus:border-sky-200/50 focus:ring-2 focus:ring-sky-300/20
-                        shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]`}
-              {...register("secondtNum", {
-                required: { value: true, message: "Require" },
-                pattern: { value: /[0-9]/, message: "Only Numbers" },
-              })}
-            />
-            <input
-              id="thirdNum"
-              type="text"
-              maxLength="1"
-              className={`h-12 w-12 rounded-2xl text-center text-lg font-semibold
-                        bg-white/[0.06] text-white outline-none
-                        border ${errors.thirdNum ? "border-red-400/60" : "border-white/12"}
-                        focus:border-sky-200/50 focus:ring-2 focus:ring-sky-300/20
-                        shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]`}
-              {...register("thirdNum", {
-                required: { value: true, message: "Require" },
-                pattern: { value: /[0-9]/, message: "Only Numbers" },
-              })}
-            />
-            <input
-              id="fourthNum"
-              type="text"
-              maxLength="1"
-              className={`h-12 w-12 rounded-2xl text-center text-lg font-semibold
-                        bg-white/[0.06] text-white outline-none
-                        border ${errors.fourthNum ? "border-red-400/60" : "border-white/12"}
-                        focus:border-sky-200/50 focus:ring-2 focus:ring-sky-300/20
-                        shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]`}
-              {...register("fourthNum", {
-                required: { value: true, message: "Require" },
-                pattern: { value: /[0-9]/, message: "Only Numbers" },
-              })}
-            />
-          </div>
-          <input id="submit-id" className="hidden" type="submit" value="Send Code" />
-          <p className="mt-3 text-[11px] text-white/45 text-center">
-            Tip: Press Enter to submit
-          </p>
-        </form>
+
+        <h1 className="mt-4 text-xl font-semibold text-white">
+          Check your email
+        </h1>
+
+        <p className="mt-2 text-sm leading-6 text-white/60">
+          We sent a 4-digit verification code to
+        </p>
+
+        <p className="mt-1 break-all text-sm font-medium text-sky-200">
+          {verifyEmail}
+        </p>
+
+        <button
+          type="button"
+          onClick={() => dispatch(clearChangePassword())}
+          className="
+            mt-2 text-sm text-sky-200
+            underline underline-offset-4
+            hover:text-sky-100
+          "
+        >
+          Use a different email
+        </button>
       </div>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mt-6"
+      >
+        <div
+          className="flex justify-center gap-3"
+          onPaste={handlePaste}
+        >
+          {fields.map((fieldName, index) => {
+            const registration = register(fieldName, {
+              required: true,
+              pattern: /^[0-9]$/,
+            });
+
+            return (
+              <input
+                key={fieldName}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                className={`
+                  h-14 w-14 rounded-2xl
+                  border bg-white/[0.06]
+                  text-center text-xl font-semibold
+                  text-white outline-none transition
+                  ${errors[fieldName]
+                    ? "border-rose-400/60"
+                    : "border-white/15 focus:border-sky-200/60"
+                  }
+                `}
+                {...registration}
+                ref={(element) => {
+                  registration.ref(element);
+                  inputRefs.current[index] = element;
+                }}
+                onChange={(event) => {
+                  registration.onChange(event);
+                  handleInput(event, index, fieldName);
+                }}
+                onKeyDown={(event) =>
+                  handleKeyDown(event, index, fieldName)
+                }
+              />
+            );
+          })}
+        </div>
+
+        <div className="mt-3 min-h-5 text-center">
+          {isOtpLoading ? (
+            <p className="text-xs text-sky-200">
+              Verifying code...
+            </p>
+          ) : isOtpError ? (
+            <p className="text-xs text-rose-300">
+              {otpErrorMessage}
+            </p>
+          ) : (
+            <p className="text-xs text-white/40">
+              Enter all four digits.
+            </p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          disabled={!isValid || isOtpLoading}
+          className={`
+            mt-4 h-11 w-full rounded-xl border
+            text-sm font-semibold transition
+            ${!isValid || isOtpLoading
+              ? `
+                  cursor-not-allowed
+                  border-white/10
+                  bg-white/[0.04]
+                  text-white/35
+                `
+              : `
+                  border-sky-300/35
+                  bg-sky-500/20
+                  text-white
+                  hover:bg-sky-400/25
+                `
+            }
+          `}
+        >
+          {isOtpLoading ? "Verifying..." : "Verify code"}
+        </button>
+      </form>
     </div>
   );
 };
