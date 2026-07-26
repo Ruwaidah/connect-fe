@@ -98,6 +98,24 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+// ************************** DEMO LOGIN ******************************
+export const loginDemoUser = createAsyncThunk(
+  "LOGIN_DEMO_USER",
+  async (account, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_APP_URL}/users/demo`,
+        { account });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+        "Unable to start demo mode."
+      );
+    }
+  }
+);
+
 // ************************** SIGNUP AUTH ******************************
 export const signUp = createAsyncThunk("SIGN_UP", async (data, thunkAPI) => {
   return await axios
@@ -527,6 +545,36 @@ const usersSlice = createSlice({
     });
 
     builder.addCase(loginUser.rejected, (state, action) => {
+      state.isAuthError = true;
+      state.isAuthLoading = false;
+      state.errorMessage = action.payload;
+      state.user = null;
+    });
+
+    // ************************** DEMO LOGIN ******************************
+    builder.addCase(loginDemoUser.pending, (state) => {
+      state.errorMessage = null;
+      state.isAuthError = false;
+      state.isAuthLoading = true;
+      state.user = null;
+    });
+
+    builder.addCase(loginDemoUser.fulfilled, (state, action) => {
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("id", action.payload.id);
+      localStorage.setItem("demoMode", "true");
+      localStorage.setItem(
+        "demoAccount",
+        action.payload.demo_key
+      );
+
+      state.isAuthError = false;
+      state.errorMessage = null;
+      state.isAuthLoading = false;
+      state.user = action.payload;
+    });
+
+    builder.addCase(loginDemoUser.rejected, (state, action) => {
       state.isAuthError = true;
       state.isAuthLoading = false;
       state.errorMessage = action.payload;

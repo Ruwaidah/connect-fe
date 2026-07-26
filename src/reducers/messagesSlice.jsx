@@ -10,27 +10,64 @@ const initialState = {
   activeChatFriendId: null,
 };
 
-export const getMessages = createAsyncThunk("GET_MESSAGES", async (_, thunkAPI) => {
-  try {
-    const res = await axiosWithAuth().get(
-      `${import.meta.env.VITE_APP_URL}/auth/message/listmessages?userid=${localStorage.getItem("id")}`
-    );
-    return res.data;
-  } catch (err) {
-    return thunkAPI.rejectWithValue(err.response?.data?.message || "Error");
+export const getMessages = createAsyncThunk(
+  "GET_MESSAGES",
+  async (_, thunkAPI) => {
+    const userId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+
+    if (!userId || !token) {
+      return thunkAPI.rejectWithValue(
+        "No authenticated user."
+      );
+    }
+
+    try {
+      const res = await axiosWithAuth().get(
+        `${import.meta.env.VITE_APP_URL
+        }/auth/message/listmessages?userid=${userId}`
+      );
+
+      return res.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message ||
+        "Unable to load messages."
+      );
+    }
   }
-});
+);
 
 export const getMessagesBetweenTwoUsers = createAsyncThunk(
   "GET_MESSAGES_BETWEEN_TWO",
   async (friendId, thunkAPI) => {
+    const userId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+
+    if (!userId || !token) {
+      return thunkAPI.rejectWithValue(
+        "No authenticated user."
+      );
+    }
+
+    if (!friendId) {
+      return thunkAPI.rejectWithValue(
+        "A friend must be selected."
+      );
+    }
+
     try {
       const res = await axiosWithAuth().get(
-        `${import.meta.env.VITE_APP_URL}/auth/message?friendid=${friendId}&&userid=${localStorage.getItem("id")}`
+        `${import.meta.env.VITE_APP_URL
+        }/auth/message?friendid=${friendId}&userid=${userId}`
       );
+
       return res.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.data?.message || "Error");
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message ||
+        "Unable to load conversation."
+      );
     }
   }
 );

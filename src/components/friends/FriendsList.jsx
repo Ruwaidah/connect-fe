@@ -25,7 +25,7 @@ const FriendsList = () => {
 
   return (
     <div className="w-full pb-6">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 mt-1">
         {friendsList.map((friend, index) => {
           const friendId = friend.friendId || friend.id;
 

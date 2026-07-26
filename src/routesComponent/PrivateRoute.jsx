@@ -27,6 +27,11 @@ const PrivateRoute = () => {
   }, [dispatch, location.pathname]);
 
   useEffect(() => {
+    const userId = localStorage.getItem("id");
+    const token = localStorage.getItem("token");
+
+    if (!userId || !token) return;
+
     dispatch(getMessages());
   }, [dispatch]);
 

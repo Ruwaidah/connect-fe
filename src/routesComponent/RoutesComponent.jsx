@@ -25,86 +25,47 @@ import EditEmail from "../components/setting/account/editEmail/EditEmail";
 import EditPassword from "../components/setting/account/editPassword/EditPassword";
 import ProfileCard from "../components/profile/ProfileCard";
 import Notifications from "../components/notifications/Notifications";
+import DemoMode from "../components/Demo/DemoMode";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (localStorage.getItem("id")) {
-      socket.emit("reconnect", localStorage.getItem("id"));
-      dispatch(getUser());
-    }
-  }, [localStorage.getItem("id")]);
+    const userId = localStorage.getItem("id");
+
+    if (!userId) return;
+
+    socket.emit("reconnect", userId);
+    dispatch(getUser());
+  }, [dispatch]);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route index element={<HomePage />} />
+        <Route path="login" element={<Login />} />
+        <Route path="signup" element={<SignUp />} />
         <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="demo" element={<DemoMode />} />
       </Route>
+
       <Route element={<PrivateRoute />}>
-        <Route
-          path="/messages"
-          element={<Messages />}
-        />
-        <Route
-          path="/new-chat-friends-list"
-          element={<StartNewChat />}
-        />
-        <Route
-          path="/profile"
-          element={<ProfileCard />}
-        />
-        <Route
-          path="/edit-profile"
-          element={<ProfileForm />}
-        />
-        <Route
-          path="/friends"
-          element={<Friends />}
-        />
-        <Route
-          path="/friend/profile/:friendid"
-          element={<FriendCard />}
-        />
-        <Route
-          path="/messages/private/:friendid"
-          element={<MessageCard />}
-        />
-        <Route
-          path="/addnewfriend"
-          element={<AddNewFriendForm />}
-        />
-        <Route
-          path="/friend-request"
-          element={<FriendsRequests />}
-        />
-        <Route
-          path="/setting"
-          element={<Setting />}
-        />
-        <Route
-          path="/setting/account"
-          element={<AccountSetting />}
-        />
-        <Route
-          path="/setting/editusername"
-          element={<EditUsername />}
-        />
-        <Route
-          path="/setting/editemail"
-          element={<EditEmail />}
-        />
-        <Route
-          path="/setting/editpassword"
-          element={<EditPassword />}
-        />
-        <Route
-          path="/notifications"
-          element={<Notifications />}
-        />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/new-chat-friends-list" element={<StartNewChat />} />
+        <Route path="/profile" element={<ProfileCard />} />
+        <Route path="/edit-profile" element={<ProfileForm />} />
+        <Route path="/friends" element={<Friends />} />
+        <Route path="/friend/profile/:friendid" element={<FriendCard />} />
+        <Route path="/messages/private/:friendid" element={<MessageCard />} />
+        <Route path="/addnewfriend" element={<AddNewFriendForm />} />
+        <Route path="/friend-request" element={<FriendsRequests />} />
+        <Route path="/setting" element={<Setting />} />
+        <Route path="/setting/account" element={<AccountSetting />} />
+        <Route path="/setting/editusername" element={<EditUsername />} />
+        <Route path="/setting/editemail" element={<EditEmail />} />
+        <Route path="/setting/editpassword" element={<EditPassword />} />
+        <Route path="/notifications" element={<Notifications />} />
       </Route>
+
       <Route path="*" element={<NoPageFound />} />
     </Routes>
   );

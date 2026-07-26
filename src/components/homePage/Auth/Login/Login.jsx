@@ -1,31 +1,36 @@
 import Feature from "./FeatureLoginPage";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import LoginWithGoogle from "./LoginInWithGoogle";
-import { Link } from "react-router-dom";
 import LoginForm from "./LoginForm";
 
 const Login = () => {
   if (localStorage.getItem("token")) return <Navigate to="/messages" />;
 
   return (
-    <main className="login text-white w-[80%] max-2xl:w-[96%]
-                      max-xl:w-[96%]
-                     h-[80vh] flex items-center">
-      <div className="flex justify-center w-full items-center">
-        <section className="space-y-6 w-[56%] flex flex-col max-sm:hidden">
+    <main className="
+            login mx-auto flex
+            min-h-[calc(100dvh-140px)]
+            w-full max-w-[1320px]
+            items-center px-5 text-white">
+      <div className="
+          flex w-full items-center
+          justify-between gap-10
+          max-lg:gap-6">
+        <section className="flex min-w-0 flex-1 flex-col space-y-6 max-sm:hidden">
           <div className="space-y-3">
             <h1 className="text-4xl max-xl:text-2xl
                             font-extralight leading-tight">
               Welcome to Connect
             </h1>
             <p className="text-white/80 max-w-xl text-xl max-xl:text-base">
-              Login to unlock powerful features.
+              Login to continue, or explore the app instantly in demo mode.
             </p>
           </div>
           <div className="flex w-full justify-start items-center">
-            <img src="./assets/login-phone.png"
+            <img src="/assets/login-phone.png"
+              alt="Connect mobile login preview"
               className="w-70 h-120 max-xl:w-50 max-xl:h-100 mr-10 max-xl:mr-4 max-lg:hidden" />
-            <div className="flex flex-col w-80 mt-4 max-xl:w-70">
+            <div className="mt-4 flex w-full max-w-[320px] flex-col max-xl:max-w-[280px]">
               <Feature
                 title="Fast chat"
                 desc="Messages in real time."
@@ -49,10 +54,12 @@ const Login = () => {
           </div>
         </section>
 
-        <section className="bg-gray-900/70 rounded-3xl w-140 flex justify-start max-xl:w-120">
-          <div className="mx-auto w-full lg:mx-0 rounded-3xl border border-white/10 
-                          bg-white/5 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
-            <div className="rounded-3xl p-6 max-sm:p-2">
+        <section className="w-full max-w-[520px] shrink-0 rounded-3xl bg-gray-900/70">
+          <div className="
+                    w-full rounded-3xl border border-white/10
+                    bg-white/5 backdrop-blur-xl
+                    shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
+            <div className="rounded-3xl p-6 max-sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-xl font-normal max-sm:text-base max-sm:mt-2">Login to Connect</h2>
@@ -65,6 +72,18 @@ const Login = () => {
                 <div className="h-px flex-1 bg-white/10" />
               </div>
               <LoginForm />
+              <Link
+                to="/demo"
+                className="
+                  mt-2 flex h-12 w-full items-center justify-center
+                  rounded-xl border border-sky-300/25
+                  bg-sky-500/15
+                  text-sm font-semibold text-white
+                  transition
+                  hover:border-sky-300/40
+                  hover:bg-sky-400/20">
+                Try Demo — No Login Required
+              </Link>
               <div className="mt-4 flex items-center justify-between text-sm">
                 <Link
                   to="/reset-password"

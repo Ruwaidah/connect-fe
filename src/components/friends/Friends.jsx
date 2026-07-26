@@ -98,9 +98,7 @@ const Friends = () => {
         className="
           mx-auto flex min-h-[100dvh] w-full
           max-w-[520px] flex-col
-          px-3 pb-[96px] pt-[112px]
-        "
-      >
+          px-3 pb-[96px] pt-[112px]">
         {isGettingUserLoading || !user ? (
           <div className="flex flex-1 items-center justify-center">
             <Loading />

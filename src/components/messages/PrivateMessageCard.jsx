@@ -1,116 +1,254 @@
-import { useSelector, useDispatch } from "react-redux";
-import Header from "../header/Header";
+import { useEffect, useMemo, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import Header from "../header/Header";
 import PrivateMessageForm from "./PrivateMessageForm";
-import { useRef, useEffect, useMemo, useState } from "react";
-import NoMessages from "./NoMessages";
+
 import {
-  messageRead,
+  clearActiveChat,
   markThreadRead,
+  messageRead,
+  setActiveChat,
 } from "../../reducers/messagesSlice";
 
 const PrivateMessageCard = () => {
   const dispatch = useDispatch();
   const { friendid } = useParams();
-  const friendId = String(friendid);
-  const [sendMsg, setSendMsg] = useState(false);
+
+  const friendId = String(friendid || "");
   const messagesEndRef = useRef(null);
 
   const { user } = useSelector((state) => state.user);
-  const thread = useSelector((s) => s.messages.messages?.[friendId]);
+
+  const thread = useSelector(
+    (state) => state.messages.messages?.[friendId]
+  );
+
   const friend = thread?.friend;
+
+  const currentUserId = Number(
+    user?.id || localStorage.getItem("id")
+  );
 
   const sortedMessages = useMemo(() => {
     return [...(thread?.messages || [])].sort(
-      (a, b) => new Date(a.create_at) - new Date(b.create_at)
+      (a, b) =>
+        new Date(a.create_at).getTime() -
+        new Date(b.create_at).getTime()
     );
   }, [thread?.messages]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  useEffect(() => {
+    if (!friendId) return;
+
+    dispatch(setActiveChat(friendId));
+
+    return () => {
+      dispatch(clearActiveChat());
+    };
+  }, [dispatch, friendId]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [thread?.messages, sendMsg]);
+    const currentFriendId = Number(friendId);
+
+    if (!currentUserId || !currentFriendId) return;
+
+    dispatch(markThreadRead(friendId));
+
+    dispatch(
+      messageRead({
+        data: {
+          userId: currentUserId,
+          friendId: currentFriendId,
+        },
+      })
+    );
+  }, [
+    dispatch,
+    friendId,
+    currentUserId,
+    thread?.numberOfMsgUnread,
+  ]);
 
   useEffect(() => {
-    const myId = Number(localStorage.getItem("id"));
-    const currentFriendId = Number(friendid);
-    if (!myId || !currentFriendId) return;
-
-    dispatch(markThreadRead(String(currentFriendId)));
-    dispatch(messageRead({ data: { userId: myId, friendId: currentFriendId } }));
-  }, [dispatch, friendid]);
-
-  const currentUserId = Number(user?.id || localStorage.getItem("id"));
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [sortedMessages.length]);
 
   const formatMessageTime = (date) => {
     if (!date) return "";
+
     return new Date(date).toLocaleTimeString([], {
       hour: "numeric",
       minute: "2-digit",
     });
   };
 
-  if (!thread || !friend) return <NoMessages />;
+  if (!friend) {
+    return (
+      <div className="flex min-h-[100dvh] items-center justify-center px-4 text-white">
+        <div
+          className="
+            rounded-2xl border border-white/10
+            bg-white/[0.04] px-5 py-3
+            text-center text-sm text-white/60
+            backdrop-blur-xl
+          "
+        >
+          Conversation unavailable.
+        </div>
+      </div>
+    );
+  }
+
+  const profileId = friend.id || friend.friendId;
 
   return (
-    <div className="w-full min-h-screen text-white flex flex-col">
+    <div className="flex h-[100dvh] w-full flex-col text-white">
       <Header
         title={`${friend.firstName} ${friend.lastName}`}
-        subtitle="Private chat"
+        subtitle={`@${friend.username || "private_chat"}`}
         showBack
         right={
           <Link
-            to={`/friend/profile/${friend.id || friend.friendId}`}
-            className="w-10 h-10 rounded-full overflow-hidden ring-1 ring-white/10 bg-white/10"
+            to={`/friend/profile/${profileId}`}
+            aria-label={`Open ${friend.firstName}'s profile`}
+            className="
+              h-10 w-10 shrink-0 overflow-hidden
+              rounded-full border border-white/10
+              bg-white/10
+              ring-1 ring-sky-300/15
+              transition
+              hover:ring-sky-300/35
+            "
           >
             {friend.image ? (
               <img
                 src={friend.image}
-                className="w-full h-full object-cover"
-                alt=""
+                alt={`${friend.firstName} ${friend.lastName}`}
+                className="h-full w-full object-cover"
               />
-            ) : null}
+            ) : (
+              <div
+                className="
+                  grid h-full w-full place-items-center
+                  text-xs font-semibold text-white/60
+                "
+              >
+                {friend.firstName?.charAt(0)}
+                {friend.lastName?.charAt(0)}
+              </div>
+            )}
           </Link>
         }
       />
-      <div className="pt-14 flex-1 flex flex-col min-h-0">
-        <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-3 min-h-0">
+
+      <main
+        className="
+          flex min-h-0 w-full
+          flex-1 flex-col pt-14">
+        <div
+          className="
+            flex min-h-0 flex-1 flex-col
+            gap-3 overflow-y-auto
+            px-5 py-5
+            sm:px-8
+            lg:px-12">
           {sortedMessages.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="max-w-[220px] px-4 py-2 text-sm text-white/70 text-center rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md">
-                No messages yet
+            <div className="flex flex-1 items-center justify-center px-4">
+              <div className="max-w-[280px] text-center">
+                <div
+                  className="
+                    mx-auto grid h-16 w-16 place-items-center
+                    rounded-full border border-white/10
+                    bg-white/[0.04]
+                  "
+                >
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    className="text-sky-200/65"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+
+                <h2 className="mt-4 text-base font-semibold text-white">
+                  Start the conversation
+                </h2>
+
+                <p className="mt-1 text-sm leading-6 text-white/60">
+                  Send a message to {friend.firstName}.
+                </p>
               </div>
             </div>
           ) : (
-            sortedMessages.map((msg, i) => {
-              const isMine = Number(msg.senderId) === currentUserId;
+            sortedMessages.map((msg, index) => {
+              const isMine =
+                Number(msg.senderId) === currentUserId;
+
               return (
                 <div
-                  key={msg.id || i}
-                  className={`flex w-full ${isMine ? "justify-end" : "justify-start"
-                    }`}
+                  key={msg.id || `${msg.create_at}-${index}`}
+                  className={`
+                    flex w-full
+                    ${isMine
+                      ? "justify-end"
+                      : "justify-start"
+                    }
+                  `}
                 >
                   <div
-                    className={`max-w-[78%] flex flex-col ${isMine ? "items-end" : "items-start"
-                      }`}
+                    className={`
+                      flex max-w-[72%] sm:max-w-[60%] lg:max-w-[48%] flex-col
+                      ${isMine
+                        ? "items-end"
+                        : "items-start"
+                      }
+                    `}
                   >
                     <div
-                      className={`px-3 py-2.5 rounded-2xl text-sm leading-relaxed break-words shadow-md
+                      className={`
+                        break-words rounded-2xl
+                        px-3 py-2.5
+                        text-sm leading-relaxed
                         ${isMine
-                          ? `text-white rounded-br-md
-                               bg-sky-500/20 border border-sky-300/30
-                               shadow-[0_0_0_1px_rgba(140,230,255,0.14),0_10px_24px_rgba(40,120,255,0.18),inset_0_0_18px_rgba(120,220,255,0.06)]`
-                          : `text-white/90 rounded-bl-md
-                               bg-white/[0.06] border border-white/10 backdrop-blur-md
-                               shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_10px_24px_rgba(0,0,0,0.25)]`
-                        }`}
+                          ? `
+                              rounded-br-md
+                              border border-sky-300/30
+                              bg-sky-500/20
+                              text-white
+                              shadow-[0_10px_24px_rgba(40,120,255,0.16),inset_0_0_18px_rgba(120,220,255,0.06)]
+                            `
+                          : `
+                              rounded-bl-md
+                              border border-white/10
+                              bg-white/[0.06]
+                              text-white/90
+                              shadow-[0_10px_24px_rgba(0,0,0,0.22)]
+                              backdrop-blur-md
+                            `
+                        }
+                      `}
                     >
-                      <p> {msg.text}</p>
+                      <p className="whitespace-pre-wrap">
+                        {msg.text}
+                      </p>
                     </div>
-                    <p className="px-1 text-[11px] text-white/45">
+
+                    <p className="mt-1 px-1 text-[11px] text-white/40">
                       {formatMessageTime(msg.create_at)}
                     </p>
                   </div>
@@ -118,12 +256,23 @@ const PrivateMessageCard = () => {
               );
             })
           )}
+
           <div ref={messagesEndRef} />
         </div>
-        <div className="pb-2 px-2">
-          <PrivateMessageForm />
+
+        <div
+          className="
+            shrink-0 w-full
+            border-t border-white/10
+            bg-[#07101f]/45
+            backdrop-blur-2xl
+            px-3 pt-2
+            pb-[calc(env(safe-area-inset-bottom)+12px)]">
+          <div className="mx-auto w-full max-w-[520px]">
+            <PrivateMessageForm />
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

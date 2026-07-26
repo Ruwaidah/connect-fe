@@ -1,98 +1,223 @@
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useEffect, useRef } from "react";
+
 import { socket } from "../../socket";
 import { addIncomingMessage } from "../../reducers/messagesSlice";
 
 const PrivateMessageForm = () => {
   const dispatch = useDispatch();
   const { friendid } = useParams();
-  const friendId = String(friendid);
-  const thread = useSelector((s) => s.messages.messages?.[friendId]);
+
+  const friendId = String(friendid || "");
+
+  const thread = useSelector(
+    (state) => state.messages.messages?.[friendId]
+  );
+
   const friend = thread?.friend;
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
+    formState: { isSubmitting },
   } = useForm({
-    defaultValues: { msg: "" },
+    defaultValues: {
+      msg: "",
+    },
     mode: "onSubmit",
   });
 
-  const { ref: msgRef, ...msgField } = register("msg", {
-    required: "Message is required",
-    maxLength: { value: 100, message: "Message too long" },
+  const {
+    ref: registerMessageRef,
+    ...messageField
+  } = register("msg", {
+    required: "Message is required.",
+    maxLength: {
+      value: 100,
+      message: "Message cannot exceed 100 characters.",
+    },
+    validate: (value) =>
+      value.trim().length > 0 ||
+      "Message is required.",
   });
 
   const textareaRef = useRef(null);
-  const msgValue = watch("msg");
-
+  const messageValue = watch("msg") || "";
 
   useEffect(() => {
-    const el = textareaRef.current;
-    if (!el) return;
-    el.style.height = "0px";
-    el.style.height = `${el.scrollHeight}px`;
-  }, [msgValue]);
+    const textarea = textareaRef.current;
+
+    if (!textarea) return;
+
+    textarea.style.height = "0px";
+    textarea.style.height = `${Math.min(
+      textarea.scrollHeight,
+      160
+    )}px`;
+  }, [messageValue]);
 
   const onSubmit = ({ msg }) => {
-    const myId = Number(localStorage.getItem("id"));
-    const receiverId = Number(friend.id);
-    const optimistic = {
-      id: `tmp-${Date.now()}`,
-      senderId: myId,
+    const text = msg.trim();
+    const senderId = Number(
+      localStorage.getItem("id")
+    );
+
+    const receiverId = Number(
+      friend?.id || friend?.friendId || friendid
+    );
+
+    if (!text || !senderId || !receiverId) {
+      return;
+    }
+
+    const clientId =
+      crypto.randomUUID?.() ||
+      `client-${Date.now()}`;
+
+    const optimisticMessage = {
+      id: `temporary-${clientId}`,
+      clientId,
+      senderId,
       receiverId,
-      text: msg,
+      text,
       isRead: true,
       create_at: new Date().toISOString(),
-      friend: friend,
     };
-    dispatch(addIncomingMessage({ message: optimistic, myId }));
-    const clientId = crypto.randomUUID?.() || `c-${Date.now()}`;
-    socket.emit("SEND_MESSAGE", { senderId: myId, receiverId, text: msg, clientId });
-    reset();
+
+    dispatch(
+      addIncomingMessage(optimisticMessage)
+    );
+
+    socket.emit("SEND_MESSAGE", {
+      senderId,
+      receiverId,
+      text,
+      clientId,
+    });
+
+    reset({
+      msg: "",
+    });
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   };
 
+  const messageIsEmpty =
+    messageValue.trim().length === 0;
+
   return (
-    <div className="w-full px-1 pb-1 fixed bottom-0 left-0">
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-        <div
-          className="flex items-end gap-2 rounded-2xl border border-white/15
-          bg-white/[0.04] backdrop-blur-md p-2
-          shadow-[0_0_0_1px_rgba(255,255,255,0.10),0_0_22px_rgba(60,170,255,0.08)]">
+    <div className="w-full">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full"
+      >
+        <div className="
+                flex items-end gap-2
+                rounded-2xl border border-sky-300/20
+                bg-[#0b1220]/55 p-2
+                backdrop-blur-xl
+                shadow-[0_8px_24px_rgba(0,0,0,0.20),inset_0_0_0_1px_rgba(255,255,255,0.03)]">
           <textarea
-            ref={(el) => {
-              msgRef(el);
-              textareaRef.current = el;
+            {...messageField}
+            ref={(element) => {
+              registerMessageRef(element);
+              textareaRef.current = element;
             }}
-            {...msgField}
             rows={1}
-            placeholder="Message..."
-            className="flex-1 resize-none bg-transparent px-3 py-2 text-sm text-white
-                        placeholder-white/40 outline-none max-h-40 overflow-y-auto"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(onSubmit)();
+            maxLength={100}
+            placeholder={
+              friend?.firstName
+                ? `Message ${friend.firstName}...`
+                : "Message..."}
+            className="
+              max-h-40 min-h-11 flex-1
+              resize-none overflow-y-auto
+              bg-transparent px-3 py-2.5
+              text-sm text-white
+              placeholder:text-white/40
+              outline-none
+            "
+            onKeyDown={(event) => {
+              if (
+                event.key === "Enter" &&
+                !event.shiftKey
+              ) {
+                event.preventDefault();
+
+                if (!messageIsEmpty) {
+                  handleSubmit(onSubmit)();
+                }
               }
             }}
           />
+
           <button
             type="submit"
-            className="h-11 w-11 rounded-xl border border-sky-300/25
-            bg-white/[0.06] backdrop-blur-md
-            flex items-center justify-center text-white
-            shadow-[0_0_0_1px_rgba(140,230,255,0.18),0_0_18px_rgba(60,170,255,0.12)]
-            hover:border-sky-200/45 hover:bg-white/[0.08]
-            transition active:scale-[0.98]"
-            aria-label="Send">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M22 2L11 13" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M22 2l-7 20-4-9-9-4 20-7z" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            disabled={
+              messageIsEmpty ||
+              isSubmitting ||
+              !friend
+            }
+            aria-label="Send message"
+            className="
+              flex h-11 w-11 shrink-0
+              items-center justify-center
+              rounded-xl border
+              border-sky-300/25
+              bg-white/[0.06]
+              text-white
+              shadow-[0_0_0_1px_rgba(140,230,255,0.18),0_0_18px_rgba(60,170,255,0.12)]
+              transition
+              hover:border-sky-200/45
+              hover:bg-white/[0.09]
+              active:scale-[0.97]
+              disabled:cursor-not-allowed
+              disabled:opacity-35
+            "
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M22 2 11 13"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              <path
+                d="m22 2-7 20-4-9-9-4 20-7Z"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
+        </div>
+
+        <div className="mt-1 flex justify-end px-2">
+          <span
+            className={`
+              text-[10px]
+              ${messageValue.length >= 90
+                ? "text-amber-300/80"
+                : "text-white/30"
+              }
+            `}
+          >
+            {messageValue.length}/100
+          </span>
         </div>
       </form>
     </div>
