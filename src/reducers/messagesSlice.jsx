@@ -98,26 +98,72 @@ const messagesSlice = createSlice({
     addIncomingMessage: (state, action) => {
       const msg = { ...action.payload };
       const myId = Number(localStorage.getItem("id"));
-      const friendId = String(msg.senderId === myId ? msg.receiverId : msg.senderId);
 
-      if (!state.messages) state.messages = {};
+      const friendId = String(
+        Number(msg.senderId) === myId
+          ? msg.receiverId
+          : msg.senderId
+      );
+
+      if (!state.messages) {
+        state.messages = {};
+      }
+
       if (!state.messages[friendId]) {
-        state.messages[friendId] = { friend: { id: Number(friendId) }, numberOfMsgUnread: 0, messages: [] };
+        state.messages[friendId] = {
+          friend: {
+            id: Number(friendId),
+          },
+          numberOfMsgUnread: 0,
+          messages: [],
+        };
       }
 
       const thread = state.messages[friendId];
-      thread.messages ||= [];
 
-      if (msg.id && thread.messages.some((m) => m.id === msg.id)) return;
+      if (!Array.isArray(thread.messages)) {
+        thread.messages = [];
+      }
+      if (msg.clientId) {
+        const optimisticIndex = thread.messages.findIndex(
+          (message) =>
+            message.clientId === msg.clientId ||
+            message.id === `temporary-${msg.clientId}`
+        );
 
-      const chatOpen = String(state.activeChatFriendId) === friendId;
+        if (optimisticIndex !== -1) {
+          thread.messages[optimisticIndex] = msg;
+          return;
+        }
+      }
+      if (
+        msg.id &&
+        thread.messages.some(
+          (message) => String(message.id) === String(msg.id)
+        )
+      ) {
+        return;
+      }
 
-      if (chatOpen && msg.receiverId === myId) {
+      const chatOpen =
+        String(state.activeChatFriendId) === friendId;
+
+      if (
+        chatOpen &&
+        Number(msg.receiverId) === myId
+      ) {
         msg.isRead = true;
         thread.numberOfMsgUnread = 0;
-      } else if (!chatOpen && msg.receiverId === myId && msg.isRead === false) {
-        thread.numberOfMsgUnread = (thread.numberOfMsgUnread || 0) + 1;
-        state.totalUnreadMsgs = (state.totalUnreadMsgs || 0) + 1;
+      } else if (
+        !chatOpen &&
+        Number(msg.receiverId) === myId &&
+        msg.isRead === false
+      ) {
+        thread.numberOfMsgUnread =
+          (thread.numberOfMsgUnread || 0) + 1;
+
+        state.totalUnreadMsgs =
+          (state.totalUnreadMsgs || 0) + 1;
       }
 
       thread.messages.push(msg);

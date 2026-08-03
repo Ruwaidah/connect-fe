@@ -19,6 +19,12 @@ const initialState = {
   isGettingUserError: false,
   isGettingUserErrorMessage: null,
 
+  // ************************** DEMO ACCOUNTS **************************
+  demoAccounts: [],
+  isDemoAccountsLoading: false,
+  isDemoAccountsError: false,
+  demoAccountsErrorMessage: null,
+
   // ************************** UPDATE USER ******************************
   isUpdateUserLoading: false,
   isUpdateUserError: false,
@@ -111,6 +117,25 @@ export const loginDemoUser = createAsyncThunk(
       return thunkAPI.rejectWithValue(
         error.response?.data?.message ||
         "Unable to start demo mode."
+      );
+    }
+  }
+);
+
+// ************************ GET DEMO ACCOUNTS ************************
+export const getDemoAccounts = createAsyncThunk(
+  "GET_DEMO_ACCOUNTS",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_URL}/users/demo-accounts`
+      );
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message ||
+        "Unable to load demo accounts."
       );
     }
   }
@@ -579,6 +604,28 @@ const usersSlice = createSlice({
       state.isAuthLoading = false;
       state.errorMessage = action.payload;
       state.user = null;
+    });
+
+    // ************************ GET DEMO ACCOUNTS ************************
+    builder.addCase(getDemoAccounts.pending, (state) => {
+      state.isDemoAccountsLoading = true;
+      state.isDemoAccountsError = false;
+      state.demoAccountsErrorMessage = null;
+      state.demoAccounts = [];
+    });
+
+    builder.addCase(getDemoAccounts.fulfilled, (state, action) => {
+      state.isDemoAccountsLoading = false;
+      state.isDemoAccountsError = false;
+      state.demoAccountsErrorMessage = null;
+      state.demoAccounts = action.payload;
+    });
+
+    builder.addCase(getDemoAccounts.rejected, (state, action) => {
+      state.isDemoAccountsLoading = false;
+      state.isDemoAccountsError = true;
+      state.demoAccountsErrorMessage = action.payload;
+      state.demoAccounts = [];
     });
 
     // ************************** SIGN AUTH ******************************

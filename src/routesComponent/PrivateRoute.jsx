@@ -1,56 +1,105 @@
 import { useEffect } from "react";
-import AppShell from "./AppShell";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, Navigate, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
+
+import AppShell from "./AppShell";
 import NavBar from "../components/navBar/NavBar";
-import { socket, connectSocket, disconnectSocket } from "../socket";
+
+import {
+  socket,
+  connectSocket,
+  disconnectSocket,
+} from "../socket";
+
 import {
   addIncomingMessage,
-  getMessages,
-  setActiveChat,
   clearActiveChat,
+  getMessages,
   markThreadRead,
   messageRead,
+  setActiveChat,
 } from "../reducers/messagesSlice";
 
 const PrivateRoute = () => {
   const token = localStorage.getItem("token");
   const location = useLocation();
   const dispatch = useDispatch();
-  const activeChatFriendId = useSelector((s) => s.messages.activeChatFriendId);
-  const hideNav = location.pathname.startsWith("/messages/private");
+
+  const activeChatFriendId = useSelector(
+    (state) => state.messages.activeChatFriendId
+  );
+
+  const hideNav = location.pathname.startsWith(
+    "/messages/private"
+  );
 
   useEffect(() => {
-    const m = location.pathname.match(/^\/messages\/private\/(\d+)(\/)?$/);
-    if (m?.[1]) dispatch(setActiveChat(m[1]));
-    else dispatch(clearActiveChat());
+    const match = location.pathname.match(
+      /^\/messages\/private\/(\d+)\/?$/
+    );
+
+    if (match?.[1]) {
+      dispatch(setActiveChat(match[1]));
+    } else {
+      dispatch(clearActiveChat());
+    }
   }, [dispatch, location.pathname]);
 
   useEffect(() => {
     const userId = localStorage.getItem("id");
-    const token = localStorage.getItem("token");
+    const currentToken = localStorage.getItem("token");
 
-    if (!userId || !token) return;
+    if (!userId || !currentToken) return;
 
     dispatch(getMessages());
   }, [dispatch]);
 
   useEffect(() => {
     if (!token) return;
+
     connectSocket();
+
     const myId = Number(localStorage.getItem("id"));
-    const onNew = ({ message }) => {
+
+    const onNewMessage = (message) => {
+      if (!message) return;
+
       dispatch(addIncomingMessage(message));
-      const friendId = String(message.senderId === myId ? message.receiverId : message.senderId);
-      if (String(activeChatFriendId) === friendId && message.receiverId === myId) {
+
+      const friendId = String(
+        Number(message.senderId) === myId
+          ? message.receiverId
+          : message.senderId
+      );
+
+      const isCurrentChat =
+        String(activeChatFriendId) === friendId;
+
+      const messageIsForMe =
+        Number(message.receiverId) === myId;
+
+      if (isCurrentChat && messageIsForMe) {
         dispatch(markThreadRead(friendId));
-        dispatch(messageRead({ data: { userId: myId, friendId: Number(friendId) } }));
+
+        dispatch(
+          messageRead({
+            data: {
+              userId: myId,
+              friendId: Number(friendId),
+            },
+          })
+        );
       }
     };
 
-    socket.on("MESSAGE_NEW", onNew);
+    socket.on("NEW_MESSAGE", onNewMessage);
+
     return () => {
-      socket.off("MESSAGE_NEW", onNew);
+      socket.off("NEW_MESSAGE", onNewMessage);
       disconnectSocket();
     };
   }, [dispatch, token, activeChatFriendId]);
@@ -58,10 +107,11 @@ const PrivateRoute = () => {
   return token ? (
     <AppShell>
       <Outlet />
-      {!hideNav && <NavBar />}
+
+      {!hideNav ? <NavBar /> : null}
     </AppShell>
   ) : (
-    <Navigate to="/" />
+    <Navigate to="/" replace />
   );
 };
 

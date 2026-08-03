@@ -1,164 +1,393 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { useDispatch, useSelector } from "react-redux";
-import { rejectFriendRequest, approveFriendRequest } from "../../../reducers/usersSlice";
-import Loading from "../../loading/Loading";
+
+import {
+  approveFriendRequest,
+  rejectFriendRequest,
+} from "../../../reducers/usersSlice";
+
 import Header from "../../header/Header";
+import Loading from "../../loading/Loading";
 
 const FriendsRequests = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { isGettingUserLoading, user } = useSelector((state) => state.user);
+  const [processingId, setProcessingId] = useState(null);
 
-  const acceptFriendRequest = (friend, i) => {
-    gsap.to(`#request-user-card-${i}`, {
-      opacity: 0,
-      y: -6,
-      duration: 0.35,
-      ease: "power2.out",
+  const {
+    isGettingUserLoading,
+    isLoading,
+    user,
+  } = useSelector((state) => state.user);
+
+  const incoming = (user?.friendReq || []).filter(
+    (request) =>
+      Number(request.userRecieveRequest) ===
+      Number(user?.id)
+  );
+
+  const animateAndRemove = async (
+    elementId,
+    requestId,
+    action
+  ) => {
+    if (processingId) return;
+
+    setProcessingId(requestId);
+
+    await new Promise((resolve) => {
+      gsap.to(`#${elementId}`, {
+        opacity: 0,
+        y: -8,
+        height: 0,
+        marginBottom: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
+        duration: 0.35,
+        ease: "power2.out",
+        onComplete: resolve,
+      });
     });
 
-    setTimeout(() => {
-      dispatch(
-        approveFriendRequest({
-          userRecieveRequest: user.id,
-          userSendRequest: friend.userSendRequest,
-          friend: {
-            bio: friend.bio,
-            firstName: friend.firstName,
-            friendId: friend.userSendRequest,
-            image: friend.image,
-            image_id: friend.image_id,
-            lastName: friend.lastName,
-            public_id: friend.public_id,
-            username: friend.username,
-          },
-        })
-      );
-    }, 250);
+    try {
+      await dispatch(action).unwrap();
+    } catch (error) {
+      gsap.set(`#${elementId}`, {
+        clearProps: "all",
+      });
+
+      console.error("Friend request action failed:", error);
+    } finally {
+      setProcessingId(null);
+    }
   };
 
-  const rejectRequest = (friend, i) => {
-    gsap.to(`#request-user-card-${i}`, {
-      opacity: 0,
-      y: -6,
-      duration: 0.35,
-      ease: "power2.out",
-    });
+  const acceptFriendRequest = (friend, index) => {
+    const requestId = friend.userSendRequest;
+    const elementId = `request-user-card-${index}`;
 
-    setTimeout(() => {
-      dispatch(
-        rejectFriendRequest({
-          userRecieveRequest: user.id,
-          userSendRequest: friend.userSendRequest,
-        })
-      );
-    }, 250);
+    animateAndRemove(
+      elementId,
+      requestId,
+      approveFriendRequest({
+        userRecieveRequest: user.id,
+        userSendRequest: requestId,
+        friend: {
+          bio: friend.bio,
+          firstName: friend.firstName,
+          friendId: requestId,
+          image: friend.image,
+          image_id: friend.image_id,
+          lastName: friend.lastName,
+          public_id: friend.public_id,
+          username: friend.username,
+        },
+      })
+    );
   };
 
-  if (isGettingUserLoading || !user) return <Loading />;
+  const rejectRequest = (friend, index) => {
+    const requestId = friend.userSendRequest;
+    const elementId = `request-user-card-${index}`;
 
-  const incoming = (user.friendReq || []).filter((r) => r.userRecieveRequest === user.id);
+    animateAndRemove(
+      elementId,
+      requestId,
+      rejectFriendRequest({
+        userRecieveRequest: user.id,
+        userSendRequest: requestId,
+      })
+    );
+  };
 
   return (
-    <div className="min-h-screen w-full text-white bg-[url('/assets/bg-003.png')] bg-cover bg-center mt-16">
+    <div className="min-h-[100dvh] w-full text-white">
       <Header
         title="Friend Requests"
-        subtitle={incoming.length}
+        subtitle={
+          incoming.length === 1
+            ? "1 pending request"
+            : `${incoming.length} pending requests`
+        }
+        showBack
       />
+      <main
+        className="
+          mx-auto flex min-h-[100dvh] w-full
+          max-w-[520px] flex-col
+          px-3 pb-[100px] pt-[76px]">
 
-      {/* Content */}
-      <div className="mx-auto px-2 py-1 pb-2">
-        {incoming.length === 0 ? (
-          <div className="mt-8 rounded-3xl border border-white/12 bg-white/[0.04] backdrop-blur-xl p-6
-                          shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_10px_40px_rgba(0,0,0,0.35)]">
-            <p className="text-sm text-white/80">No new friend requests right now.</p>
-            <p className="text-xs text-white/50 mt-1">When someone adds you, you’ll see it here.</p>
+        {isGettingUserLoading || !user ? (
+          <div className="flex flex-1 items-center justify-center">
+            <Loading />
+          </div>
+        ) : incoming.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center px-4">
+            <div className="w-full max-w-[360px] text-center">
+              <div
+                className="
+                  relative mx-auto grid h-20 w-20
+                  place-items-center rounded-full
+                  border border-white/10
+                  bg-white/[0.04]">
+
+                <div
+                  className="
+                    absolute -inset-5 rounded-full
+                    bg-sky-400/10 blur-3xl"
+                />
+
+                <svg
+                  width="34"
+                  height="34"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  className="relative text-sky-200/65"
+                  aria-hidden="true">
+
+                  <path
+                    d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+
+                  <circle
+                    cx="9"
+                    cy="7"
+                    r="4"
+                    strokeWidth="1.6"
+                  />
+
+                  <path
+                    d="M19 8v6M22 11h-6"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+
+              <h2 className="mt-5 text-lg font-semibold">
+                No friend requests
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-white/50">
+                When someone sends you a friend request, it will
+                appear here.
+              </p>
+
+              <Link
+                to="/addnewfriend"
+                className="
+                  mt-5 inline-flex h-11 items-center
+                  justify-center rounded-xl
+                  border border-sky-300/25
+                  bg-sky-500/15 px-5
+                  text-sm font-semibold
+                  transition
+                  hover:border-sky-300/40
+                  hover:bg-sky-400/20">
+                Find Friends
+              </Link>
+            </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
-            {incoming.map((u, i) => (
-              <div
-                key={`${u.userSendRequest}-${i}`}
-                id={`request-user-card-${i}`}
-                className="rounded-3xl border border-sky-300/20 bg-white/[0.04] backdrop-blur-xl p-2
-                           shadow-[0_0_0_1px_rgba(140,230,255,0.10),0_18px_60px_rgba(0,0,0,0.35)]
-                           hover:border-sky-200/30 hover:bg-white/[0.06] transition"
-              >
-                <div className="flex items-center gap-3">
-                  {/* Avatar */}
-                  <Link to={`/friend/profile/${u.userSendRequest}`} className="relative shrink-0">
-                    <div className="absolute -inset-2 rounded-full blur-xl bg-sky-400/12" />
-                    <div className="relative rounded-full p-[2px]
-                                    bg-gradient-to-b from-sky-300/50 via-indigo-300/20 to-white/10
-                                    shadow-[0_0_0_1px_rgba(140,230,255,0.18),0_0_18px_rgba(60,170,255,0.12)]">
-                      <img
-                        src={u.image || "/assets/user.png"}
-                        alt=""
-                        className="h-12 w-12 rounded-full object-cover ring-1 ring-white/10"
-                      />
+          <div className="space-y-3">
+            {incoming.map((friend, index) => {
+              const requestId = friend.userSendRequest;
+              const isProcessing =
+                processingId === requestId || isLoading;
+
+              const fullName =
+                `${friend.firstName || ""} ${friend.lastName || ""
+                  }`.trim();
+
+              const initials =
+                `${friend.firstName?.charAt(0) || ""}${friend.lastName?.charAt(0) || ""
+                }` || "U";
+
+              return (
+                <article
+                  key={requestId}
+                  id={`request-user-card-${index}`}
+                  className="
+                    overflow-hidden rounded-2xl
+                    border border-sky-300/15
+                    bg-[#0b1220]/50 p-3
+                    shadow-[0_12px_32px_rgba(0,0,0,0.25)]
+                    backdrop-blur-xl
+                    transition
+                    hover:border-sky-300/25
+                    hover:bg-[#142342]/55">
+
+                  <div className="flex items-center gap-3">
+                    <Link
+                      to={`/friend/profile/${requestId}`}
+                      aria-label={`Open ${fullName}'s profile`}
+                      className="relative shrink-0">
+                      <div
+                        className="
+                          absolute -inset-2 rounded-full
+                          bg-sky-400/10 blur-xl"/>
+
+                      <div
+                        className="
+                          relative rounded-full p-[2px]
+                          bg-gradient-to-b
+                          from-sky-300/50
+                          via-indigo-300/20
+                          to-white/10">
+                        {friend.image ? (
+                          <img
+                            src={friend.image}
+                            alt={fullName}
+                            className="
+                              h-12 w-12 rounded-full
+                              object-cover ring-1 ring-white/10"
+                          />
+                        ) : (
+                          <div
+                            className="
+                              grid h-12 w-12 place-items-center
+                              rounded-full bg-white/10
+                              text-sm font-semibold text-white/65
+                              ring-1 ring-white/10">
+                            {initials}
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+
+                    <div className="min-w-0 flex-1">
+                      <Link
+                        to={`/friend/profile/${requestId}`}
+                        className="
+                          block truncate text-sm
+                          font-semibold text-white
+                          transition hover:text-sky-200">
+                        {fullName}
+                      </Link>
+
+                      <p className="mt-0.5 truncate text-xs text-sky-200/65">
+                        @{friend.username || "user"}
+                      </p>
+
+                      <p className="mt-1 text-xs text-white/45">
+                        Sent you a friend request
+                      </p>
                     </div>
-                  </Link>
 
-                  {/* Text */}
-                  <div className="min-w-0 flex-1">
-                    <p className="font-medium truncate">
-                      {u.firstName} {u.lastName}
-                    </p>
-                    <p className="text-xs text-white/55 truncate">
-                      @{u.username || "user"} • sent you a friend request
-                    </p>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          acceptFriendRequest(friend, index)
+                        }
+                        disabled={isProcessing}
+                        className="
+                          grid h-10 w-10 place-items-center
+                          rounded-xl border
+                          border-emerald-300/25
+                          bg-emerald-400/10
+                          text-emerald-200
+                          transition
+                          hover:border-emerald-200/40
+                          hover:bg-emerald-400/15
+                          active:scale-[0.96]
+                          disabled:cursor-not-allowed
+                          disabled:opacity-40"
+                        aria-label={`Accept ${fullName}'s friend request`}
+                        title="Accept">
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          aria-hidden="true">
+                          <path
+                            d="m20 6-11 11-5-5"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          rejectRequest(friend, index)
+                        }
+                        disabled={isProcessing}
+                        className="
+                          grid h-10 w-10 place-items-center
+                          rounded-xl border
+                          border-rose-300/20
+                          bg-rose-400/10
+                          text-rose-200
+                          transition
+                          hover:border-rose-200/35
+                          hover:bg-rose-400/15
+                          active:scale-[0.96]
+                          disabled:cursor-not-allowed
+                          disabled:opacity-40"
+                        aria-label={`Reject ${fullName}'s friend request`}
+                        title="Reject">
+
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M18 6 6 18M6 6l12 12"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => acceptFriendRequest(u, i)}
-                      className="h-9 w-9 rounded-xl border border-emerald-300/25 bg-emerald-400/10
-                                 grid place-items-center text-emerald-200
-                                 hover:bg-emerald-400/15 hover:border-emerald-200/35 transition"
-                      aria-label="Accept"
-                      title="Accept"
+                  <div
+                    className="
+                      mt-3 flex items-center
+                      justify-between border-t
+                      border-white/[0.07] pt-3
+                      text-[11px]">
+                    <Link
+                      to={`/friend/profile/${requestId}`}
+                      className="
+                        text-white/45 transition
+                        hover:text-white/75
+                      "
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M20 6L9 17l-5-5" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
+                      View profile
+                    </Link>
 
-                    <button
-                      type="button"
-                      onClick={() => rejectRequest(u, i)}
-                      className="h-9 w-9 rounded-xl border border-rose-300/20 bg-rose-400/10
-                                 grid place-items-center text-rose-200
-                                 hover:bg-rose-400/15 hover:border-rose-200/30 transition"
-                      aria-label="Reject"
-                      title="Reject"
+                    <span
+                      className="
+                        rounded-full border
+                        border-amber-300/15
+                        bg-amber-400/[0.08]
+                        px-2 py-1 text-amber-100/65
+                      "
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M18 6L6 18M6 6l12 12" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </button>
+                      Pending
+                    </span>
                   </div>
-                </div>
-
-                {/* optional: small footer row */}
-                <div className="mt-3 flex items-center justify-between text-[11px] text-white/45">
-                  <Link
-                    to={`/friend/profile/${u.userSendRequest}`}
-                    className="hover:text-white/70 transition"
-                  >
-                    View profile →
-                  </Link>
-                  <span className="rounded-full border border-white/10 bg-white/[0.03] px-2 py-1">
-                    Pending
-                  </span>
-                </div>
-              </div>
-            ))}
+                </article>
+              );
+            })}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 };

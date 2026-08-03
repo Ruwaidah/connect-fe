@@ -75,8 +75,7 @@ const PrivateMessageForm = () => {
     }
 
     const clientId =
-      crypto.randomUUID?.() ||
-      `client-${Date.now()}`;
+      crypto.randomUUID?.() || `client-${Date.now()}`;
 
     const optimisticMessage = {
       id: `temporary-${clientId}`,
@@ -88,9 +87,7 @@ const PrivateMessageForm = () => {
       create_at: new Date().toISOString(),
     };
 
-    dispatch(
-      addIncomingMessage(optimisticMessage)
-    );
+    dispatch(addIncomingMessage(optimisticMessage));
 
     socket.emit("SEND_MESSAGE", {
       senderId,

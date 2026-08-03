@@ -122,9 +122,7 @@ const PrivateMessageCard = () => {
               bg-white/10
               ring-1 ring-sky-300/15
               transition
-              hover:ring-sky-300/35
-            "
-          >
+              hover:ring-sky-300/35">
             {friend.image ? (
               <img
                 src={friend.image}
@@ -146,128 +144,133 @@ const PrivateMessageCard = () => {
         }
       />
 
-      <main
-        className="
-          flex min-h-0 w-full
-          flex-1 flex-col pt-14">
-        <div
-          className="
-            flex min-h-0 flex-1 flex-col
-            gap-3 overflow-y-auto
-            px-5 py-5
-            sm:px-8
-            lg:px-12">
-          {sortedMessages.length === 0 ? (
-            <div className="flex flex-1 items-center justify-center px-4">
-              <div className="max-w-[280px] text-center">
-                <div
-                  className="
-                    mx-auto grid h-16 w-16 place-items-center
-                    rounded-full border border-white/10
-                    bg-white/[0.04]
-                  "
-                >
-                  <svg
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    className="text-sky-200/65"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-
-                <h2 className="mt-4 text-base font-semibold text-white">
-                  Start the conversation
-                </h2>
-
-                <p className="mt-1 text-sm leading-6 text-white/60">
-                  Send a message to {friend.firstName}.
-                </p>
-              </div>
-            </div>
-          ) : (
-            sortedMessages.map((msg, index) => {
-              const isMine =
-                Number(msg.senderId) === currentUserId;
-
-              return (
-                <div
-                  key={msg.id || `${msg.create_at}-${index}`}
-                  className={`
-                    flex w-full
-                    ${isMine
-                      ? "justify-end"
-                      : "justify-start"
-                    }
-                  `}
-                >
+      <main className="flex min-h-0 w-full flex-1 flex-col pt-14">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6">
+          <div
+            className="
+              mx-auto flex min-h-full w-full max-w-[520px]
+              flex-col gap-3
+            "
+          >
+            {sortedMessages.length === 0 ? (
+              <div className="flex flex-1 items-center justify-center px-4">
+                <div className="max-w-[280px] text-center">
                   <div
+                    className="
+                      mx-auto grid h-16 w-16 place-items-center
+                      rounded-full border border-white/10
+                      bg-white/[0.04]
+                    "
+                  >
+                    <svg
+                      width="28"
+                      height="28"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      className="text-sky-200/65"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8Z"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+
+                  <h2 className="mt-4 text-base font-semibold text-white">
+                    Start the conversation
+                  </h2>
+
+                  <p className="mt-1 text-sm leading-6 text-white/60">
+                    Send a message to {friend.firstName}.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              sortedMessages.map((msg, index) => {
+                const isMine =
+                  Number(msg.senderId) === currentUserId;
+
+                return (
+                  <div
+                    key={msg.id || `${msg.create_at}-${index}`}
                     className={`
-                      flex max-w-[72%] sm:max-w-[60%] lg:max-w-[48%] flex-col
-                      ${isMine
-                        ? "items-end"
-                        : "items-start"
+                      flex w-full
+                      ${
+                        isMine
+                          ? "justify-end"
+                          : "justify-start"
                       }
                     `}
                   >
                     <div
                       className={`
-                        break-words rounded-2xl
-                        px-3 py-2.5
-                        text-sm leading-relaxed
-                        ${isMine
-                          ? `
-                              rounded-br-md
-                              border border-sky-300/30
-                              bg-sky-500/20
-                              text-white
-                              shadow-[0_10px_24px_rgba(40,120,255,0.16),inset_0_0_18px_rgba(120,220,255,0.06)]
-                            `
-                          : `
-                              rounded-bl-md
-                              border border-white/10
-                              bg-white/[0.06]
-                              text-white/90
-                              shadow-[0_10px_24px_rgba(0,0,0,0.22)]
-                              backdrop-blur-md
-                            `
+                        flex max-w-[82%] flex-col
+                        sm:max-w-[68%]
+                        lg:max-w-[55%]
+                        ${
+                          isMine
+                            ? "items-end"
+                            : "items-start"
                         }
                       `}
                     >
-                      <p className="whitespace-pre-wrap">
-                        {msg.text}
+                      <div
+                        className={`
+                          break-words rounded-2xl
+                          px-3 py-2.5
+                          text-sm leading-relaxed
+                          ${
+                            isMine
+                              ? `
+                                rounded-br-md
+                                border border-sky-300/30
+                                bg-sky-500/20
+                                text-white
+                                shadow-[0_10px_24px_rgba(40,120,255,0.16),inset_0_0_18px_rgba(120,220,255,0.06)]
+                              `
+                              : `
+                                rounded-bl-md
+                                border border-white/10
+                                bg-white/[0.06]
+                                text-white/90
+                                shadow-[0_10px_24px_rgba(0,0,0,0.22)]
+                                backdrop-blur-md
+                              `
+                          }
+                        `}
+                      >
+                        <p className="whitespace-pre-wrap">
+                          {msg.text}
+                        </p>
+                      </div>
+
+                      <p className="mt-1 px-1 text-[11px] text-white/40">
+                        {formatMessageTime(msg.create_at)}
                       </p>
                     </div>
-
-                    <p className="mt-1 px-1 text-[11px] text-white/40">
-                      {formatMessageTime(msg.create_at)}
-                    </p>
                   </div>
-                </div>
-              );
-            })
-          )}
+                );
+              })
+            )}
 
-          <div ref={messagesEndRef} />
+            <div ref={messagesEndRef} />
+          </div>
         </div>
 
         <div
           className="
-            shrink-0 w-full
+            w-full shrink-0
             border-t border-white/10
             bg-[#07101f]/45
-            backdrop-blur-2xl
             px-3 pt-2
-            pb-[calc(env(safe-area-inset-bottom)+12px)]">
+            pb-[calc(env(safe-area-inset-bottom)+12px)]
+            backdrop-blur-2xl
+          "
+        >
           <div className="mx-auto w-full max-w-[520px]">
             <PrivateMessageForm />
           </div>
