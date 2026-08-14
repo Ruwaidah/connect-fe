@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Navigate,
@@ -24,6 +24,16 @@ import {
   setActiveChat,
 } from "../reducers/messagesSlice";
 
+import {
+  getFriendById,
+  getFriends,
+  getUser,
+  friendRequestReceivedLive,
+  friendRequestCancelledLive,
+  friendRequestAcceptedLive,
+  friendRequestRejectedLive,
+} from "../reducers/usersSlice";
+
 const PrivateRoute = () => {
   const token = localStorage.getItem("token");
   const location = useLocation();
@@ -33,9 +43,15 @@ const PrivateRoute = () => {
     (state) => state.messages.activeChatFriendId
   );
 
+  const activeChatRef = useRef(activeChatFriendId);
+
   const hideNav = location.pathname.startsWith(
     "/messages/private"
   );
+
+  useEffect(() => {
+    activeChatRef.current = activeChatFriendId;
+  }, [activeChatFriendId]);
 
   useEffect(() => {
     const match = location.pathname.match(
@@ -77,7 +93,7 @@ const PrivateRoute = () => {
       );
 
       const isCurrentChat =
-        String(activeChatFriendId) === friendId;
+        String(activeChatRef.current) === friendId;
 
       const messageIsForMe =
         Number(message.receiverId) === myId;
@@ -96,13 +112,75 @@ const PrivateRoute = () => {
       }
     };
 
+    const refreshFriendData = () => {
+      dispatch(getUser());
+      dispatch(getFriends());
+    };
+
+    const onFriendRequestReceived = (payload) => {
+      dispatch(friendRequestReceivedLive(payload));
+    };
+
+    const onFriendRequestCancelled = (payload) => {
+      dispatch(friendRequestCancelledLive(payload));
+    };
+
+    const onFriendRequestAccepted = (payload) => {
+      dispatch(friendRequestAcceptedLive(payload));
+    };
+
+    const onFriendRequestRejected = (payload) => {
+      dispatch(friendRequestRejectedLive(payload));
+    };
+
     socket.on("NEW_MESSAGE", onNewMessage);
+
+    socket.on(
+      "FRIEND_REQUEST_RECEIVED",
+      onFriendRequestReceived
+    );
+
+    socket.on(
+      "FRIEND_REQUEST_ACCEPTED_LIVE",
+      onFriendRequestAccepted
+    );
+
+    socket.on(
+      "FRIEND_REQUEST_CANCELLED_LIVE",
+      onFriendRequestCancelled
+    );
+
+    socket.on(
+      "FRIEND_REQUEST_REJECTED_LIVE",
+      onFriendRequestRejected
+    );
 
     return () => {
       socket.off("NEW_MESSAGE", onNewMessage);
+
+      socket.off(
+        "FRIEND_REQUEST_RECEIVED",
+        onFriendRequestReceived
+      );
+
+      socket.off(
+        "FRIEND_REQUEST_ACCEPTED_LIVE",
+        onFriendRequestAccepted
+      );
+
+      socket.off(
+        "FRIEND_REQUEST_CANCELLED_LIVE",
+        onFriendRequestCancelled
+      );
+
+      socket.off(
+        "FRIEND_REQUEST_REJECTED_LIVE",
+        onFriendRequestRejected
+      );
+
       disconnectSocket();
     };
-  }, [dispatch, token, activeChatFriendId]);
+  }, [dispatch, token]);
 
   return token ? (
     <AppShell>

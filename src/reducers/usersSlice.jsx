@@ -413,6 +413,111 @@ const usersSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    friendRequestReceivedLive: (state, action) => {
+      const request = action.payload;
+
+      if (!state.user.friendReq) {
+        state.user.friendReq = [];
+      }
+
+      const exists = state.user.friendReq.some(
+        (item) =>
+          Number(item.userSendRequest) ===
+          Number(request.data.userSendRequest)
+      );
+
+      if (!exists) {
+        state.user.friendReq.push({
+          ...request.friendReq,
+          ...request.data,
+        });
+      }
+    },
+
+    friendRequestCancelledLive: (state, action) => {
+      const { userCancellingId, otherUserId } =
+        action.payload;
+
+      if (state.user?.friendReq) {
+        state.user.friendReq =
+          state.user.friendReq.filter((request) => {
+            const sender = Number(
+              request.userSendRequest
+            );
+
+            const receiver = Number(
+              request.userRecieveRequest
+            );
+
+            return !(
+              (sender === Number(userCancellingId) &&
+                receiver === Number(otherUserId)) ||
+              (sender === Number(otherUserId) &&
+                receiver === Number(userCancellingId))
+            );
+          });
+      }
+    },
+
+    friendRequestRejectedLive: (state, action) => {
+      const {
+        userRejectingId,
+        userRequestingId,
+      } = action.payload;
+
+      if (state.user?.friendReq) {
+        state.user.friendReq =
+          state.user.friendReq.filter((request) => {
+            const sender = Number(
+              request.userSendRequest
+            );
+
+            const receiver = Number(
+              request.userRecieveRequest
+            );
+
+            return !(
+              sender === Number(userRequestingId) &&
+              receiver === Number(userRejectingId)
+            );
+          });
+      }
+    },
+    friendRequestAcceptedLive: (state, action) => {
+      const {
+        userAcceptingId,
+        userRequestingId,
+        friend,
+      } = action.payload;
+
+      if (state.user?.friendReq) {
+        state.user.friendReq =
+          state.user.friendReq.filter((request) => {
+            return !(
+              Number(request.userSendRequest) ===
+              Number(userRequestingId) &&
+              Number(request.userRecieveRequest) ===
+              Number(userAcceptingId)
+            );
+          });
+      }
+
+      if (friend) {
+        if (!state.friendsList) {
+          state.friendsList = [];
+        }
+
+        const exists = state.friendsList.some(
+          (item) =>
+            Number(item.id || item.friendId) ===
+            Number(friend.id || friend.friendId)
+        );
+
+        if (!exists) {
+          state.friendsList.push(friend);
+        }
+      }
+    },
     deletingFriendUser: (state, action) => {
       state.isDeleteUser = action.payload;
     },
@@ -1005,6 +1110,10 @@ const usersSlice = createSlice({
 });
 
 export const {
+  friendRequestReceivedLive,
+  friendRequestCancelledLive,
+  friendRequestAcceptedLive,
+  friendRequestRejectedLive,
   logout,
   clearChangePassword,
   changeTheEmail,

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import { socket } from "../../socket";
 import Header from "../header/Header";
 import ConfirmDialog from "./ConfirmDialog";
 import Loading from "../loading/Loading";
@@ -19,6 +19,9 @@ import {
 const FriendCard = () => {
   const dispatch = useDispatch();
   const { friendid } = useParams();
+  const user = useSelector(
+    (state) => state.user.user
+  );
 
   const {
     findFriend,
@@ -36,15 +39,53 @@ const FriendCard = () => {
     }
   }, [dispatch, friendid]);
 
-  const sendFriendRequest = async () => {
-    if (!findFriend?.id) return;
+  const sendFriendRequest = async (person) => {
+    const senderId = Number(localStorage.getItem("id"));
 
-    await dispatch(
-      addNewFriend({
-        userSendRequest: currentUserId,
-        userRecieveRequest: findFriend.id,
-      })
+    const receiverId = Number(
+      person?.id ||
+      person?.friendId ||
+      person?.userId
     );
+
+    if (!senderId || !receiverId) {
+      console.error("Missing sender or receiver ID", {
+        senderId,
+        receiverId,
+        person,
+      });
+
+      return;
+    }
+
+    try {
+      const result = await dispatch(
+        addNewFriend({
+          userSendRequest: senderId,
+          userRecieveRequest: receiverId,
+        })
+      ).unwrap();
+
+      socket.emit("FRIEND_REQUEST_SENT", {
+        userSendRequest: {
+          id: senderId,
+          firstName: user?.firstName || "",
+          lastName: user?.lastName || "",
+          username: user?.username || "",
+          image: user?.image || "",
+        },
+        userRecieveRequest: receiverId,
+        friendReq:
+          result?.response ||
+          result?.friendReq ||
+          result,
+      });
+    } catch (error) {
+      console.error(
+        "Unable to send friend request:",
+        error
+      );
+    }
   };
 
   const acceptFriendRequest = async () => {
@@ -69,25 +110,60 @@ const FriendCard = () => {
   };
 
   const cancelRequest = async () => {
-    if (!findFriend?.id) return;
+    const userCancellingId = Number(currentUserId);
+    const otherUserId = Number(findFriend?.id);
 
-    await dispatch(
-      cancelFriendReq({
-        userSendRequest: currentUserId,
-        userRecieveRequest: findFriend.id,
-      })
-    );
+    if (!userCancellingId || !otherUserId) return;
+
+    try {
+      await dispatch(
+        cancelFriendReq({
+          userSendRequest: userCancellingId,
+          userRecieveRequest: otherUserId,
+        })
+      ).unwrap();
+
+      socket.emit("FRIEND_REQUEST_CANCELLED", {
+        userCancellingId,
+        otherUserId,
+      });
+
+      // Refresh the profile card for the person who cancelled.
+      dispatch(getFriendById(otherUserId));
+    } catch (error) {
+      console.error(
+        "Unable to cancel friend request:",
+        error
+      );
+    }
   };
 
   const rejectRequest = async () => {
-    if (!findFriend?.id) return;
+    const currentId = Number(currentUserId);
+    const otherUserId = Number(findFriend?.id);
 
-    await dispatch(
-      rejectFriendRequest({
-        userRecieveRequest: currentUserId,
-        userSendRequest: findFriend.id,
-      })
-    );
+    if (!currentId || !otherUserId) return;
+
+    try {
+      await dispatch(
+        rejectFriendRequest({
+          userRecieveRequest: currentId,
+          userSendRequest: otherUserId,
+        })
+      ).unwrap();
+
+      socket.emit("FRIEND_REQUEST_REJECTED", {
+        userRejectingId: currentId,
+        userRequestingId: otherUserId,
+      });
+
+      dispatch(getFriendById(otherUserId));
+    } catch (error) {
+      console.error(
+        "Unable to reject friend request:",
+        error
+      );
+    }
   };
 
   const confirmDeleteFriend = async () => {
@@ -442,7 +518,7 @@ const FriendCard = () => {
             <div className="space-y-3">
               <button
                 type="button"
-                onClick={sendFriendRequest}
+                onClick={() => sendFriendRequest(findFriend)}
                 className="
                   flex h-12 w-full items-center justify-center gap-2
                   rounded-xl border border-sky-300/30

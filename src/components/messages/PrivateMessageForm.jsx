@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -10,13 +10,29 @@ const PrivateMessageForm = () => {
   const dispatch = useDispatch();
   const { friendid } = useParams();
 
+  const [messageError, setMessageError] = useState("");
+
   const friendId = String(friendid || "");
 
-  const thread = useSelector(
-    (state) => state.messages.messages?.[friendId]
+  const activeChatFriendId = useSelector(
+    (state) => state.messages.activeChatFriendId
   );
 
+  const thread = useSelector((state) => {
+    const messages = state.messages.messages;
+
+    return (
+      messages?.data?.[activeChatFriendId] ||
+      messages?.data?.[friendId] ||
+      messages?.[activeChatFriendId] ||
+      messages?.[friendId] ||
+      null
+    );
+  });
+
   const friend = thread?.friend;
+
+  const canSendMessage = thread?.areFriend === true;
 
   const {
     register,
@@ -60,22 +76,55 @@ const PrivateMessageForm = () => {
     )}px`;
   }, [messageValue]);
 
+  useEffect(() => {
+    const onMessageError = (error) => {
+      setMessageError(
+        error?.message ||
+        "You must be friends before you can send messages."
+      );
+    };
+
+    socket.on("MESSAGE_ERROR", onMessageError);
+
+    return () => {
+      socket.off("MESSAGE_ERROR", onMessageError);
+    };
+  }, []);
+
+  useEffect(() => {
+    setMessageError("");
+    reset({ msg: "" });
+  }, [friendId, reset]);
+
   const onSubmit = ({ msg }) => {
+    if (!canSendMessage) {
+      setMessageError(
+        "You must be friends before you can send messages."
+      );
+      return;
+    }
+
     const text = msg.trim();
+
     const senderId = Number(
       localStorage.getItem("id")
     );
 
     const receiverId = Number(
-      friend?.id || friend?.friendId || friendid
+      friend?.id ||
+      friend?.friendId ||
+      friendid
     );
 
     if (!text || !senderId || !receiverId) {
       return;
     }
 
+    setMessageError("");
+
     const clientId =
-      crypto.randomUUID?.() || `client-${Date.now()}`;
+      crypto.randomUUID?.() ||
+      `client-${Date.now()}`;
 
     const optimisticMessage = {
       id: `temporary-${clientId}`,
@@ -87,7 +136,9 @@ const PrivateMessageForm = () => {
       create_at: new Date().toISOString(),
     };
 
-    dispatch(addIncomingMessage(optimisticMessage));
+    dispatch(
+      addIncomingMessage(optimisticMessage)
+    );
 
     socket.emit("SEND_MESSAGE", {
       senderId,
@@ -108,18 +159,63 @@ const PrivateMessageForm = () => {
   const messageIsEmpty =
     messageValue.trim().length === 0;
 
+  const sendIsDisabled =
+    !canSendMessage ||
+    messageIsEmpty ||
+    isSubmitting ||
+    !friend;
+
   return (
     <div className="w-full">
+      {!canSendMessage && (
+        <div
+          className="
+            mb-2 rounded-xl
+            border border-amber-300/20
+            bg-amber-400/10
+            px-3 py-2
+            text-center text-xs
+            text-amber-100/80
+          "
+        >
+          You must be friends before you can send
+          messages.
+        </div>
+      )}
+
+      {messageError && canSendMessage && (
+        <div
+          className="
+            mb-2 rounded-xl
+            border border-red-300/20
+            bg-red-400/10
+            px-3 py-2
+            text-center text-xs
+            text-red-100/80
+          "
+        >
+          {messageError}
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full"
       >
-        <div className="
-                flex items-end gap-2
-                rounded-2xl border border-sky-300/20
-                bg-[#0b1220]/55 p-2
-                backdrop-blur-xl
-                shadow-[0_8px_24px_rgba(0,0,0,0.20),inset_0_0_0_1px_rgba(255,255,255,0.03)]">
+        <div
+          className={`
+            flex items-end gap-2
+            rounded-2xl border
+            bg-[#0b1220]/55 p-2
+            backdrop-blur-xl
+            shadow-[0_8px_24px_rgba(0,0,0,0.20),inset_0_0_0_1px_rgba(255,255,255,0.03)]
+
+            ${canSendMessage
+              ? "border-sky-300/20"
+              : "border-white/10 opacity-70"
+            }
+          `}
+        >
           <textarea
             {...messageField}
             ref={(element) => {
@@ -128,10 +224,14 @@ const PrivateMessageForm = () => {
             }}
             rows={1}
             maxLength={100}
+            disabled={!canSendMessage}
             placeholder={
-              friend?.firstName
-                ? `Message ${friend.firstName}...`
-                : "Message..."}
+              canSendMessage
+                ? friend?.firstName
+                  ? `Message ${friend.firstName}...`
+                  : "Message..."
+                : "You must be friends to send messages"
+            }
             className="
               max-h-40 min-h-11 flex-1
               resize-none overflow-y-auto
@@ -139,6 +239,8 @@ const PrivateMessageForm = () => {
               text-sm text-white
               placeholder:text-white/40
               outline-none
+              disabled:cursor-not-allowed
+              disabled:opacity-50
             "
             onKeyDown={(event) => {
               if (
@@ -147,7 +249,10 @@ const PrivateMessageForm = () => {
               ) {
                 event.preventDefault();
 
-                if (!messageIsEmpty) {
+                if (
+                  canSendMessage &&
+                  !messageIsEmpty
+                ) {
                   handleSubmit(onSubmit)();
                 }
               }
@@ -156,11 +261,7 @@ const PrivateMessageForm = () => {
 
           <button
             type="submit"
-            disabled={
-              messageIsEmpty ||
-              isSubmitting ||
-              !friend
-            }
+            disabled={sendIsDisabled}
             aria-label="Send message"
             className="
               flex h-11 w-11 shrink-0
@@ -207,6 +308,7 @@ const PrivateMessageForm = () => {
           <span
             className={`
               text-[10px]
+
               ${messageValue.length >= 90
                 ? "text-amber-300/80"
                 : "text-white/30"

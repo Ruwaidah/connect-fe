@@ -30,34 +30,37 @@ const FriendsRequests = () => {
   const animateAndRemove = async (
     elementId,
     requestId,
-    action
+    action,
+    onSuccess
   ) => {
     if (processingId) return;
 
     setProcessingId(requestId);
 
-    await new Promise((resolve) => {
-      gsap.to(`#${elementId}`, {
-        opacity: 0,
-        y: -8,
-        height: 0,
-        marginBottom: 0,
-        paddingTop: 0,
-        paddingBottom: 0,
-        duration: 0.35,
-        ease: "power2.out",
-        onComplete: resolve,
-      });
-    });
-
     try {
       await dispatch(action).unwrap();
+
+      onSuccess?.();
+
+      await new Promise((resolve) => {
+        gsap.to(`#${elementId}`, {
+          opacity: 0,
+          y: -8,
+          height: 0,
+          marginBottom: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+          duration: 0.35,
+          ease: "power2.out",
+          onComplete: resolve,
+        });
+      });
     } catch (error) {
+      console.error("Friend request action failed:", error);
+
       gsap.set(`#${elementId}`, {
         clearProps: "all",
       });
-
-      console.error("Friend request action failed:", error);
     } finally {
       setProcessingId(null);
     }
@@ -83,7 +86,13 @@ const FriendsRequests = () => {
           public_id: friend.public_id,
           username: friend.username,
         },
-      })
+      }),
+      () => {
+        socket.emit("FRIEND_REQUEST_ACCEPTED", {
+          userAcceptingId: user.id,
+          userRequestingId: requestId,
+        });
+      }
     );
   };
 

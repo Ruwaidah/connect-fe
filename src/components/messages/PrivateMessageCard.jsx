@@ -27,6 +27,8 @@ const PrivateMessageCard = () => {
 
   const friend = thread?.friend;
 
+  const canSendMessage = friend?.friend !== false;
+
   const currentUserId = Number(
     user?.id || localStorage.getItem("id")
   );
@@ -199,22 +201,18 @@ const PrivateMessageCard = () => {
                     key={msg.id || `${msg.create_at}-${index}`}
                     className={`
                       flex w-full
-                      ${
-                        isMine
-                          ? "justify-end"
-                          : "justify-start"
-                      }
-                    `}
-                  >
+                      ${isMine
+                        ? "justify-end"
+                        : "justify-start"}
+                    `}>
                     <div
                       className={`
                         flex max-w-[82%] flex-col
                         sm:max-w-[68%]
                         lg:max-w-[55%]
-                        ${
-                          isMine
-                            ? "items-end"
-                            : "items-start"
+                        ${isMine
+                          ? "items-end"
+                          : "items-start"
                         }
                       `}
                     >
@@ -223,16 +221,15 @@ const PrivateMessageCard = () => {
                           break-words rounded-2xl
                           px-3 py-2.5
                           text-sm leading-relaxed
-                          ${
-                            isMine
-                              ? `
+                          ${isMine
+                            ? `
                                 rounded-br-md
                                 border border-sky-300/30
                                 bg-sky-500/20
                                 text-white
                                 shadow-[0_10px_24px_rgba(40,120,255,0.16),inset_0_0_18px_rgba(120,220,255,0.06)]
                               `
-                              : `
+                            : `
                                 rounded-bl-md
                                 border border-white/10
                                 bg-white/[0.06]
@@ -268,12 +265,21 @@ const PrivateMessageCard = () => {
             bg-[#07101f]/45
             px-3 pt-2
             pb-[calc(env(safe-area-inset-bottom)+12px)]
-            backdrop-blur-2xl
-          "
-        >
-          <div className="mx-auto w-full max-w-[520px]">
-            <PrivateMessageForm />
-          </div>
+            backdrop-blur-2xl">
+
+          {canSendMessage ? (
+            <div className="mx-auto w-full max-w-[520px]">
+              <PrivateMessageForm />
+            </div>
+          ) : (
+            <div
+              className="
+                rounded-2xl border border-amber-300/20
+                bg-amber-400/10 px-4 py-3
+                text-center text-sm text-amber-100/75">
+              You must be friends before you can send messages.
+            </div>
+          )}
         </div>
       </main>
     </div>
