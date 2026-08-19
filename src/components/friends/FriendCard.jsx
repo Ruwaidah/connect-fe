@@ -89,24 +89,63 @@ const FriendCard = () => {
   };
 
   const acceptFriendRequest = async () => {
-    if (!findFriend?.id) return;
+    const userAcceptingId = Number(currentUserId);
+    const userRequestingId = Number(findFriend?.id);
 
-    await dispatch(
-      approveFriendRequest({
-        userRecieveRequest: currentUserId,
-        userSendRequest: findFriend.id,
-        friend: {
-          bio: findFriend.bio,
-          firstName: findFriend.firstName,
+    if (!userAcceptingId || !userRequestingId) return;
+
+    try {
+      await dispatch(
+        approveFriendRequest({
+          userRecieveRequest: userAcceptingId,
+          userSendRequest: userRequestingId,
+          friend: {
+            bio: findFriend.bio,
+            firstName: findFriend.firstName,
+            friendId: findFriend.id,
+            image: findFriend.image,
+            image_id: findFriend.image_id,
+            lastName: findFriend.lastName,
+            public_id: findFriend.public_id,
+            username: findFriend.username,
+          },
+        })
+      ).unwrap();
+
+      socket.emit("FRIEND_REQUEST_ACCEPTED", {
+        userAcceptingId,
+        userRequestingId,
+
+        acceptingUser: {
+          id: user.id,
+          friendId: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          bio: user.bio,
+          image: user.image,
+          image_id: user.image_id,
+          public_id: user.public_id,
+        },
+
+        requestingUser: {
+          id: findFriend.id,
           friendId: findFriend.id,
+          firstName: findFriend.firstName,
+          lastName: findFriend.lastName,
+          username: findFriend.username,
+          bio: findFriend.bio,
           image: findFriend.image,
           image_id: findFriend.image_id,
-          lastName: findFriend.lastName,
           public_id: findFriend.public_id,
-          username: findFriend.username,
         },
-      })
-    );
+      });
+    } catch (error) {
+      console.error(
+        "Unable to accept friend request:",
+        error
+      );
+    }
   };
 
   const cancelRequest = async () => {
@@ -139,25 +178,30 @@ const FriendCard = () => {
   };
 
   const rejectRequest = async () => {
-    const currentId = Number(currentUserId);
-    const otherUserId = Number(findFriend?.id);
+    const userRejectingId = Number(currentUserId);
+    const userRequestingId = Number(findFriend?.id);
 
-    if (!currentId || !otherUserId) return;
+    if (!userRejectingId || !userRequestingId) return;
 
     try {
       await dispatch(
         rejectFriendRequest({
-          userRecieveRequest: currentId,
-          userSendRequest: otherUserId,
+          userRecieveRequest: userRejectingId,
+          userSendRequest: userRequestingId,
         })
       ).unwrap();
 
-      socket.emit("FRIEND_REQUEST_REJECTED", {
-        userRejectingId: currentId,
-        userRequestingId: otherUserId,
+      console.log("REJECT API SUCCESS", {
+        userRejectingId,
+        userRequestingId,
       });
 
-      dispatch(getFriendById(otherUserId));
+      socket.emit("FRIEND_REQUEST_REJECTED", {
+        userRejectingId,
+        userRequestingId,
+      });
+
+      dispatch(getFriendById(userRequestingId));
     } catch (error) {
       console.error(
         "Unable to reject friend request:",
@@ -167,10 +211,28 @@ const FriendCard = () => {
   };
 
   const confirmDeleteFriend = async () => {
-    if (!findFriend?.id) return;
+    const userId = Number(currentUserId);
+    const friendId = Number(findFriend?.id);
 
-    await dispatch(deleteFriend(findFriend.id));
-    dispatch(deletingFriendUser(false));
+    if (!userId || !friendId) return;
+
+    try {
+      await dispatch(
+        deleteFriend(friendId)
+      ).unwrap();
+
+      socket.emit("FRIEND_DELETED", {
+        userId,
+        friendId,
+      });
+
+      dispatch(deletingFriendUser(false));
+    } catch (error) {
+      console.error(
+        "Unable to delete friend:",
+        error
+      );
+    }
   };
 
   if (getFriendLoading || !findFriend) {

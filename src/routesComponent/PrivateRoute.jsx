@@ -32,6 +32,7 @@ import {
   friendRequestCancelledLive,
   friendRequestAcceptedLive,
   friendRequestRejectedLive,
+  friendDeletedLive
 } from "../reducers/usersSlice";
 
 const PrivateRoute = () => {
@@ -130,7 +131,15 @@ const PrivateRoute = () => {
     };
 
     const onFriendRequestRejected = (payload) => {
+      console.log(
+        "FRONTEND RECEIVED REJECT LIVE:",
+        payload
+      );
       dispatch(friendRequestRejectedLive(payload));
+    };
+
+    const onFriendDeleted = (payload) => {
+      dispatch(friendDeletedLive(payload));
     };
 
     socket.on("NEW_MESSAGE", onNewMessage);
@@ -155,6 +164,11 @@ const PrivateRoute = () => {
       onFriendRequestRejected
     );
 
+    socket.on(
+      "FRIEND_DELETED_LIVE",
+      onFriendDeleted
+    );
+
     return () => {
       socket.off("NEW_MESSAGE", onNewMessage);
 
@@ -176,6 +190,11 @@ const PrivateRoute = () => {
       socket.off(
         "FRIEND_REQUEST_REJECTED_LIVE",
         onFriendRequestRejected
+      );
+
+      socket.off(
+        "FRIEND_DELETED_LIVE",
+        onFriendDeleted
       );
 
       disconnectSocket();

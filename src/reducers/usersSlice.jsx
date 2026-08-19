@@ -465,22 +465,50 @@ const usersSlice = createSlice({
         userRequestingId,
       } = action.payload;
 
-      if (state.user?.friendReq) {
+      const myId = Number(
+        localStorage.getItem("id")
+      );
+
+      const otherUserId =
+        myId === Number(userRejectingId)
+          ? Number(userRequestingId)
+          : Number(userRejectingId);
+
+      // Remove pending request
+      if (Array.isArray(state.user?.friendReq)) {
         state.user.friendReq =
           state.user.friendReq.filter((request) => {
-            const sender = Number(
+            const senderId = Number(
               request.userSendRequest
             );
 
-            const receiver = Number(
+            const receiverId = Number(
               request.userRecieveRequest
             );
 
             return !(
-              sender === Number(userRequestingId) &&
-              receiver === Number(userRejectingId)
+              senderId === Number(userRequestingId) &&
+              receiverId === Number(userRejectingId)
             );
           });
+      }
+
+      // Update profile being viewed
+      if (state.findFriend) {
+        const profileId = Number(
+          state.findFriend.id ||
+          state.findFriend.friendId
+        );
+
+        if (profileId === otherUserId) {
+          state.findFriend.requestSent = false;
+          state.findFriend.requestReceived = false;
+          state.findFriend.friend = false;
+          state.findFriend.areFriend = false;
+
+          state.findFriend.isRequestSent = false;
+          state.findFriend.isRequestReceived = false;
+        }
       }
     },
     friendRequestAcceptedLive: (state, action) => {
@@ -490,6 +518,11 @@ const usersSlice = createSlice({
         friend,
       } = action.payload;
 
+      const currentUserId = Number(
+        localStorage.getItem("id")
+      );
+
+      // Remove the pending request
       if (state.user?.friendReq) {
         state.user.friendReq =
           state.user.friendReq.filter((request) => {
@@ -502,19 +535,88 @@ const usersSlice = createSlice({
           });
       }
 
-      if (friend) {
-        if (!state.friendsList) {
-          state.friendsList = [];
-        }
+      // Make sure friendsList exists
+      if (!Array.isArray(state.friendsList)) {
+        state.friendsList = [];
+      }
 
-        const exists = state.friendsList.some(
-          (item) =>
-            Number(item.id || item.friendId) ===
-            Number(friend.id || friend.friendId)
+      // Add the new friend immediately
+      if (friend) {
+        const newFriendId = Number(
+          friend.friendId || friend.id
         );
 
-        if (!exists) {
+        const alreadyExists =
+          state.friendsList.some((item) => {
+            const existingId = Number(
+              item.friendId || item.id
+            );
+
+            return existingId === newFriendId;
+          });
+
+        if (!alreadyExists) {
           state.friendsList.push(friend);
+        }
+      }
+
+      // If currently viewing this person's profile,
+      // update that profile immediately too.
+      if (state.findFriend) {
+        const profileId = Number(
+          state.findFriend.id ||
+          state.findFriend.friendId
+        );
+
+        const newFriendId = Number(
+          friend?.friendId || friend?.id
+        );
+
+        if (profileId === newFriendId) {
+          state.findFriend.friend = true;
+          state.findFriend.areFriend = true;
+          state.findFriend.requestSent = false;
+          state.findFriend.requestReceived = false;
+        }
+      }
+    },
+    friendDeletedLive: (state, action) => {
+      const {
+        userId,
+        friendId,
+      } = action.payload;
+
+      const currentUserId = Number(
+        localStorage.getItem("id")
+      );
+
+      const deletedFriendId =
+        currentUserId === Number(userId)
+          ? Number(friendId)
+          : Number(userId);
+
+      if (Array.isArray(state.friendsList)) {
+        state.friendsList =
+          state.friendsList.filter((friend) => {
+            const id = Number(
+              friend.friendId || friend.id
+            );
+
+            return id !== deletedFriendId;
+          });
+      }
+
+      if (state.findFriend) {
+        const profileId = Number(
+          state.findFriend.id ||
+          state.findFriend.friendId
+        );
+
+        if (profileId === deletedFriendId) {
+          state.findFriend.friend = false;
+          state.findFriend.areFriend = false;
+          state.findFriend.requestSent = false;
+          state.findFriend.requestReceived = false;
         }
       }
     },
@@ -1114,6 +1216,7 @@ export const {
   friendRequestCancelledLive,
   friendRequestAcceptedLive,
   friendRequestRejectedLive,
+  friendDeletedLive,
   logout,
   clearChangePassword,
   changeTheEmail,
