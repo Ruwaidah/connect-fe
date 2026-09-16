@@ -26,6 +26,8 @@ import EditPassword from "../components/setting/account/editPassword/EditPasswor
 import ProfileCard from "../components/profile/ProfileCard";
 import Notifications from "../components/notifications/Notifications";
 import DemoMode from "../components/Demo/DemoMode";
+import BlockedUsers from "../components/setting/BlockedUsers";
+import SocialSettings from "../components/setting/SocialSettings";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -59,6 +61,8 @@ const RoutesComponent = () => {
         <Route path="/addnewfriend" element={<AddNewFriendForm />} />
         <Route path="/friend-request" element={<FriendsRequests />} />
         <Route path="/setting" element={<Setting />} />
+        <Route path="/setting/social" element={<SocialSettings />} />
+        <Route path="/setting/social/blocked" element={<BlockedUsers />} />
         <Route path="/setting/account" element={<AccountSetting />} />
         <Route path="/setting/editusername" element={<EditUsername />} />
         <Route path="/setting/editemail" element={<EditEmail />} />

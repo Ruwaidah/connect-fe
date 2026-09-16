@@ -28,6 +28,7 @@ const AddNewFriendForm = () => {
     );
   }, [findFriend?.id, currentUserId]);
 
+
   const hasNoMatch = Boolean(
     findFriend?.message && !findFriend?.id
   );

@@ -80,9 +80,7 @@ const Setting = () => {
       <main
         className="
           mx-auto w-full max-w-[520px]
-          px-3 pb-[100px] pt-[76px]
-        "
-      >
+          px-3 pb-[100px] pt-[76px]">
         <section>
           <p className="mb-3 px-1 text-xs font-medium uppercase tracking-[0.16em] text-white/35">
             Preferences
@@ -104,17 +102,13 @@ const Setting = () => {
                   hover:border-sky-300/25
                   hover:bg-[#142342]/65
                   hover:shadow-[0_12px_34px_rgba(0,0,0,0.28),0_0_22px_rgba(60,170,255,0.10)]
-                  active:scale-[0.99]
-                "
-              >
+                  active:scale-[0.99]">
                 <div
                   className="
                     grid h-10 w-10 shrink-0 place-items-center
                     rounded-xl border border-white/10
                     bg-white/[0.04]
-                    shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]
-                  "
-                >
+                    shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
                   <img
                     src={item.icon}
                     alt=""

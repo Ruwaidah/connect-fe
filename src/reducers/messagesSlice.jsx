@@ -88,6 +88,30 @@ const messagesSlice = createSlice({
   name: "messages",
   initialState,
   reducers: {
+    friendshipAcceptedLive: (state, action) => {
+      const { otherUserId } = action.payload;
+
+      const thread =
+        state.messages?.data?.[String(otherUserId)] ||
+        state.messages?.[String(otherUserId)];
+
+      if (thread) {
+        thread.areFriend = true;
+      }
+    },
+
+    friendshipDeletedLive: (state, action) => {
+      const { otherUserId } = action.payload;
+
+      const thread =
+        state.messages?.data?.[String(otherUserId)] ||
+        state.messages?.[String(otherUserId)];
+
+      if (thread) {
+        thread.areFriend = false;
+      }
+    },
+
     setActiveChat: (state, action) => {
       state.activeChatFriendId = action.payload ? String(action.payload) : null;
     },
@@ -243,7 +267,13 @@ const messagesSlice = createSlice({
   },
 });
 
-export const { addIncomingMessage, setActiveChat, clearActiveChat, markThreadRead } =
+export const {
+  friendshipAcceptedLive,
+  friendshipDeletedLive,
+  addIncomingMessage,
+  setActiveChat,
+  clearActiveChat,
+  markThreadRead } =
   messagesSlice.actions;
 
 export default messagesSlice.reducer;

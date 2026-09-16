@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { gsap } from "gsap";
 import { useDispatch, useSelector } from "react-redux";
+import { socket } from "../../../socket";
 
 import {
   approveFriendRequest,
@@ -10,7 +11,6 @@ import {
 
 import Header from "../../header/Header";
 import Loading from "../../loading/Loading";
-
 const FriendsRequests = () => {
   const dispatch = useDispatch();
   const [processingId, setProcessingId] = useState(null);
@@ -26,6 +26,8 @@ const FriendsRequests = () => {
       Number(request.userRecieveRequest) ===
       Number(user?.id)
   );
+
+  console.log(incoming)
 
   const animateAndRemove = async (
     elementId,
@@ -67,14 +69,15 @@ const FriendsRequests = () => {
   };
 
   const acceptFriendRequest = (friend, index) => {
-    const requestId = friend.userSendRequest;
+    const requestId = Number(friend.userSendRequest);
+    const userAcceptingId = Number(user.id);
     const elementId = `request-user-card-${index}`;
 
     animateAndRemove(
       elementId,
       requestId,
       approveFriendRequest({
-        userRecieveRequest: user.id,
+        userRecieveRequest: userAcceptingId,
         userSendRequest: requestId,
         friend: {
           bio: friend.bio,
@@ -89,24 +92,60 @@ const FriendsRequests = () => {
       }),
       () => {
         socket.emit("FRIEND_REQUEST_ACCEPTED", {
-          userAcceptingId: user.id,
+          userAcceptingId,
           userRequestingId: requestId,
+
+          acceptingUser: {
+            id: user.id,
+            friendId: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            username: user.username,
+            bio: user.bio,
+            image: user.image,
+            image_id: user.image_id,
+            public_id: user.public_id,
+          },
+
+          requestingUser: {
+            id: requestId,
+            friendId: requestId,
+            firstName: friend.firstName,
+            lastName: friend.lastName,
+            username: friend.username,
+            bio: friend.bio,
+            image: friend.image,
+            image_id: friend.image_id,
+            public_id: friend.public_id,
+          },
         });
       }
     );
   };
 
   const rejectRequest = (friend, index) => {
-    const requestId = friend.userSendRequest;
+    const requestId = Number(friend.userSendRequest);
+    const userRejectingId = Number(user.id);
     const elementId = `request-user-card-${index}`;
 
     animateAndRemove(
       elementId,
       requestId,
       rejectFriendRequest({
-        userRecieveRequest: user.id,
+        userRecieveRequest: userRejectingId,
         userSendRequest: requestId,
-      })
+      }),
+      () => {
+        console.log("EMITTING FRIEND REQUEST REJECTED", {
+          userRejectingId,
+          userRequestingId: requestId,
+        });
+
+        socket.emit("FRIEND_REQUEST_REJECTED", {
+          userRejectingId,
+          userRequestingId: requestId,
+        });
+      }
     );
   };
 

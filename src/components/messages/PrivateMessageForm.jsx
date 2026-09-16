@@ -18,6 +18,10 @@ const PrivateMessageForm = () => {
     (state) => state.messages.activeChatFriendId
   );
 
+  const friendsList = useSelector(
+    (state) => state.user.friendsList
+  );
+
   const thread = useSelector((state) => {
     const messages = state.messages.messages;
 
@@ -32,8 +36,20 @@ const PrivateMessageForm = () => {
 
   const friend = thread?.friend;
 
-  const canSendMessage = thread?.areFriend === true;
+  const canSendMessage = (friendsList || []).some(
+    (item) => {
+      const possibleIds = [
+        item?.id,
+        item?.friendId,
+        item?.userId,
+        item?.userid,
+      ]
+        .filter(Boolean)
+        .map(Number);
 
+      return possibleIds.includes(Number(friendId));
+    }
+  );
   const {
     register,
     handleSubmit,

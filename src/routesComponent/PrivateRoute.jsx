@@ -22,6 +22,8 @@ import {
   markThreadRead,
   messageRead,
   setActiveChat,
+  friendshipAcceptedLive,
+  friendshipDeletedLive,
 } from "../reducers/messagesSlice";
 
 import {
@@ -73,6 +75,7 @@ const PrivateRoute = () => {
     if (!userId || !currentToken) return;
 
     dispatch(getMessages());
+    dispatch(getFriends());
   }, [dispatch]);
 
   useEffect(() => {
@@ -128,6 +131,14 @@ const PrivateRoute = () => {
 
     const onFriendRequestAccepted = (payload) => {
       dispatch(friendRequestAcceptedLive(payload));
+
+      if (payload?.otherUserId) {
+        dispatch(
+          friendshipAcceptedLive({
+            otherUserId: payload.otherUserId,
+          })
+        );
+      }
     };
 
     const onFriendRequestRejected = (payload) => {
@@ -140,6 +151,19 @@ const PrivateRoute = () => {
 
     const onFriendDeleted = (payload) => {
       dispatch(friendDeletedLive(payload));
+
+      const myId = Number(localStorage.getItem("id"));
+
+      const otherUserId =
+        myId === Number(payload.userId)
+          ? Number(payload.friendId)
+          : Number(payload.userId);
+
+      dispatch(
+        friendshipDeletedLive({
+          otherUserId,
+        })
+      );
     };
 
     socket.on("NEW_MESSAGE", onNewMessage);

@@ -76,6 +76,10 @@ const initialState = {
   addingNewFriendLoading: false,
   addingNewFriendError: false,
   addingNewFriendErrorMessage: null,
+
+  // ************************************* BLOCK USER *************************************
+  blockedUsers: [],
+  blockedUsersLoading: false,
 };
 
 // ************************** LOGIN AUTH WITH GOOGLE ******************************
@@ -409,36 +413,148 @@ export const deleteFriend = createAsyncThunk(
   }
 );
 
+// ************************************* BLOCK USER *************************************
+export const blockUser = createAsyncThunk(
+  "user/blockUser",
+  async (
+    { blockerId, blockedId },
+    thunkAPI
+  ) => {
+    try {
+      const response = await axiosWithAuth().post(
+        `${import.meta.env.VITE_APP_URL}/users/blockuser`,
+        {
+          blockerId,
+          blockedId,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log(error)
+      return thunkAPI.rejectWithValue(error.response?.data ||
+        "Unable to block user.")
+    }
+
+  }
+);
+
+// ************************************* GET BLOCKED USERS LIST *************************************
+export const getBlockedUsers =
+  createAsyncThunk(
+    "user/getBlockedUsers",
+    async (thunkAPI) => {
+      try {
+        const userId =
+          localStorage.getItem("id");
+
+        const response =
+          await axiosWithAuth().get(
+            `${import.meta.env.VITE_APP_URL}/users/blockedusers/${userId}`
+          );
+
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(
+          error.response?.data ||
+          "Unable to get blocked users."
+        );
+      }
+    }
+  );
+
+
+// ************************************* UNBLOCK USER *************************************
+export const unblockUser =
+  createAsyncThunk(
+    "user/unblockUser",
+    async (
+      { blockerId, blockedId },
+      thunkAPI
+    ) => {
+      try {
+        const response =
+          await axiosWithAuth().delete(
+            `${import.meta.env.VITE_APP_URL}/users/unblockuser`,
+            {
+              data: {
+                blockerId,
+                blockedId,
+              },
+            }
+          );
+
+        return response.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(
+          error.response?.data ||
+          "Unable to unblock user."
+        );
+      }
+    }
+  );
+
 const usersSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     friendRequestReceivedLive: (state, action) => {
-      const request = action.payload;
+      const payload = action.payload;
 
-      if (!state.user.friendReq) {
+      if (!state.user) return;
+
+      if (!Array.isArray(state.user.friendReq)) {
         state.user.friendReq = [];
       }
 
       const exists = state.user.friendReq.some(
-        (item) =>
-          Number(item.userSendRequest) ===
-          Number(request.data.userSendRequest)
+        (request) =>
+          Number(request.userSendRequest) ===
+          Number(payload.userSendRequest)
       );
 
       if (!exists) {
         state.user.friendReq.push({
-          ...request.friendReq,
-          ...request.data,
+          ...payload.friendReq,
+
+          userSendRequest: payload.userSendRequest,
+          userRecieveRequest: payload.userRecieveRequest,
+
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          username: payload.username,
+          image: payload.image,
         });
+      }
+
+      if (
+        state.findFriend &&
+        Number(state.findFriend.id) ===
+        Number(payload.userSendRequest)
+      ) {
+        state.findFriend.friendReq = {
+          ...payload.friendReq,
+          userSendRequest: payload.userSendRequest,
+          userRecieveRequest: payload.userRecieveRequest,
+        };
       }
     },
 
     friendRequestCancelledLive: (state, action) => {
-      const { userCancellingId, otherUserId } =
-        action.payload;
+      const {
+        userCancellingId,
+        otherUserId,
+      } = action.payload;
 
-      if (state.user?.friendReq) {
+      const myId = Number(
+        localStorage.getItem("id")
+      );
+
+      const cancellingId = Number(userCancellingId);
+      const receiverId = Number(otherUserId);
+
+      // Remove the pending request from friendReq
+      if (Array.isArray(state.user?.friendReq)) {
         state.user.friendReq =
           state.user.friendReq.filter((request) => {
             const sender = Number(
@@ -450,12 +566,25 @@ const usersSlice = createSlice({
             );
 
             return !(
-              (sender === Number(userCancellingId) &&
-                receiver === Number(otherUserId)) ||
-              (sender === Number(otherUserId) &&
-                receiver === Number(userCancellingId))
+              sender === cancellingId &&
+              receiver === receiverId
             );
           });
+      }
+
+      // Find the OTHER person for whichever browser receives this
+      const profileUserId =
+        myId === cancellingId
+          ? receiverId
+          : cancellingId;
+
+      // Update FriendCard live if viewing that person's profile
+      if (
+        state.findFriend &&
+        Number(state.findFriend.id) === profileUserId
+      ) {
+        state.findFriend.friendReq = null;
+        state.findFriend.friend = false;
       }
     },
 
@@ -474,7 +603,6 @@ const usersSlice = createSlice({
           ? Number(userRequestingId)
           : Number(userRejectingId);
 
-      // Remove pending request
       if (Array.isArray(state.user?.friendReq)) {
         state.user.friendReq =
           state.user.friendReq.filter((request) => {
@@ -493,21 +621,14 @@ const usersSlice = createSlice({
           });
       }
 
-      // Update profile being viewed
       if (state.findFriend) {
         const profileId = Number(
-          state.findFriend.id ||
-          state.findFriend.friendId
+          state.findFriend.id
         );
 
         if (profileId === otherUserId) {
-          state.findFriend.requestSent = false;
-          state.findFriend.requestReceived = false;
+          state.findFriend.friendReq = null;
           state.findFriend.friend = false;
-          state.findFriend.areFriend = false;
-
-          state.findFriend.isRequestSent = false;
-          state.findFriend.isRequestReceived = false;
         }
       }
     },
@@ -515,15 +636,12 @@ const usersSlice = createSlice({
       const {
         userAcceptingId,
         userRequestingId,
+        otherUserId,
         friend,
       } = action.payload;
 
-      const currentUserId = Number(
-        localStorage.getItem("id")
-      );
-
-      // Remove the pending request
-      if (state.user?.friendReq) {
+      // Remove pending request
+      if (Array.isArray(state.user?.friendReq)) {
         state.user.friendReq =
           state.user.friendReq.filter((request) => {
             return !(
@@ -535,49 +653,30 @@ const usersSlice = createSlice({
           });
       }
 
-      // Make sure friendsList exists
+      // Add new friend
       if (!Array.isArray(state.friendsList)) {
         state.friendsList = [];
       }
 
-      // Add the new friend immediately
       if (friend) {
-        const newFriendId = Number(
-          friend.friendId || friend.id
+        const exists = state.friendsList.some(
+          (item) =>
+            Number(item.friendId || item.id) ===
+            Number(friend.friendId || friend.id)
         );
 
-        const alreadyExists =
-          state.friendsList.some((item) => {
-            const existingId = Number(
-              item.friendId || item.id
-            );
-
-            return existingId === newFriendId;
-          });
-
-        if (!alreadyExists) {
+        if (!exists) {
           state.friendsList.push(friend);
         }
       }
 
-      // If currently viewing this person's profile,
-      // update that profile immediately too.
-      if (state.findFriend) {
-        const profileId = Number(
-          state.findFriend.id ||
-          state.findFriend.friendId
-        );
-
-        const newFriendId = Number(
-          friend?.friendId || friend?.id
-        );
-
-        if (profileId === newFriendId) {
-          state.findFriend.friend = true;
-          state.findFriend.areFriend = true;
-          state.findFriend.requestSent = false;
-          state.findFriend.requestReceived = false;
-        }
+      // Update profile if currently viewing this user
+      if (
+        state.findFriend &&
+        Number(state.findFriend.id) === Number(otherUserId)
+      ) {
+        state.findFriend.friend = true;
+        state.findFriend.friendReq = null;
       }
     },
     friendDeletedLive: (state, action) => {
@@ -1071,6 +1170,7 @@ const usersSlice = createSlice({
       state.findFriend = null;
     });
     builder.addCase(findNewFriend.fulfilled, (state, action) => {
+      console.log(action)
       state.findFriendLoading = false;
       state.findFriend = action.payload;
       state.findFriendError = false;
@@ -1108,11 +1208,9 @@ const usersSlice = createSlice({
       state.isErrorMessage = null;
     });
     builder.addCase(approveFriendRequest.fulfilled, (state, action) => {
-      // socket.emit("APPROVE_FRIEND_REQUEST", action.payload);
       state.isLoading = false;
       state.isError = false;
       state.isErrorMessage = null;
-      // state.friendsList = [...state.friendsList, action.payload.friend];
       state.user.friendReq = state.user.friendReq.filter(
         (u) =>
           u.userRecieveRequest !== action.payload.userRecieveRequest &&
@@ -1136,13 +1234,11 @@ const usersSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(cancelFriendReq.fulfilled, (state, action) => {
-      // socket.emit("CANCEL_FRIEND_REQUEST", action.payload);
       state.isLoading = false;
       state.isError = false;
       state.isErrorMessage = null;
       state.user.friendReq = action.payload.data;
       state.findFriend.friendReq = null;
-      // if (state.searchFriend) state.searchFriend.friendReq = {};
     });
     builder.addCase(cancelFriendReq.rejected, (state, action) => {
       state.isLoading = false;
@@ -1157,11 +1253,9 @@ const usersSlice = createSlice({
       state.isErrorMessage = null;
     });
     builder.addCase(rejectFriendRequest.fulfilled, (state, action) => {
-      // socket.emit("REJECT_FIEND_REQUEST", action.payload.friend);
       state.isLoading = false;
       state.isError = false;
       state.isErrorMessage = null;
-      // state.user.friendReq = action.payload.data;
       state.user.friendReq = action.payload.data;
       if (state.findFriend) state.findFriend.friendReq = null;
     });
@@ -1208,6 +1302,83 @@ const usersSlice = createSlice({
       state.addingNewFriendError = true;
       state.addingNewFriendErrorMessage = action.payload;
     });
+
+
+
+    // ************************** GET BLOCKED USERS LIST  ******************************
+    builder.addCase(
+      getBlockedUsers.pending,
+      (state) => {
+        state.blockedUsersLoading = true;
+      })
+    builder.addCase(
+      getBlockedUsers.fulfilled,
+      (state, action) => {
+        state.blockedUsersLoading = false;
+        state.blockedUsers =
+          action.payload;
+      })
+    builder.addCase(
+      getBlockedUsers.rejected,
+      (state) => {
+        state.blockedUsersLoading = false;
+      })
+
+      // ************************** UNBLOCK USER  ******************************
+      .addCase(unblockUser.fulfilled, (state, action) => {
+        const blockedId = Number(
+          action.payload.blockedId
+        );
+
+        state.blockedUsers =
+          state.blockedUsers.filter(
+            (user) =>
+              Number(user.id) !== blockedId
+          );
+
+        if (
+          state.findFriend &&
+          Number(state.findFriend.id) === blockedId
+        ) {
+          state.findFriend.blocked = false;
+        }
+      })
+
+    // ************************** BLOCK USER  ******************************
+    builder.addCase(blockUser.fulfilled, (state, action) => {
+      const blockedId = Number(
+        action.payload.blockedId
+      );
+
+      if (Array.isArray(state.friendsList)) {
+        state.friendsList =
+          state.friendsList.filter(
+            (friend) =>
+              Number(
+                friend.friendId || friend.id
+              ) !== blockedId
+          );
+      }
+
+      if (Array.isArray(state.user?.friendReq)) {
+        state.user.friendReq =
+          state.user.friendReq.filter(
+            (request) =>
+              Number(request.userSendRequest) !== blockedId &&
+              Number(request.userRecieveRequest) !== blockedId
+          );
+      }
+
+      if (
+        state.findFriend &&
+        Number(state.findFriend.id) === blockedId
+      ) {
+        state.findFriend.friend = false;
+        state.findFriend.friendReq = null;
+        state.findFriend.blocked = true;
+      }
+    });
+
   },
 });
 
