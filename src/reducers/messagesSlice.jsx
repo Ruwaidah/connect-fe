@@ -200,6 +200,71 @@ const messagesSlice = createSlice({
       }
     },
 
+    userBlockedMessageLive: (state, action) => {
+      const {
+        blockerId,
+        blockedId,
+      } = action.payload;
+
+      const currentUserId = Number(
+        localStorage.getItem("id")
+      );
+
+      const otherUserId =
+        currentUserId === Number(blockerId)
+          ? Number(blockedId)
+          : Number(blockerId);
+
+      const friendId = String(
+        otherUserId
+      );
+
+      if (state.messages?.[friendId]) {
+        state.messages[friendId].blocked = true;
+        state.messages[friendId].areFriend = false;
+      }
+
+      if (
+        state.messages?.data?.[friendId]
+      ) {
+        state.messages.data[
+          friendId
+        ].blocked = true;
+
+        state.messages.data[
+          friendId
+        ].areFriend = false;
+      }
+    },
+
+    userUnblockedMessageLive: (state, action) => {
+      const {
+        blockerId,
+        blockedId,
+      } = action.payload;
+
+      const currentUserId = Number(
+        localStorage.getItem("id")
+      );
+
+      const otherUserId =
+        currentUserId === Number(blockerId)
+          ? Number(blockedId)
+          : Number(blockerId);
+
+      const friendId = String(otherUserId);
+
+      if (state.messages?.[friendId]) {
+        state.messages[friendId].blocked = false;
+      }
+
+      if (state.messages?.data?.[friendId]) {
+        state.messages.data[
+          friendId
+        ].blocked = false;
+      }
+    },
+
   },
 
   extraReducers: (builder) => {
@@ -225,24 +290,33 @@ const messagesSlice = createSlice({
         state.isMessagesError = false;
         state.errorMessages = null;
       })
-      .addCase(getMessagesBetweenTwoUsers.fulfilled, (state, action) => {
-        state.isMessagesLoading = false;
+      .addCase(
+        getMessagesBetweenTwoUsers.fulfilled,
+        (state, action) => {
 
-        const friendId = String(action.payload.friend.id);
+          console.log(action.payload, action.meta.arg)
+          state.isMessagesLoading = false;
 
-        if (!state.messages[friendId]) {
-          state.messages[friendId] = {
-            friend: action.payload.friend,
-            numberOfMsgUnread: action.payload.numberOfMsgUnread || 0,
-            messages: [],
-          };
+          const friendId = String(
+            action.meta.arg
+          );
+
+          if (!state.messages[friendId]) {
+            return;
+          }
+
+          state.messages[friendId].messages =
+            action.payload?.messages || [];
+
+          state.messages[friendId].areFriend =
+            Boolean(action.payload?.areFriend);
+
+          state.messages[friendId].blocked =
+            Boolean(action.payload?.blocked);
         }
-
-        state.messages[friendId].friend = action.payload.friend;
-        state.messages[friendId].messages = action.payload.messages || [];
-        state.messages[friendId].numberOfMsgUnread = action.payload.numberOfMsgUnread || 0;
-      })
+      )
       .addCase(getMessagesBetweenTwoUsers.rejected, (state, action) => {
+        console.log("sdefs")
         state.isMessagesLoading = false;
         state.isMessagesError = true;
         state.errorMessages = action.payload;
@@ -273,7 +347,10 @@ export const {
   addIncomingMessage,
   setActiveChat,
   clearActiveChat,
-  markThreadRead } =
+  markThreadRead,
+  userBlockedMessageLive,
+  userUnblockedMessageLive
+} =
   messagesSlice.actions;
 
 export default messagesSlice.reducer;

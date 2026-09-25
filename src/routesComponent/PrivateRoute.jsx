@@ -24,6 +24,7 @@ import {
   setActiveChat,
   friendshipAcceptedLive,
   friendshipDeletedLive,
+  userBlockedMessageLive
 } from "../reducers/messagesSlice";
 
 import {
@@ -34,7 +35,8 @@ import {
   friendRequestCancelledLive,
   friendRequestAcceptedLive,
   friendRequestRejectedLive,
-  friendDeletedLive
+  friendDeletedLive,
+  userBlockedLive
 } from "../reducers/usersSlice";
 
 const PrivateRoute = () => {
@@ -166,6 +168,18 @@ const PrivateRoute = () => {
       );
     };
 
+    const handleUserBlocked = (data) => {
+      dispatch(
+        userBlockedLive(data)
+      );
+
+      dispatch(
+        userBlockedMessageLive(data)
+      );
+    };
+
+
+
     socket.on("NEW_MESSAGE", onNewMessage);
 
     socket.on(
@@ -191,6 +205,11 @@ const PrivateRoute = () => {
     socket.on(
       "FRIEND_DELETED_LIVE",
       onFriendDeleted
+    );
+
+    socket.on(
+      "USER_BLOCKED_LIVE",
+      handleUserBlocked
     );
 
     return () => {
@@ -221,13 +240,21 @@ const PrivateRoute = () => {
         onFriendDeleted
       );
 
+      socket.off(
+        "USER_BLOCKED_LIVE",
+        handleUserBlocked
+      );
+
       disconnectSocket();
     };
   }, [dispatch, token]);
 
   return token ? (
     <AppShell>
-      <Outlet />
+      <div className={`min-h-0 flex-1 overflow-y-auto
+            ${hideNav ? "" : "pb-[90px]"}`}>
+        <Outlet />
+      </div>
 
       {!hideNav ? <NavBar /> : null}
     </AppShell>

@@ -679,6 +679,7 @@ const usersSlice = createSlice({
         state.findFriend.friendReq = null;
       }
     },
+
     friendDeletedLive: (state, action) => {
       const {
         userId,
@@ -719,6 +720,92 @@ const usersSlice = createSlice({
         }
       }
     },
+
+    // UPDATE BLOCKUSER LIVE
+    userBlockedLive: (state, action) => {
+      const {
+        blockerId,
+        blockedId,
+      } = action.payload;
+
+      const currentUserId = Number(
+        localStorage.getItem("id")
+      );
+
+      const otherUserId =
+        currentUserId === Number(blockerId)
+          ? Number(blockedId)
+          : Number(blockerId);
+
+      if (Array.isArray(state.friendsList)) {
+        state.friendsList =
+          state.friendsList.filter(
+            (friend) =>
+              Number(
+                friend.friendId ||
+                friend.id
+              ) !== otherUserId
+          );
+      }
+
+      if (
+        Array.isArray(
+          state.user?.friendReq
+        )
+      ) {
+        state.user.friendReq =
+          state.user.friendReq.filter(
+            (request) =>
+              Number(
+                request.userSendRequest
+              ) !== otherUserId &&
+              Number(
+                request.userRecieveRequest
+              ) !== otherUserId
+          );
+      }
+
+      if (
+        state.findFriend &&
+        Number(state.findFriend.id) ===
+        otherUserId
+      ) {
+        state.findFriend.friend = false;
+        state.findFriend.friendReq = null;
+
+        state.findFriend.blocked =
+          currentUserId ===
+          Number(blockerId);
+      }
+    },
+
+
+    // UPDATE UNBLOCKUSER LIVE
+    userUnblockedLive: (state, action) => {
+      const {
+        blockerId,
+        blockedId,
+      } = action.payload;
+
+      const currentUserId = Number(
+        localStorage.getItem("id")
+      );
+
+      const otherUserId =
+        currentUserId === Number(blockerId)
+          ? Number(blockedId)
+          : Number(blockerId);
+
+      if (
+        state.findFriend &&
+        Number(state.findFriend.id) ===
+        otherUserId
+      ) {
+        state.findFriend.blocked = false;
+      }
+    },
+
+
     deletingFriendUser: (state, action) => {
       state.isDeleteUser = action.payload;
     },
@@ -1388,6 +1475,8 @@ export const {
   friendRequestAcceptedLive,
   friendRequestRejectedLive,
   friendDeletedLive,
+  userBlockedLive,
+  userUnblockedLive,
   logout,
   clearChangePassword,
   changeTheEmail,
@@ -1395,7 +1484,7 @@ export const {
   startNewChatList,
   deletingFriendUser,
   clearEditCancel,
-  clearState
+  clearState,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

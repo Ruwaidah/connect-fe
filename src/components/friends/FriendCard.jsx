@@ -55,8 +55,8 @@ const FriendCard = () => {
 
     const receiverId = Number(
       person?.id ||
-        person?.friendId ||
-        person?.userId
+      person?.friendId ||
+      person?.userId
     );
 
     if (!senderId || !receiverId) {
@@ -367,10 +367,9 @@ const FriendCard = () => {
   const initials =
     `${findFriend.firstName?.charAt(
       0
-    ) || ""}${
-      findFriend.lastName?.charAt(
-        0
-      ) || ""
+    ) || ""}${findFriend.lastName?.charAt(
+      0
+    ) || ""
     }` || "U";
 
   const isFriend = Boolean(
@@ -394,48 +393,60 @@ const FriendCard = () => {
     friendRequest &&
     !requestWasSentByMe;
 
-  const handleBlockUser =
-    async () => {
-      const blockerId = Number(
-        currentUserId
-      );
+  const handleBlockUser = async () => {
+    const blockerId = Number(
+      currentUserId
+    );
 
-      const blockedId = Number(
-        findFriend?.id
-      );
+    const blockedId = Number(
+      findFriend?.id
+    );
 
-      if (
-        !blockerId ||
-        !blockedId
-      ) {
-        return;
-      }
+    if (!blockerId || !blockedId) {
+      return;
+    }
 
-      try {
-        if (isBlocked) {
-          await dispatch(
-            unblockUser({
-              blockerId,
-              blockedId,
-            })
-          ).unwrap();
-        } else {
-          await dispatch(
-            blockUser({
-              blockerId,
-              blockedId,
-            })
-          ).unwrap();
-        }
-      } catch (error) {
-        console.error(
-          isBlocked
-            ? "Unable to unblock user:"
-            : "Unable to block user:",
-          error
+    try {
+      if (isBlocked) {
+        await dispatch(
+          unblockUser({
+            blockerId,
+            blockedId,
+          })
+        ).unwrap();
+
+        socket.emit(
+          "USER_UNBLOCKED",
+          {
+            blockerId,
+            blockedId,
+          }
+        );
+      } else {
+        await dispatch(
+          blockUser({
+            blockerId,
+            blockedId,
+          })
+        ).unwrap();
+
+        socket.emit(
+          "USER_BLOCKED",
+          {
+            blockerId,
+            blockedId,
+          }
         );
       }
-    };
+    } catch (error) {
+      console.error(
+        isBlocked
+          ? "Unable to unblock user:"
+          : "Unable to block user:",
+        error
+      );
+    }
+  };
 
   return (
     <div className="min-h-[100dvh] w-full text-white">
@@ -445,16 +456,15 @@ const FriendCard = () => {
           findFriend.username
             ? `@${findFriend.username}`
             : undefined}
-        showBack/>
+        showBack />
 
       {isDeleteUser ? (
         <ConfirmDialog
           open={isDeleteUser}
           title="Delete friend?"
-          description={`This will remove @${
-            findFriend.username ||
+          description={`This will remove @${findFriend.username ||
             "this user"
-          } from your friends list.`}
+            } from your friends list.`}
           confirmText="Delete"
           cancelText="Cancel"
           tone="danger"
@@ -493,13 +503,11 @@ const FriendCard = () => {
                   src={
                     findFriend.image
                   }
-                  alt={`${
-                    findFriend.firstName ||
+                  alt={`${findFriend.firstName ||
                     ""
-                  } ${
-                    findFriend.lastName ||
+                    } ${findFriend.lastName ||
                     ""
-                  }`}
+                    }`}
                   className="
                     h-28 w-28 rounded-full
                     object-cover
@@ -751,7 +759,7 @@ const FriendCard = () => {
                     cx="12"
                     cy="12"
                     r="9"
-                    strokeWidth="1.6"/>
+                    strokeWidth="1.6" />
 
                   <path
                     d="m6.5 17.5 11-11"

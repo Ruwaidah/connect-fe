@@ -74,54 +74,60 @@ const settingsItems = [
 
 const Setting = () => {
   return (
-    <div className="min-h-[100dvh] w-full text-white">
+    <div className="h-[100dvh] w-full overflow-hidden text-white">
       <Header title="Settings" showBack />
 
       <main
         className="
+          h-full overflow-y-auto
           mx-auto w-full max-w-[520px]
-          px-3 pb-[100px] pt-[76px]">
+          px-3 pb-4 pt-[68px] pb-[180px]
+          overscroll-contain
+        "
+      >
         <section>
-          <p className="mb-3 px-1 text-xs font-medium uppercase tracking-[0.16em] text-white/35">
+          <p className="mb-2 px-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/35">
             Preferences
           </p>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {settingsItems.map((item) => (
               <Link
                 key={item.title}
                 to={item.to}
                 className="
-                  group flex min-h-16 w-full
+                  group flex min-h-12 w-full
                   items-center gap-3
                   rounded-2xl border border-white/10
-                  bg-[#0b1220]/50 px-3 py-3
+                  bg-[#0b1220]/50 px-3 py-2
                   backdrop-blur-xl
                   shadow-[0_8px_28px_rgba(0,0,0,0.22),0_0_0_1px_rgba(255,255,255,0.04)]
                   transition
                   hover:border-sky-300/25
                   hover:bg-[#142342]/65
                   hover:shadow-[0_12px_34px_rgba(0,0,0,0.28),0_0_22px_rgba(60,170,255,0.10)]
-                  active:scale-[0.99]">
+                  active:scale-[0.99]"
+              >
                 <div
                   className="
-                    grid h-10 w-10 shrink-0 place-items-center
-                    rounded-xl border border-white/10
+                    grid h-8 w-8 shrink-0 place-items-center
+                    rounded-lg border border-white/10
                     bg-white/[0.04]
-                    shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
+                    shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]"
+                >
                   <img
                     src={item.icon}
                     alt=""
-                    className="h-6 w-6 object-contain opacity-85"
+                    className="h-5 w-5 object-contain opacity-85"
                   />
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-white/90">
+                  <p className="truncate text-[13px] font-semibold text-white/90">
                     {item.title}
                   </p>
 
-                  <p className="mt-0.5 truncate text-xs text-white/45">
+                  <p className="mt-0.5 truncate text-[11px] text-white/45">
                     {item.subtitle}
                   </p>
                 </div>
@@ -132,15 +138,15 @@ const Setting = () => {
           </div>
         </section>
 
-        <section className="mt-6">
-          <p className="mb-3 px-1 text-xs font-medium uppercase tracking-[0.16em] text-white/35">
+        <section className="mt-3">
+          <p className="mb-2 px-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white/35">
             Session
           </p>
 
           <LogOut />
         </section>
 
-        <p className="mt-6 text-center text-[11px] text-white/30">
+        <p className="mt-3 text-center text-[10px] text-white/30">
           Connect version 1.0
         </p>
       </main>
@@ -148,4 +154,5 @@ const Setting = () => {
   );
 };
 
-export default Setting;
+
+export default Setting

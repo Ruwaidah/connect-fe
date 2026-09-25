@@ -28,6 +28,7 @@ import Notifications from "../components/notifications/Notifications";
 import DemoMode from "../components/Demo/DemoMode";
 import BlockedUsers from "../components/setting/BlockedUsers";
 import SocialSettings from "../components/setting/SocialSettings";
+import SecuritySettings from "../components/setting/SecuritySettings";
 
 const RoutesComponent = () => {
   const dispatch = useDispatch();
@@ -62,6 +63,8 @@ const RoutesComponent = () => {
         <Route path="/friend-request" element={<FriendsRequests />} />
         <Route path="/setting" element={<Setting />} />
         <Route path="/setting/social" element={<SocialSettings />} />
+        <Route path="/setting/security" element={<SecuritySettings />} />
+        <Route path="/setting/security/blocked" element={<BlockedUsers />} />
         <Route path="/setting/social/blocked" element={<BlockedUsers />} />
         <Route path="/setting/account" element={<AccountSetting />} />
         <Route path="/setting/editusername" element={<EditUsername />} />
